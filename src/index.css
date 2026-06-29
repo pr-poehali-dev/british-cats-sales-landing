@@ -4,33 +4,36 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 160 30% 6%;
+    --foreground: 40 30% 92%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 160 25% 9%;
+    --card-foreground: 40 30% 92%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 160 25% 9%;
+    --popover-foreground: 40 30% 92%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 43 65% 52%;
+    --primary-foreground: 160 40% 8%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 160 20% 14%;
+    --secondary-foreground: 40 30% 92%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 160 15% 16%;
+    --muted-foreground: 40 12% 62%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 43 60% 50%;
+    --accent-foreground: 160 40% 8%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 70% 45%;
+    --destructive-foreground: 40 30% 92%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 43 30% 22%;
+    --input: 160 20% 16%;
+    --ring: 43 65% 52%;
+
+    --gold: 43 70% 56%;
+    --gold-soft: 43 50% 72%;
 
     --radius: 0.5rem;
 
@@ -97,5 +100,49 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: "Golos Text", sans-serif;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: "Cormorant", serif;
+  }
+  .text-gold-gradient {
+    background: linear-gradient(
+      110deg,
+      hsl(43 50% 72%),
+      hsl(43 80% 56%),
+      hsl(43 50% 72%)
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .gold-line {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--gold) / 0.6),
+      transparent
+    );
+  }
+  .luxe-card {
+    background: linear-gradient(160deg, hsl(160 25% 11%), hsl(160 28% 7%));
+    border: 1px solid hsl(var(--gold) / 0.18);
+    transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .luxe-card:hover {
+    border-color: hsl(var(--gold) / 0.5);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px -20px hsl(var(--gold) / 0.35);
+  }
+  .grain {
+    background-image: radial-gradient(
+      hsl(var(--gold) / 0.04) 1px,
+      transparent 1px
+    );
+    background-size: 22px 22px;
   }
 }
