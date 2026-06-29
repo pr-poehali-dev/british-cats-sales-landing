@@ -100,7 +100,8 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground grain">
+    <div className="min-h-screen bg-background text-foreground grain relative">
+      <div className="paw-bg" />
       <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-background/80 border-b border-gold/15">
         <div className="container flex items-center justify-between h-20">
           <button onClick={() => scrollTo('home')} className="flex items-center gap-2">

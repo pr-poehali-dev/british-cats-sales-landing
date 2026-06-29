@@ -138,6 +138,23 @@
     transform: translateY(-6px);
     box-shadow: 0 20px 50px -20px hsl(var(--gold) / 0.35);
   }
+  .paw-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='%23d4af37' fill-opacity='0.05'%3E%3Cellipse cx='30' cy='38' rx='9' ry='12'/%3E%3Cellipse cx='16' cy='22' rx='4' ry='5'/%3E%3Cellipse cx='27' cy='17' rx='4' ry='5'/%3E%3Cellipse cx='38' cy='19' rx='4' ry='5'/%3E%3Cellipse cx='48' cy='27' rx='4' ry='5'/%3E%3Cellipse cx='90' cy='98' rx='9' ry='12'/%3E%3Cellipse cx='76' cy='82' rx='4' ry='5'/%3E%3Cellipse cx='87' cy='77' rx='4' ry='5'/%3E%3Cellipse cx='98' cy='79' rx='4' ry='5'/%3E%3Cellipse cx='108' cy='87' rx='4' ry='5'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 160px 160px;
+    animation: paw-drift 40s linear infinite;
+  }
+  @keyframes paw-drift {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 160px 320px;
+    }
+  }
   .grain {
     background-image: radial-gradient(
       hsl(var(--gold) / 0.04) 1px,
