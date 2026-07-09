@@ -1,0 +1,21 @@
+{
+  "tests": [
+    {
+      "name": "Проверка статуса сервиса",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {"service": "transcribe"},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Ошибка без ссылки на запись",
+      "method": "POST",
+      "path": "/",
+      "body": {"audioUrl": ""},
+      "expectedStatus": 400,
+      "expectedBody": {"error": "string"},
+      "bodyMatcher": "partial"
+    }
+  ]
+}

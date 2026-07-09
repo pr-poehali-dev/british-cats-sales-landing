@@ -8,11 +8,13 @@ import {
 } from '@/components/ui/select';
 import { actions, STAGES, STATUSES, type Student, type StudentStatus, type FunnelStage } from '@/lib/crm-store';
 import { fmtDate } from './ui-helpers';
+import func2url from '../../../backend/func2url.json';
 
 const NOTE_META: Record<string, { icon: string; color: string; label: string }> = {
   comment: { icon: 'MessageSquare', color: 'text-primary', label: 'Комментарий' },
   call: { icon: 'Phone', color: 'text-success', label: 'Звонок' },
   stage: { icon: 'GitBranch', color: 'text-neon', label: 'Этап' },
+  transcript: { icon: 'FileAudio', color: 'text-accent', label: 'Расшифровка звонка' },
 };
 
 const fmtDateTime = (iso: string) => {
@@ -24,11 +26,38 @@ const fmtDateTime = (iso: string) => {
 const StudentCard = ({ student }: { student: Student }) => {
   const [comment, setComment] = useState('');
   const [callText, setCallText] = useState('');
+  const [recordUrl, setRecordUrl] = useState('');
+  const [transcribing, setTranscribing] = useState(false);
+  const [error, setError] = useState('');
 
   const addComment = () => {
     if (!comment.trim()) return;
     actions.addNote(student.id, 'comment', comment.trim());
     setComment('');
+  };
+
+  const transcribe = async () => {
+    if (!recordUrl.trim() || transcribing) return;
+    setTranscribing(true);
+    setError('');
+    try {
+      const res = await fetch(func2url.transcribe, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ audioUrl: recordUrl.trim() }),
+      });
+      const json = await res.json();
+      if (res.ok && json.transcript) {
+        actions.addNote(student.id, 'transcript', json.transcript);
+        setRecordUrl('');
+      } else {
+        setError(json.detail || json.error || 'Не удалось расшифровать');
+      }
+    } catch {
+      setError('Ошибка соединения с сервером');
+    } finally {
+      setTranscribing(false);
+    }
   };
 
   const logCall = () => {
@@ -104,6 +133,27 @@ const StudentCard = ({ student }: { student: Student }) => {
               <Icon name="Phone" size={15} className="mr-1" /> Звонок
             </Button>
           </div>
+        </div>
+
+        <div className="rounded-lg border border-accent/25 bg-accent/5 p-3">
+          <label className="text-xs text-accent mb-1.5 flex items-center gap-1.5">
+            <Icon name="FileAudio" size={13} /> Расшифровка звонка (МегаФон + SpeechKit)
+          </label>
+          <div className="flex gap-2">
+            <Input
+              placeholder="Ссылка на запись разговора"
+              value={recordUrl}
+              onChange={(e) => setRecordUrl(e.target.value)}
+              className="h-9"
+              onKeyDown={(e) => e.key === 'Enter' && transcribe()}
+            />
+            <Button onClick={transcribe} disabled={transcribing || !recordUrl.trim()} size="sm" className="h-9 shrink-0 bg-accent hover:bg-accent/90 text-accent-foreground">
+              {transcribing
+                ? <Icon name="Loader2" size={15} className="animate-spin" />
+                : <><Icon name="AudioLines" size={15} className="mr-1" /> Расшифровать</>}
+            </Button>
+          </div>
+          {error && <div className="text-xs text-destructive mt-2 flex items-start gap-1"><Icon name="TriangleAlert" size={12} className="mt-0.5 shrink-0" /> {error}</div>}
         </div>
 
         <div>

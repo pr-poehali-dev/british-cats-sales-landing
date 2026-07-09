@@ -13,7 +13,7 @@ export type PaymentStatus = 'Ожидает' | 'Получена';
 
 export interface ActivityNote {
   id: string;
-  type: 'comment' | 'call' | 'stage';
+  type: 'comment' | 'call' | 'stage' | 'transcript';
   text: string;
   createdAt: string;
 }
