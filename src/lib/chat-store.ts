@@ -1,9 +1,10 @@
 import { useSyncExternalStore } from 'react';
 
-export type Channel = 'telegram' | 'vk' | 'whatsapp' | 'instagram' | 'web';
+export type Channel = 'telegram' | 'max' | 'vk' | 'whatsapp' | 'instagram' | 'web';
 
 export const CHANNEL_META: Record<Channel, { label: string; icon: string; color: string }> = {
   telegram: { label: 'Telegram', icon: 'Send', color: 'text-sky-400' },
+  max: { label: 'MAX', icon: 'MessageSquareText', color: 'text-violet-400' },
   vk: { label: 'ВКонтакте', icon: 'Users', color: 'text-blue-400' },
   whatsapp: { label: 'WhatsApp', icon: 'MessageCircle', color: 'text-green-400' },
   instagram: { label: 'Instagram', icon: 'Instagram', color: 'text-pink-400' },
@@ -57,6 +58,14 @@ const seed: Dialog[] = [
     ],
   },
   {
+    id: 'd5', name: 'Ирина Волкова', channel: 'max', handle: '@irina_v',
+    avatarColor: 'bg-violet-500/25 text-violet-300', unread: 2,
+    messages: [
+      { id: uid(), from: 'client', text: 'Добрый день! Увидела вас в MAX, интересует курс для бизнеса', at: nowMinus(15) },
+      { id: uid(), from: 'client', text: 'Можно программу посмотреть?', at: nowMinus(14) },
+    ],
+  },
+  {
     id: 'd4', name: 'Гость с сайта', channel: 'web', handle: 'посетитель #4821',
     avatarColor: 'bg-primary/25 text-primary', unread: 3,
     messages: [
@@ -67,7 +76,7 @@ const seed: Dialog[] = [
   },
 ];
 
-const KEY = 'khakni-chat-v1';
+const KEY = 'khakni-chat-v2';
 let dialogs: Dialog[] = load();
 const listeners = new Set<() => void>();
 
