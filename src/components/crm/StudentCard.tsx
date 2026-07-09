@@ -63,6 +63,24 @@ const StudentCard = ({ student }: { student: Student }) => {
           </div>
         </div>
 
+        <div className="space-y-2 pt-1">
+          <div className="text-xs text-muted-foreground flex items-center gap-1.5">
+            <Icon name="Contact" size={13} /> Контакты
+          </div>
+          <div className="relative">
+            <Icon name="Send" size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-primary" />
+            <Input placeholder="Telegram (@username)" value={student.contact || ''} onChange={(e) => actions.updateStudent(student.id, { contact: e.target.value })} className="h-9 pl-9" />
+          </div>
+          <div className="relative">
+            <Icon name="Phone" size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-success" />
+            <Input placeholder="Телефон" value={student.phone || ''} onChange={(e) => actions.updateStudent(student.id, { phone: e.target.value })} className="h-9 pl-9" />
+          </div>
+          <div className="relative">
+            <Icon name="Mail" size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-warning" />
+            <Input type="email" placeholder="Почта" value={student.email || ''} onChange={(e) => actions.updateStudent(student.id, { email: e.target.value })} className="h-9 pl-9" />
+          </div>
+        </div>
+
         <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="text-xs text-muted-foreground mb-1.5 flex items-center gap-1">

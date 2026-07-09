@@ -22,6 +22,8 @@ export interface Student {
   id: string;
   name: string;
   contact: string;
+  phone?: string;
+  email?: string;
   source: Source;
   course: string;
   status: StudentStatus;
@@ -86,14 +88,14 @@ const seed: CRMData = {
     { id: 'c3', title: 'ИИ для бизнеса', price: 68000, startDate: '2026-09-01', seats: 15 },
   ],
   students: [
-    { id: 's1', name: 'Алина Хакимова', contact: '@alina_h', source: 'Instagram', course: 'AI-старт: нейросети с нуля', status: 'Учится', stage: 'Обучается', createdAt: '2026-06-12', comment: 'Активная, платит вовремя' },
-    { id: 's2', name: 'Дмитрий Орлов', contact: '+7 900 111-22-33', source: 'Telegram', course: 'Промпт-инжиниринг PRO', status: 'Оплатил', stage: 'Оплата получена', createdAt: '2026-06-20', comment: 'Ждёт старт группы' },
-    { id: 's3', name: 'Марина Львова', contact: '@marina_lv', source: 'Реклама', course: 'ИИ для бизнеса', status: 'Лид', stage: 'КП отправлено', createdAt: '2026-07-01', comment: 'Думает, перезвонить' },
-    { id: 's4', name: 'Игорь Соколов', contact: '+7 921 555-77-88', source: 'Реферал', course: 'AI-старт: нейросети с нуля', status: 'Завершил', stage: 'Обучается', createdAt: '2026-04-05', comment: 'Хочет продвинутый курс' },
-    { id: 's5', name: 'Ольга Ким', contact: '@olga_kim', source: 'Instagram', course: 'Промпт-инжиниринг PRO', status: 'Лид', stage: 'Новый лид', createdAt: '2026-07-05', comment: '' },
-    { id: 's6', name: 'Артём Белов', contact: '@artem_b', source: 'Telegram', course: 'ИИ для бизнеса', status: 'Лид', stage: 'Квалифицирован', createdAt: '2026-07-07', comment: 'Заинтересован, бюджет есть' },
-    { id: 's7', name: 'Ксения Романова', contact: '+7 903 222-33-44', source: 'Реклама', course: 'AI-старт: нейросети с нуля', status: 'Оплатил', stage: 'Счёт выставлен', createdAt: '2026-07-02', comment: 'Выставлен счёт' },
-    { id: 's8', name: 'Павел Гусев', contact: '@pavel_g', source: 'Реферал', course: 'ИИ для бизнеса', status: 'Отказ', stage: 'Новый лид', createdAt: '2026-06-28', comment: 'Дорого' },
+    { id: 's1', name: 'Алина Хакимова', contact: '@alina_h', phone: '+7 900 100-10-11', email: 'alina@mail.ru', source: 'Instagram', course: 'AI-старт: нейросети с нуля', status: 'Учится', stage: 'Обучается', createdAt: '2026-06-12', comment: 'Активная, платит вовремя' },
+    { id: 's2', name: 'Дмитрий Орлов', contact: '@dmitry_o', phone: '+7 900 111-22-33', email: 'orlov.d@gmail.com', source: 'Telegram', course: 'Промпт-инжиниринг PRO', status: 'Оплатил', stage: 'Оплата получена', createdAt: '2026-06-20', comment: 'Ждёт старт группы' },
+    { id: 's3', name: 'Марина Львова', contact: '@marina_lv', phone: '+7 905 333-44-55', email: 'marina.lv@yandex.ru', source: 'Реклама', course: 'ИИ для бизнеса', status: 'Лид', stage: 'КП отправлено', createdAt: '2026-07-01', comment: 'Думает, перезвонить' },
+    { id: 's4', name: 'Игорь Соколов', contact: '@igor_s', phone: '+7 921 555-77-88', email: 'sokolov@mail.ru', source: 'Реферал', course: 'AI-старт: нейросети с нуля', status: 'Завершил', stage: 'Обучается', createdAt: '2026-04-05', comment: 'Хочет продвинутый курс' },
+    { id: 's5', name: 'Ольга Ким', contact: '@olga_kim', phone: '+7 926 777-88-99', email: 'olga.kim@gmail.com', source: 'Instagram', course: 'Промпт-инжиниринг PRO', status: 'Лид', stage: 'Новый лид', createdAt: '2026-07-05', comment: '' },
+    { id: 's6', name: 'Артём Белов', contact: '@artem_b', phone: '+7 903 121-31-41', email: 'belov.a@yandex.ru', source: 'Telegram', course: 'ИИ для бизнеса', status: 'Лид', stage: 'Квалифицирован', createdAt: '2026-07-07', comment: 'Заинтересован, бюджет есть' },
+    { id: 's7', name: 'Ксения Романова', contact: '@ksenia_r', phone: '+7 903 222-33-44', email: 'romanova@mail.ru', source: 'Реклама', course: 'AI-старт: нейросети с нуля', status: 'Оплатил', stage: 'Счёт выставлен', createdAt: '2026-07-02', comment: 'Выставлен счёт' },
+    { id: 's8', name: 'Павел Гусев', contact: '@pavel_g', phone: '+7 911 909-80-70', email: 'gusev.p@gmail.com', source: 'Реферал', course: 'ИИ для бизнеса', status: 'Отказ', stage: 'Новый лид', createdAt: '2026-06-28', comment: 'Дорого' },
   ],
   lessons: [
     { id: 'l1', course: 'AI-старт: нейросети с нуля', group: 'Группа A-1', topic: 'Введение в нейросети', date: '2026-08-01', time: '19:00' },
@@ -109,7 +111,7 @@ const seed: CRMData = {
   ],
 };
 
-const KEY = 'khakni-crm-v2';
+const KEY = 'khakni-crm-v3';
 
 function normalize(d: CRMData): CRMData {
   return {

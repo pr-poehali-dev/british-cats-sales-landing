@@ -24,19 +24,21 @@ const Students = () => {
   const [expanded, setExpanded] = useState<string | null>(null);
   const [toDelete, setToDelete] = useState<{ id: string; name: string } | null>(null);
   const [form, setForm] = useState({
-    name: '', contact: '', source: 'Instagram' as Source, course: data.courses[0]?.title || '',
+    name: '', contact: '', phone: '', email: '', source: 'Instagram' as Source, course: data.courses[0]?.title || '',
     status: 'Лид' as StudentStatus, comment: '',
   });
 
   const filtered = data.students.filter(
     (s) => s.name.toLowerCase().includes(search.toLowerCase()) ||
-      s.contact.toLowerCase().includes(search.toLowerCase())
+      s.contact.toLowerCase().includes(search.toLowerCase()) ||
+      (s.phone || '').includes(search) ||
+      (s.email || '').toLowerCase().includes(search.toLowerCase())
   );
 
   const save = () => {
     if (!form.name.trim()) return;
     actions.addStudent({ ...form, stage: 'Новый лид' });
-    setForm({ name: '', contact: '', source: 'Instagram', course: data.courses[0]?.title || '', status: 'Лид', comment: '' });
+    setForm({ name: '', contact: '', phone: '', email: '', source: 'Instagram', course: data.courses[0]?.title || '', status: 'Лид', comment: '' });
     setOpen(false);
   };
 
@@ -56,7 +58,11 @@ const Students = () => {
               <DialogHeader><DialogTitle className="font-display">Новый ученик</DialogTitle></DialogHeader>
               <div className="space-y-3">
                 <Input placeholder="ФИО" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
-                <Input placeholder="Telegram / телефон" value={form.contact} onChange={(e) => setForm({ ...form, contact: e.target.value })} />
+                <Input placeholder="Telegram (@username)" value={form.contact} onChange={(e) => setForm({ ...form, contact: e.target.value })} />
+                <div className="grid grid-cols-2 gap-3">
+                  <Input placeholder="Телефон" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+                  <Input placeholder="Почта" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
+                </div>
                 <div className="grid grid-cols-2 gap-3">
                   <Select value={form.source} onValueChange={(v) => setForm({ ...form, source: v as Source })}>
                     <SelectTrigger><SelectValue placeholder="Источник" /></SelectTrigger>
@@ -93,7 +99,7 @@ const Students = () => {
               <tr className="border-b border-border text-muted-foreground text-left">
                 <th className="p-4 font-medium w-8"></th>
                 <th className="p-4 font-medium">ФИО</th>
-                <th className="p-4 font-medium">Контакт</th>
+                <th className="p-4 font-medium">Контакты</th>
                 <th className="p-4 font-medium">Источник</th>
                 <th className="p-4 font-medium">Курс</th>
                 <th className="p-4 font-medium">Статус</th>
@@ -113,7 +119,14 @@ const Students = () => {
                       <Icon name="ChevronDown" size={16} className={`text-muted-foreground transition-transform ${expanded === s.id ? 'rotate-180 text-primary' : ''}`} />
                     </td>
                     <td className="p-4 font-medium whitespace-nowrap">{s.name}</td>
-                    <td className="p-4 text-muted-foreground whitespace-nowrap">{s.contact}</td>
+                    <td className="p-4 text-muted-foreground whitespace-nowrap">
+                      <div className="space-y-0.5 text-xs">
+                        {s.contact && <div className="flex items-center gap-1.5"><Icon name="Send" size={11} className="text-primary" /> {s.contact}</div>}
+                        {s.phone && <div className="flex items-center gap-1.5"><Icon name="Phone" size={11} className="text-success" /> {s.phone}</div>}
+                        {s.email && <div className="flex items-center gap-1.5"><Icon name="Mail" size={11} className="text-warning" /> {s.email}</div>}
+                        {!s.contact && !s.phone && !s.email && '—'}
+                      </div>
+                    </td>
                     <td className="p-4 whitespace-nowrap">{s.source}</td>
                     <td className="p-4 text-muted-foreground max-w-[180px] truncate">{s.course}</td>
                     <td className="p-4" onClick={(e) => e.stopPropagation()}>
