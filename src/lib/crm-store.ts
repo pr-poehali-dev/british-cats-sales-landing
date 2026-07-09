@@ -30,7 +30,7 @@ export interface Student {
   comment: string;
   lastCallAt?: string;
   nextCallAt?: string;
-  notes: ActivityNote[];
+  notes?: ActivityNote[];
 }
 
 export interface Course {
@@ -138,7 +138,9 @@ function persist() {
 
 function subscribe(cb: () => void) {
   listeners.add(cb);
-  return () => listeners.delete(cb);
+  return () => {
+    listeners.delete(cb);
+  };
 }
 
 export function useCRM() {
