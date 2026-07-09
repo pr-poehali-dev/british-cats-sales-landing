@@ -11,6 +11,13 @@ export type FunnelStage =
   | 'Обучается';
 export type PaymentStatus = 'Ожидает' | 'Получена';
 
+export interface ActivityNote {
+  id: string;
+  type: 'comment' | 'call' | 'stage';
+  text: string;
+  createdAt: string;
+}
+
 export interface Student {
   id: string;
   name: string;
@@ -21,6 +28,9 @@ export interface Student {
   stage: FunnelStage;
   createdAt: string;
   comment: string;
+  lastCallAt?: string;
+  nextCallAt?: string;
+  notes: ActivityNote[];
 }
 
 export interface Course {
@@ -99,16 +109,23 @@ const seed: CRMData = {
   ],
 };
 
-const KEY = 'khakni-crm-v1';
+const KEY = 'khakni-crm-v2';
+
+function normalize(d: CRMData): CRMData {
+  return {
+    ...d,
+    students: d.students.map((s) => ({ ...s, notes: Array.isArray(s.notes) ? s.notes : [] })),
+  };
+}
 
 function load(): CRMData {
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) return normalize(JSON.parse(raw));
   } catch {
     /* noop */
   }
-  return seed;
+  return normalize(seed);
 }
 
 let data: CRMData = load();
@@ -129,8 +146,25 @@ export function useCRM() {
 }
 
 export const actions = {
-  addStudent(s: Omit<Student, 'id' | 'createdAt'>) {
-    data = { ...data, students: [{ ...s, id: uid(), createdAt: new Date().toISOString().slice(0, 10) }, ...data.students] };
+  addStudent(s: Omit<Student, 'id' | 'createdAt' | 'notes'>) {
+    data = { ...data, students: [{ ...s, id: uid(), createdAt: new Date().toISOString().slice(0, 10), notes: [] }, ...data.students] };
+    persist();
+  },
+  addNote(id: string, type: ActivityNote['type'], text: string) {
+    const note: ActivityNote = { id: uid(), type, text, createdAt: new Date().toISOString() };
+    data = {
+      ...data,
+      students: data.students.map((s) => (s.id === id ? { ...s, notes: [note, ...(s.notes || [])] } : s)),
+    };
+    persist();
+  },
+  deleteNote(studentId: string, noteId: string) {
+    data = {
+      ...data,
+      students: data.students.map((s) =>
+        s.id === studentId ? { ...s, notes: (s.notes || []).filter((n) => n.id !== noteId) } : s
+      ),
+    };
     persist();
   },
   updateStudent(id: string, patch: Partial<Student>) {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,13 +9,20 @@ import {
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { useCRM, actions, SOURCES, STATUSES, type Source, type StudentStatus } from '@/lib/crm-store';
 import { fmtDate, StatusBadge, SectionHeader } from './ui-helpers';
+import StudentCard from './StudentCard';
 
 const Students = () => {
   const data = useCRM();
   const [search, setSearch] = useState('');
   const [open, setOpen] = useState(false);
+  const [expanded, setExpanded] = useState<string | null>(null);
+  const [toDelete, setToDelete] = useState<{ id: string; name: string } | null>(null);
   const [form, setForm] = useState({
     name: '', contact: '', source: 'Instagram' as Source, course: data.courses[0]?.title || '',
     status: 'Лид' as StudentStatus, comment: '',
@@ -84,45 +91,85 @@ const Students = () => {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border text-muted-foreground text-left">
+                <th className="p-4 font-medium w-8"></th>
                 <th className="p-4 font-medium">ФИО</th>
                 <th className="p-4 font-medium">Контакт</th>
                 <th className="p-4 font-medium">Источник</th>
                 <th className="p-4 font-medium">Курс</th>
                 <th className="p-4 font-medium">Статус</th>
+                <th className="p-4 font-medium">Перезвонить</th>
                 <th className="p-4 font-medium">Добавлен</th>
-                <th className="p-4 font-medium">Комментарий</th>
                 <th className="p-4"></th>
               </tr>
             </thead>
             <tbody>
               {filtered.map((s) => (
-                <tr key={s.id} className="border-b border-border/50 hover:bg-secondary/40 transition-colors">
-                  <td className="p-4 font-medium whitespace-nowrap">{s.name}</td>
-                  <td className="p-4 text-muted-foreground whitespace-nowrap">{s.contact}</td>
-                  <td className="p-4 whitespace-nowrap">{s.source}</td>
-                  <td className="p-4 text-muted-foreground max-w-[180px] truncate">{s.course}</td>
-                  <td className="p-4">
-                    <Select value={s.status} onValueChange={(v) => actions.updateStudent(s.id, { status: v as StudentStatus })}>
-                      <SelectTrigger className="h-8 w-auto border-none bg-transparent p-0 gap-2"><StatusBadge value={s.status} /></SelectTrigger>
-                      <SelectContent>{STATUSES.map((x) => <SelectItem key={x} value={x}>{x}</SelectItem>)}</SelectContent>
-                    </Select>
-                  </td>
-                  <td className="p-4 text-muted-foreground whitespace-nowrap">{fmtDate(s.createdAt)}</td>
-                  <td className="p-4 text-muted-foreground max-w-[200px] truncate">{s.comment || '—'}</td>
-                  <td className="p-4">
-                    <button onClick={() => actions.deleteStudent(s.id)} className="text-muted-foreground hover:text-destructive">
-                      <Icon name="Trash2" size={16} />
-                    </button>
-                  </td>
-                </tr>
+                <Fragment key={s.id}>
+                  <tr
+                    onClick={() => setExpanded(expanded === s.id ? null : s.id)}
+                    className="border-b border-border/50 hover:bg-secondary/40 transition-colors cursor-pointer"
+                  >
+                    <td className="p-4">
+                      <Icon name="ChevronDown" size={16} className={`text-muted-foreground transition-transform ${expanded === s.id ? 'rotate-180 text-primary' : ''}`} />
+                    </td>
+                    <td className="p-4 font-medium whitespace-nowrap">{s.name}</td>
+                    <td className="p-4 text-muted-foreground whitespace-nowrap">{s.contact}</td>
+                    <td className="p-4 whitespace-nowrap">{s.source}</td>
+                    <td className="p-4 text-muted-foreground max-w-[180px] truncate">{s.course}</td>
+                    <td className="p-4" onClick={(e) => e.stopPropagation()}>
+                      <Select value={s.status} onValueChange={(v) => actions.updateStudent(s.id, { status: v as StudentStatus })}>
+                        <SelectTrigger className="h-8 w-auto border-none bg-transparent p-0 gap-2"><StatusBadge value={s.status} /></SelectTrigger>
+                        <SelectContent>{STATUSES.map((x) => <SelectItem key={x} value={x}>{x}</SelectItem>)}</SelectContent>
+                      </Select>
+                    </td>
+                    <td className="p-4 whitespace-nowrap">
+                      {s.nextCallAt
+                        ? <span className="inline-flex items-center gap-1.5 text-warning text-xs"><Icon name="CalendarClock" size={13} /> {fmtDate(s.nextCallAt)}</span>
+                        : <span className="text-muted-foreground">—</span>}
+                    </td>
+                    <td className="p-4 text-muted-foreground whitespace-nowrap">{fmtDate(s.createdAt)}</td>
+                    <td className="p-4" onClick={(e) => e.stopPropagation()}>
+                      <button onClick={() => setToDelete({ id: s.id, name: s.name })} className="text-muted-foreground hover:text-destructive">
+                        <Icon name="Trash2" size={16} />
+                      </button>
+                    </td>
+                  </tr>
+                  {expanded === s.id && (
+                    <tr>
+                      <td colSpan={9} className="p-3 bg-background/40">
+                        <StudentCard student={s} />
+                      </td>
+                    </tr>
+                  )}
+                </Fragment>
               ))}
               {filtered.length === 0 && (
-                <tr><td colSpan={8} className="p-10 text-center text-muted-foreground">Ничего не найдено</td></tr>
+                <tr><td colSpan={9} className="p-10 text-center text-muted-foreground">Ничего не найдено</td></tr>
               )}
             </tbody>
           </table>
         </div>
       </div>
+
+      <AlertDialog open={!!toDelete} onOpenChange={(o) => !o && setToDelete(null)}>
+        <AlertDialogContent className="glass">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="font-display">Правда ли я хочу удалить?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Ученик <span className="text-foreground font-medium">{toDelete?.name}</span> и вся история по нему будут удалены без возможности восстановления.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Отмена</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => { if (toDelete) actions.deleteStudent(toDelete.id); setToDelete(null); }}
+              className="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
+            >
+              Удалить
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
