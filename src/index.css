@@ -4,36 +4,33 @@
 
 @layer base {
   :root {
-    --background: 160 30% 6%;
-    --foreground: 40 30% 92%;
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
 
-    --card: 160 25% 9%;
-    --card-foreground: 40 30% 92%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
 
-    --popover: 160 25% 9%;
-    --popover-foreground: 40 30% 92%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 43 65% 52%;
-    --primary-foreground: 160 40% 8%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 160 20% 14%;
-    --secondary-foreground: 40 30% 92%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --muted: 160 15% 16%;
-    --muted-foreground: 40 12% 62%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 43 60% 50%;
-    --accent-foreground: 160 40% 8%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
 
-    --destructive: 0 70% 45%;
-    --destructive-foreground: 40 30% 92%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 43 30% 22%;
-    --input: 160 20% 16%;
-    --ring: 43 65% 52%;
-
-    --gold: 43 70% 56%;
-    --gold-soft: 43 50% 72%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
 
@@ -100,66 +97,5 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: "Golos Text", sans-serif;
-  }
-}
-
-@layer utilities {
-  .font-display {
-    font-family: "Cormorant", serif;
-  }
-  .text-gold-gradient {
-    background: linear-gradient(
-      110deg,
-      hsl(43 50% 72%),
-      hsl(43 80% 56%),
-      hsl(43 50% 72%)
-    );
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  .gold-line {
-    background: linear-gradient(
-      90deg,
-      transparent,
-      hsl(var(--gold) / 0.6),
-      transparent
-    );
-  }
-  .luxe-card {
-    background: linear-gradient(160deg, hsl(160 25% 11%), hsl(160 28% 7%));
-    border: 1px solid hsl(var(--gold) / 0.18);
-    transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .luxe-card:hover {
-    border-color: hsl(var(--gold) / 0.5);
-    transform: translateY(-6px);
-    box-shadow: 0 20px 50px -20px hsl(var(--gold) / 0.35);
-  }
-  .paw-bg {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='%23d4af37' fill-opacity='0.05'%3E%3Cellipse cx='30' cy='38' rx='9' ry='12'/%3E%3Cellipse cx='16' cy='22' rx='4' ry='5'/%3E%3Cellipse cx='27' cy='17' rx='4' ry='5'/%3E%3Cellipse cx='38' cy='19' rx='4' ry='5'/%3E%3Cellipse cx='48' cy='27' rx='4' ry='5'/%3E%3Cellipse cx='90' cy='98' rx='9' ry='12'/%3E%3Cellipse cx='76' cy='82' rx='4' ry='5'/%3E%3Cellipse cx='87' cy='77' rx='4' ry='5'/%3E%3Cellipse cx='98' cy='79' rx='4' ry='5'/%3E%3Cellipse cx='108' cy='87' rx='4' ry='5'/%3E%3C/g%3E%3C/svg%3E");
-    background-size: 160px 160px;
-    animation: paw-drift 40s linear infinite;
-  }
-  @keyframes paw-drift {
-    from {
-      background-position: 0 0;
-    }
-    to {
-      background-position: 160px 320px;
-    }
-  }
-  .grain {
-    background-image: radial-gradient(
-      hsl(var(--gold) / 0.04) 1px,
-      transparent 1px
-    );
-    background-size: 22px 22px;
   }
 }
