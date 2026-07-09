@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Sidebar, { type Section } from '@/components/crm/Sidebar';
 import Dashboard from '@/components/crm/Dashboard';
 import Inbox from '@/components/crm/Inbox';
+import Tasks from '@/components/crm/Tasks';
 import Students from '@/components/crm/Students';
 import Funnel from '@/components/crm/Funnel';
 import Courses from '@/components/crm/Courses';
@@ -17,6 +18,7 @@ const Index = () => {
       <main className="flex-1 min-w-0 p-6 md:p-8 grid-bg">
         {section === 'dashboard' && <Dashboard />}
         {section === 'inbox' && <Inbox />}
+        {section === 'tasks' && <Tasks />}
         {section === 'students' && <Students />}
         {section === 'funnel' && <Funnel />}
         {section === 'courses' && <Courses />}

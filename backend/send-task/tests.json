@@ -1,0 +1,30 @@
+{
+  "tests": [
+    {
+      "name": "Статус сервиса и каналов",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {"service": "send-task"},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Ошибка без обязательных полей",
+      "method": "POST",
+      "path": "/",
+      "body": {"channel": "telegram"},
+      "expectedStatus": 400,
+      "expectedBody": {"error": "string"},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Неподдерживаемый канал",
+      "method": "POST",
+      "path": "/",
+      "body": {"channel": "whatsapp", "contact": "+7900", "text": "Задача"},
+      "expectedStatus": 400,
+      "expectedBody": {"error": "string"},
+      "bodyMatcher": "partial"
+    }
+  ]
+}

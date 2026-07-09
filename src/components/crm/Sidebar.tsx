@@ -2,11 +2,12 @@ import Icon from '@/components/ui/icon';
 import { useTheme, setTheme, THEMES } from '@/lib/theme';
 import { useDialogs } from '@/lib/chat-store';
 
-export type Section = 'dashboard' | 'inbox' | 'students' | 'funnel' | 'courses' | 'schedule' | 'finance';
+export type Section = 'dashboard' | 'inbox' | 'tasks' | 'students' | 'funnel' | 'courses' | 'schedule' | 'finance';
 
 const ITEMS: { id: Section; label: string; icon: string }[] = [
   { id: 'dashboard', label: 'Дашборд', icon: 'LayoutDashboard' },
   { id: 'inbox', label: 'Чаты', icon: 'MessagesSquare' },
+  { id: 'tasks', label: 'Задачи', icon: 'ListChecks' },
   { id: 'students', label: 'Ученики', icon: 'Users' },
   { id: 'funnel', label: 'Воронка продаж', icon: 'Trello' },
   { id: 'courses', label: 'Курсы', icon: 'GraduationCap' },
