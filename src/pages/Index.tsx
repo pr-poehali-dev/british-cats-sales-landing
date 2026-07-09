@@ -1,12 +1,26 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from 'react';
+import Sidebar, { type Section } from '@/components/crm/Sidebar';
+import Dashboard from '@/components/crm/Dashboard';
+import Students from '@/components/crm/Students';
+import Funnel from '@/components/crm/Funnel';
+import Courses from '@/components/crm/Courses';
+import Schedule from '@/components/crm/Schedule';
+import Finance from '@/components/crm/Finance';
 
 const Index = () => {
+  const [section, setSection] = useState<Section>('dashboard');
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Start building your amazing project here!</h1>
-        <p className="text-xl text-gray-600">Begin editing to see magic happen :)</p>
-      </div>
+    <div className="min-h-screen flex bg-background text-foreground">
+      <Sidebar active={section} onChange={setSection} />
+      <main className="flex-1 min-w-0 p-6 md:p-8 grid-bg">
+        {section === 'dashboard' && <Dashboard />}
+        {section === 'students' && <Students />}
+        {section === 'funnel' && <Funnel />}
+        {section === 'courses' && <Courses />}
+        {section === 'schedule' && <Schedule />}
+        {section === 'finance' && <Finance />}
+      </main>
     </div>
   );
 };
