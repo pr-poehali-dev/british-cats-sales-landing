@@ -1,10 +1,12 @@
 import Icon from '@/components/ui/icon';
 import { useTheme, setTheme, THEMES } from '@/lib/theme';
+import { useDialogs } from '@/lib/chat-store';
 
-export type Section = 'dashboard' | 'students' | 'funnel' | 'courses' | 'schedule' | 'finance';
+export type Section = 'dashboard' | 'inbox' | 'students' | 'funnel' | 'courses' | 'schedule' | 'finance';
 
 const ITEMS: { id: Section; label: string; icon: string }[] = [
   { id: 'dashboard', label: 'Дашборд', icon: 'LayoutDashboard' },
+  { id: 'inbox', label: 'Чаты', icon: 'MessagesSquare' },
   { id: 'students', label: 'Ученики', icon: 'Users' },
   { id: 'funnel', label: 'Воронка продаж', icon: 'Trello' },
   { id: 'courses', label: 'Курсы', icon: 'GraduationCap' },
@@ -19,6 +21,8 @@ interface Props {
 
 const Sidebar = ({ active, onChange }: Props) => {
   const theme = useTheme();
+  const dialogs = useDialogs();
+  const unread = dialogs.reduce((s, d) => s + d.unread, 0);
   return (
     <aside className="w-64 shrink-0 bg-sidebar border-r border-sidebar-border flex flex-col h-screen sticky top-0">
       <div className="p-6 flex items-center gap-3 border-b border-sidebar-border">
@@ -43,7 +47,14 @@ const Sidebar = ({ active, onChange }: Props) => {
             }`}
           >
             <Icon name={item.icon} size={19} />
-            {item.label}
+            <span className="flex-1 text-left">{item.label}</span>
+            {item.id === 'inbox' && unread > 0 && (
+              <span className={`min-w-[20px] h-5 px-1.5 rounded-full text-[11px] font-bold flex items-center justify-center ${
+                active === item.id ? 'bg-primary-foreground text-primary' : 'bg-primary text-primary-foreground'
+              }`}>
+                {unread}
+              </span>
+            )}
           </button>
         ))}
       </nav>
