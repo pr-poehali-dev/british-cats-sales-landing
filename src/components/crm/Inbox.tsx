@@ -2,8 +2,10 @@ import { useState, useRef, useEffect } from 'react';
 import Icon from '@/components/ui/icon';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useDialogs, chatActions, CHANNEL_META, type Channel } from '@/lib/chat-store';
+import { useDialogs, chatActions, CHANNEL_META, type Channel, type ChatAttachment } from '@/lib/chat-store';
 import { SectionHeader } from './ui-helpers';
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 const fmtTime = (iso: string) => {
   const d = new Date(iso);
@@ -14,12 +16,21 @@ const fmtTime = (iso: string) => {
     : d.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short' });
 };
 
+const fmtSize = (bytes: number) => {
+  if (bytes < 1024) return `${bytes} Б`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} КБ`;
+  return `${(bytes / 1024 / 1024).toFixed(1)} МБ`;
+};
+
 const Inbox = () => {
   const dialogs = useDialogs();
   const [activeId, setActiveId] = useState<string | null>(dialogs[0]?.id ?? null);
   const [filter, setFilter] = useState<Channel | 'all'>('all');
   const [text, setText] = useState('');
+  const [pending, setPending] = useState<ChatAttachment | null>(null);
+  const [fileError, setFileError] = useState('');
   const endRef = useRef<HTMLDivElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const filtered = filter === 'all' ? dialogs : dialogs.filter((d) => d.channel === filter);
   const active = dialogs.find((d) => d.id === activeId) || null;
@@ -32,12 +43,32 @@ const Inbox = () => {
   const openDialog = (id: string) => {
     setActiveId(id);
     chatActions.markRead(id);
+    setPending(null);
+    setFileError('');
+  };
+
+  const pickFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFileError('');
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    if (file.size > MAX_FILE_SIZE) {
+      setFileError(`Файл больше 5 МБ (${fmtSize(file.size)})`);
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      setPending({ name: file.name, size: file.size, type: file.type, dataUrl: reader.result as string });
+    };
+    reader.readAsDataURL(file);
   };
 
   const send = () => {
-    if (!text.trim() || !active) return;
-    chatActions.sendMessage(active.id, text.trim());
+    if ((!text.trim() && !pending) || !active) return;
+    chatActions.sendMessage(active.id, text.trim(), pending ?? undefined);
     setText('');
+    setPending(null);
+    setFileError('');
   };
 
   return (
@@ -121,7 +152,27 @@ const Inbox = () => {
                           : 'bg-secondary text-foreground rounded-bl-sm'
                       }`}
                     >
-                      <div>{m.text}</div>
+                      {m.attachment && (
+                        m.attachment.type.startsWith('image/') ? (
+                          <a href={m.attachment.dataUrl} download={m.attachment.name} target="_blank" rel="noreferrer" className="block mb-1.5">
+                            <img src={m.attachment.dataUrl} alt={m.attachment.name} className="rounded-lg max-h-52 object-cover" />
+                          </a>
+                        ) : (
+                          <a
+                            href={m.attachment.dataUrl}
+                            download={m.attachment.name}
+                            className={`flex items-center gap-2 mb-1.5 p-2 rounded-lg ${m.from === 'me' ? 'bg-primary-foreground/15' : 'bg-background/60'}`}
+                          >
+                            <Icon name="File" size={22} />
+                            <span className="min-w-0">
+                              <span className="block truncate max-w-[180px]">{m.attachment.name}</span>
+                              <span className="block text-[10px] opacity-70">{fmtSize(m.attachment.size)}</span>
+                            </span>
+                            <Icon name="Download" size={15} className="ml-1 shrink-0" />
+                          </a>
+                        )
+                      )}
+                      {m.text && <div>{m.text}</div>}
                       <div className={`text-[10px] mt-1 ${m.from === 'me' ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>
                         {fmtTime(m.at)}
                       </div>
@@ -131,17 +182,47 @@ const Inbox = () => {
                 <div ref={endRef} />
               </div>
 
-              <div className="p-3 border-t border-border/60 flex gap-2">
-                <Input
-                  placeholder={`Ответить в ${CHANNEL_META[active.channel].label}...`}
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && send()}
-                  className="h-10"
-                />
-                <Button onClick={send} disabled={!text.trim()} className="h-10 shrink-0">
-                  <Icon name="Send" size={16} className="mr-1" /> Отправить
-                </Button>
+              <div className="p-3 border-t border-border/60">
+                {pending && (
+                  <div className="flex items-center gap-2 mb-2 p-2 rounded-lg bg-secondary/60 text-sm">
+                    {pending.type.startsWith('image/')
+                      ? <img src={pending.dataUrl} alt={pending.name} className="w-9 h-9 rounded object-cover" />
+                      : <Icon name="File" size={20} className="text-primary" />}
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate">{pending.name}</span>
+                      <span className="block text-[11px] text-muted-foreground">{fmtSize(pending.size)}</span>
+                    </span>
+                    <button onClick={() => setPending(null)} className="text-muted-foreground hover:text-destructive shrink-0">
+                      <Icon name="X" size={16} />
+                    </button>
+                  </div>
+                )}
+                {fileError && (
+                  <div className="text-xs text-destructive mb-2 flex items-center gap-1">
+                    <Icon name="TriangleAlert" size={12} /> {fileError}
+                  </div>
+                )}
+                <div className="flex gap-2">
+                  <input ref={fileRef} type="file" className="hidden" onChange={pickFile} />
+                  <Button
+                    variant="secondary"
+                    onClick={() => fileRef.current?.click()}
+                    className="h-10 w-10 p-0 shrink-0"
+                    title="Прикрепить файл (до 5 МБ)"
+                  >
+                    <Icon name="Paperclip" size={18} />
+                  </Button>
+                  <Input
+                    placeholder={`Ответить в ${CHANNEL_META[active.channel].label}...`}
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && send()}
+                    className="h-10"
+                  />
+                  <Button onClick={send} disabled={!text.trim() && !pending} className="h-10 shrink-0">
+                    <Icon name="Send" size={16} className="mr-1" /> Отправить
+                  </Button>
+                </div>
               </div>
             </>
           ) : (

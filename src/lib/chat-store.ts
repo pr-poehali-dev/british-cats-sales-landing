@@ -11,11 +11,19 @@ export const CHANNEL_META: Record<Channel, { label: string; icon: string; color:
   web: { label: 'Сайт', icon: 'Globe', color: 'text-primary' },
 };
 
+export interface ChatAttachment {
+  name: string;
+  size: number;
+  type: string;
+  dataUrl: string;
+}
+
 export interface ChatMessage {
   id: string;
   from: 'client' | 'me';
   text: string;
   at: string;
+  attachment?: ChatAttachment;
 }
 
 export interface Dialog {
@@ -107,10 +115,10 @@ export function useDialogs(): Dialog[] {
 }
 
 export const chatActions = {
-  sendMessage(dialogId: string, text: string) {
+  sendMessage(dialogId: string, text: string, attachment?: ChatAttachment) {
     dialogs = dialogs.map((d) =>
       d.id === dialogId
-        ? { ...d, messages: [...d.messages, { id: uid(), from: 'me', text, at: new Date().toISOString() }] }
+        ? { ...d, messages: [...d.messages, { id: uid(), from: 'me', text, at: new Date().toISOString(), attachment }] }
         : d
     );
     persist();
