@@ -127,10 +127,10 @@ const TaskList = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col items-end gap-2">
+              <div className="flex flex-col items-stretch md:items-end gap-2 w-full md:w-auto">
                 <div className="flex gap-2">
                   <Select value={t.status} onValueChange={(v) => tasksActions.updateTask(t.id, { status: v as TaskStatus })}>
-                    <SelectTrigger className="h-9 w-[130px]"><SelectValue /></SelectTrigger>
+                    <SelectTrigger className="h-9 flex-1 md:flex-none md:w-[130px]"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {(Object.keys(TASK_STATUS_META) as TaskStatus[]).map((s) => (
                         <SelectItem key={s} value={s}>{TASK_STATUS_META[s].label}</SelectItem>

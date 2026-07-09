@@ -29,6 +29,7 @@ const Inbox = () => {
   const [text, setText] = useState('');
   const [pending, setPending] = useState<ChatAttachment | null>(null);
   const [fileError, setFileError] = useState('');
+  const [mobileChat, setMobileChat] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -42,6 +43,7 @@ const Inbox = () => {
 
   const openDialog = (id: string) => {
     setActiveId(id);
+    setMobileChat(true);
     chatActions.markRead(id);
     setPending(null);
     setFileError('');
@@ -85,8 +87,8 @@ const Inbox = () => {
         ))}
       </div>
 
-      <div className="grid md:grid-cols-[320px_1fr] gap-4 h-[calc(100vh-16rem)] min-h-[480px]">
-        <div className="glass rounded-xl overflow-y-auto">
+      <div className="grid md:grid-cols-[320px_1fr] gap-4 h-[calc(100vh-13rem)] md:h-[calc(100vh-16rem)] min-h-[420px]">
+        <div className={`glass rounded-xl overflow-y-auto ${mobileChat ? 'hidden md:block' : 'block'}`}>
           {filtered.length === 0 && (
             <div className="p-6 text-center text-muted-foreground text-sm">Нет диалогов в этом канале</div>
           )}
@@ -126,11 +128,18 @@ const Inbox = () => {
           })}
         </div>
 
-        <div className="glass rounded-xl flex flex-col overflow-hidden">
+        <div className={`glass rounded-xl flex-col overflow-hidden ${mobileChat ? 'flex' : 'hidden md:flex'}`}>
           {active ? (
             <>
-              <div className="p-4 border-b border-border/60 flex items-center gap-3">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold ${active.avatarColor}`}>
+              <div className="p-3 md:p-4 border-b border-border/60 flex items-center gap-3">
+                <button
+                  onClick={() => setMobileChat(false)}
+                  className="md:hidden w-8 h-8 flex items-center justify-center rounded-lg hover:bg-secondary shrink-0"
+                  aria-label="Назад"
+                >
+                  <Icon name="ArrowLeft" size={20} />
+                </button>
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold shrink-0 ${active.avatarColor}`}>
                   {active.name.charAt(0)}
                 </div>
                 <div className="min-w-0">

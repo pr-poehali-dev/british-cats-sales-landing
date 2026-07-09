@@ -87,12 +87,57 @@ const Students = () => {
         }
       />
 
-      <div className="relative mb-4 max-w-sm">
+      <div className="relative mb-4 w-full max-w-sm">
         <Icon name="Search" size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
         <Input placeholder="Поиск по имени или контакту" value={search} onChange={(e) => setSearch(e.target.value)} className="pl-9" />
       </div>
 
-      <div className="glass rounded-2xl overflow-hidden">
+      {/* Мобильные карточки */}
+      <div className="md:hidden space-y-3">
+        {filtered.map((s) => (
+          <div key={s.id} className="glass rounded-2xl overflow-hidden">
+            <button
+              onClick={() => setExpanded(expanded === s.id ? null : s.id)}
+              className="w-full text-left p-4 flex items-start gap-3"
+            >
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="font-medium">{s.name}</span>
+                  <StatusBadge value={s.status} />
+                </div>
+                <div className="mt-1.5 space-y-0.5 text-xs text-muted-foreground">
+                  {s.contact && <div className="flex items-center gap-1.5"><Icon name="Send" size={11} className="text-primary" /> {s.contact}</div>}
+                  {s.phone && <div className="flex items-center gap-1.5"><Icon name="Phone" size={11} className="text-success" /> {s.phone}</div>}
+                  {s.email && <div className="flex items-center gap-1.5 truncate"><Icon name="Mail" size={11} className="text-warning shrink-0" /> {s.email}</div>}
+                </div>
+                <div className="mt-1.5 text-xs text-muted-foreground truncate">{s.course}</div>
+                {s.nextCallAt && (
+                  <div className="mt-1 inline-flex items-center gap-1.5 text-warning text-xs">
+                    <Icon name="CalendarClock" size={13} /> Перезвонить: {fmtDate(s.nextCallAt)}
+                  </div>
+                )}
+              </div>
+              <Icon name="ChevronDown" size={18} className={`text-muted-foreground transition-transform shrink-0 mt-0.5 ${expanded === s.id ? 'rotate-180 text-primary' : ''}`} />
+            </button>
+            {expanded === s.id && (
+              <div className="p-3 pt-0">
+                <div className="flex justify-end mb-2">
+                  <button onClick={() => setToDelete({ id: s.id, name: s.name })} className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-destructive">
+                    <Icon name="Trash2" size={14} /> Удалить
+                  </button>
+                </div>
+                <StudentCard student={s} />
+              </div>
+            )}
+          </div>
+        ))}
+        {filtered.length === 0 && (
+          <div className="glass rounded-2xl p-10 text-center text-muted-foreground">Ничего не найдено</div>
+        )}
+      </div>
+
+      {/* Десктопная таблица */}
+      <div className="hidden md:block glass rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>

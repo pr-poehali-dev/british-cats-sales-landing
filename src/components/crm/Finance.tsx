@@ -87,7 +87,33 @@ const Finance = () => {
         </div>
       </div>
 
-      <div className="glass rounded-2xl overflow-hidden">
+      {/* Мобильные карточки */}
+      <div className="md:hidden space-y-3">
+        {data.payments.map((p) => (
+          <div key={p.id} className="glass rounded-2xl p-4">
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0">
+                <div className="font-medium">{studentName(p.studentId)}</div>
+                <div className="text-xs text-muted-foreground truncate mt-0.5">{p.course}</div>
+              </div>
+              <button onClick={() => actions.deletePayment(p.id)} className="text-muted-foreground hover:text-destructive shrink-0">
+                <Icon name="Trash2" size={16} />
+              </button>
+            </div>
+            <div className="flex items-center justify-between gap-2 mt-3">
+              <span className="font-display text-lg font-bold">{fmtMoney(p.amount)}</span>
+              <button onClick={() => actions.togglePayment(p.id)}><StatusBadge value={p.status} /></button>
+            </div>
+            <div className="text-xs text-muted-foreground mt-1.5">{fmtDate(p.date)}</div>
+          </div>
+        ))}
+        {data.payments.length === 0 && (
+          <div className="glass rounded-2xl p-10 text-center text-muted-foreground">Платежей пока нет</div>
+        )}
+      </div>
+
+      {/* Десктопная таблица */}
+      <div className="hidden md:block glass rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>

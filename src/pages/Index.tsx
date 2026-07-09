@@ -13,9 +13,9 @@ const Index = () => {
   const [section, setSection] = useState<Section>('dashboard');
 
   return (
-    <div className="min-h-screen flex bg-background text-foreground">
+    <div className="min-h-screen flex flex-col md:flex-row bg-background text-foreground">
       <Sidebar active={section} onChange={setSection} />
-      <main className="flex-1 min-w-0 p-6 md:p-8 grid-bg">
+      <main className="flex-1 min-w-0 p-4 sm:p-6 md:p-8 grid-bg">
         {section === 'dashboard' && <Dashboard />}
         {section === 'inbox' && <Inbox />}
         {section === 'tasks' && <Tasks />}

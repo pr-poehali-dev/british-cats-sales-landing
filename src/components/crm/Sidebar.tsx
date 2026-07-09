@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Icon from '@/components/ui/icon';
 import { useTheme, setTheme, THEMES } from '@/lib/theme';
 import { useDialogs } from '@/lib/chat-store';
@@ -24,23 +25,32 @@ const Sidebar = ({ active, onChange }: Props) => {
   const theme = useTheme();
   const dialogs = useDialogs();
   const unread = dialogs.reduce((s, d) => s + d.unread, 0);
-  return (
-    <aside className="w-64 shrink-0 bg-sidebar border-r border-sidebar-border flex flex-col h-screen sticky top-0">
-      <div className="p-6 flex items-center gap-3 border-b border-sidebar-border">
-        <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center neon-glow">
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const activeItem = ITEMS.find((i) => i.id === active);
+
+  const handleSelect = (s: Section) => {
+    onChange(s);
+    setMobileOpen(false);
+  };
+
+  const panel = (
+    <div className="flex flex-col h-full">
+      <div className="p-5 md:p-6 flex items-center gap-3 border-b border-sidebar-border">
+        <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center neon-glow shrink-0">
           <Icon name="BrainCircuit" className="text-white" size={22} />
         </div>
-        <div>
-          <div className="font-display font-bold text-lg leading-tight neon-text">Khakni Neuro</div>
-          <div className="text-xs text-muted-foreground">CRM онлайн-школы</div>
+        <div className="min-w-0">
+          <div className="font-display font-bold text-lg leading-tight neon-text truncate">Khakni Neuro</div>
+          <div className="text-xs text-muted-foreground truncate">CRM онлайн-школы</div>
         </div>
       </div>
 
-      <nav className="flex-1 p-3 space-y-1">
+      <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
         {ITEMS.map((item) => (
           <button
             key={item.id}
-            onClick={() => onChange(item.id)}
+            onClick={() => handleSelect(item.id)}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
               active === item.id
                 ? 'bg-primary text-primary-foreground neon-glow'
@@ -85,16 +95,58 @@ const Sidebar = ({ active, onChange }: Props) => {
 
       <div className="p-4 border-t border-sidebar-border">
         <div className="flex items-center gap-3 px-2">
-          <div className="w-9 h-9 rounded-full bg-accent/20 border border-accent/40 flex items-center justify-center text-accent font-semibold">
+          <div className="w-9 h-9 rounded-full bg-accent/20 border border-accent/40 flex items-center justify-center text-accent font-semibold shrink-0">
             А
           </div>
-          <div className="text-sm">
-            <div className="font-medium">Администратор</div>
-            <div className="text-xs text-muted-foreground">admin@khakni.ai</div>
+          <div className="text-sm min-w-0">
+            <div className="font-medium truncate">Администратор</div>
+            <div className="text-xs text-muted-foreground truncate">admin@khakni.ai</div>
           </div>
         </div>
       </div>
-    </aside>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Мобильная верхняя панель с бургером */}
+      <header className="md:hidden sticky top-0 z-30 flex items-center gap-3 px-4 h-14 bg-sidebar border-b border-sidebar-border">
+        <button
+          onClick={() => setMobileOpen(true)}
+          className="w-9 h-9 flex items-center justify-center rounded-lg text-sidebar-foreground hover:bg-sidebar-accent shrink-0"
+          aria-label="Меню"
+        >
+          <Icon name="Menu" size={22} />
+          {unread > 0 && <span className="absolute top-2 left-8 w-2 h-2 rounded-full bg-primary" />}
+        </button>
+        <div className="flex items-center gap-2 min-w-0">
+          {activeItem && <Icon name={activeItem.icon} size={18} className="text-primary shrink-0" />}
+          <span className="font-display font-semibold truncate">{activeItem?.label || 'Khakni Neuro'}</span>
+        </div>
+      </header>
+
+      {/* Десктопный сайдбар */}
+      <aside className="hidden md:flex w-64 shrink-0 bg-sidebar border-r border-sidebar-border flex-col h-screen sticky top-0">
+        {panel}
+      </aside>
+
+      {/* Мобильный drawer */}
+      {mobileOpen && (
+        <div className="md:hidden fixed inset-0 z-50 flex">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
+          <aside className="relative w-[82vw] max-w-[300px] bg-sidebar border-r border-sidebar-border h-full animate-in slide-in-from-left duration-200">
+            <button
+              onClick={() => setMobileOpen(false)}
+              className="absolute top-4 right-3 w-8 h-8 flex items-center justify-center rounded-lg text-sidebar-foreground hover:bg-sidebar-accent z-10"
+              aria-label="Закрыть"
+            >
+              <Icon name="X" size={20} />
+            </button>
+            {panel}
+          </aside>
+        </div>
+      )}
+    </>
   );
 };
 

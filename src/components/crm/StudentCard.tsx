@@ -72,7 +72,7 @@ const StudentCard = ({ student }: { student: Student }) => {
   };
 
   return (
-    <div className="grid md:grid-cols-2 gap-6 p-5 bg-secondary/30 rounded-xl border border-border/60">
+    <div className="grid md:grid-cols-2 gap-5 md:gap-6 p-3 sm:p-5 bg-secondary/30 rounded-xl border border-border/60">
       {/* Левая колонка — управление */}
       <div className="space-y-4">
         <div className="grid grid-cols-2 gap-3">

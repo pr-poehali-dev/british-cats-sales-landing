@@ -29,11 +29,11 @@ export const StatusBadge = ({ value }: { value: string }) => (
 );
 
 export const SectionHeader = ({ title, subtitle, action }: { title: string; subtitle?: string; action?: React.ReactNode }) => (
-  <div className="flex items-start justify-between mb-6 gap-4 flex-wrap">
-    <div>
-      <h1 className="font-display text-2xl md:text-3xl font-bold">{title}</h1>
+  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-5 md:mb-6 gap-3 sm:gap-4">
+    <div className="min-w-0">
+      <h1 className="font-display text-xl sm:text-2xl md:text-3xl font-bold">{title}</h1>
       {subtitle && <p className="text-muted-foreground text-sm mt-1">{subtitle}</p>}
     </div>
-    {action}
+    {action && <div className="shrink-0 [&_button]:w-full sm:[&_button]:w-auto">{action}</div>}
   </div>
 );

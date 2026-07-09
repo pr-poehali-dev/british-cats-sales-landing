@@ -34,7 +34,7 @@ const Funnel = () => {
               onDragOver={(e) => { e.preventDefault(); setOverStage(stage); }}
               onDragLeave={() => setOverStage(null)}
               onDrop={() => drop(stage)}
-              className={`w-72 shrink-0 rounded-2xl border transition-colors ${
+              className={`w-[80vw] max-w-[300px] sm:w-72 shrink-0 rounded-2xl border transition-colors ${
                 overStage === stage ? 'border-primary bg-primary/5' : 'border-border bg-card/40'
               }`}
             >

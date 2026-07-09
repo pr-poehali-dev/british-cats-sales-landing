@@ -59,7 +59,31 @@ const Schedule = () => {
         }
       />
 
-      <div className="glass rounded-2xl overflow-hidden">
+      {/* Мобильные карточки */}
+      <div className="md:hidden space-y-3">
+        {sorted.map((l) => (
+          <div key={l.id} className="glass rounded-2xl p-4 flex items-start gap-3">
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 text-sm flex-wrap">
+                <span className="inline-flex items-center gap-1.5 text-primary font-medium"><Icon name="Clock" size={14} /> {l.time}</span>
+                <span className="text-muted-foreground">{fmtDate(l.date)}</span>
+              </div>
+              <div className="font-medium mt-1.5">{l.topic}</div>
+              <div className="text-xs text-muted-foreground mt-1 truncate">{l.course}</div>
+              {l.group && <div className="text-xs text-muted-foreground mt-0.5">Группа: {l.group}</div>}
+            </div>
+            <button onClick={() => actions.deleteLesson(l.id)} className="text-muted-foreground hover:text-destructive shrink-0">
+              <Icon name="Trash2" size={16} />
+            </button>
+          </div>
+        ))}
+        {sorted.length === 0 && (
+          <div className="glass rounded-2xl p-10 text-center text-muted-foreground">Занятий пока нет</div>
+        )}
+      </div>
+
+      {/* Десктопная таблица */}
+      <div className="hidden md:block glass rounded-2xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
