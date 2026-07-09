@@ -25,7 +25,7 @@ const Funnel = () => {
     <div>
       <SectionHeader title="Воронка продаж" subtitle="Перетаскивайте карточки между этапами или откройте карточку для редактирования" />
 
-      <div className="flex gap-4 overflow-x-auto pb-4">
+      <div className="flex flex-col md:flex-row gap-4 md:overflow-x-auto pb-4">
         {STAGES.map((stage) => {
           const items = data.students.filter((s) => s.stage === stage);
           return (
@@ -34,7 +34,7 @@ const Funnel = () => {
               onDragOver={(e) => { e.preventDefault(); setOverStage(stage); }}
               onDragLeave={() => setOverStage(null)}
               onDrop={() => drop(stage)}
-              className={`w-[80vw] max-w-[300px] sm:w-72 shrink-0 rounded-2xl border transition-colors ${
+              className={`w-full md:w-72 md:shrink-0 rounded-2xl border transition-colors ${
                 overStage === stage ? 'border-primary bg-primary/5' : 'border-border bg-card/40'
               }`}
             >
@@ -42,7 +42,7 @@ const Funnel = () => {
                 <span className="font-display font-semibold text-sm">{stage}</span>
                 <span className="text-xs bg-secondary px-2 py-0.5 rounded-full text-muted-foreground">{items.length}</span>
               </div>
-              <div className="p-3 space-y-2 min-h-[120px]">
+              <div className="p-3 space-y-2 md:min-h-[120px]">
                 {items.map((s) => (
                   <div
                     key={s.id}
