@@ -1,4 +1,5 @@
 import Icon from '@/components/ui/icon';
+import { useTheme, setTheme, THEMES } from '@/lib/theme';
 
 export type Section = 'dashboard' | 'students' | 'funnel' | 'courses' | 'schedule' | 'finance';
 
@@ -17,6 +18,7 @@ interface Props {
 }
 
 const Sidebar = ({ active, onChange }: Props) => {
+  const theme = useTheme();
   return (
     <aside className="w-64 shrink-0 bg-sidebar border-r border-sidebar-border flex flex-col h-screen sticky top-0">
       <div className="p-6 flex items-center gap-3 border-b border-sidebar-border">
@@ -45,6 +47,29 @@ const Sidebar = ({ active, onChange }: Props) => {
           </button>
         ))}
       </nav>
+
+      <div className="p-3 border-t border-sidebar-border">
+        <div className="text-xs text-muted-foreground px-1 mb-2 flex items-center gap-1.5">
+          <Icon name="Paintbrush" size={12} /> Тема оформления
+        </div>
+        <div className="grid grid-cols-3 gap-1.5">
+          {THEMES.map((t) => (
+            <button
+              key={t.id}
+              onClick={() => setTheme(t.id)}
+              title={t.label}
+              className={`flex flex-col items-center gap-1 py-2 rounded-lg text-[11px] transition-all ${
+                theme === t.id
+                  ? 'bg-primary text-primary-foreground neon-glow'
+                  : 'bg-sidebar-accent text-sidebar-foreground hover:bg-secondary'
+              }`}
+            >
+              <Icon name={t.icon} size={16} />
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </div>
 
       <div className="p-4 border-t border-sidebar-border">
         <div className="flex items-center gap-3 px-2">
