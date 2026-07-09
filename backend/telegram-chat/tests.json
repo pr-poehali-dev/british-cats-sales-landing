@@ -1,0 +1,21 @@
+{
+  "tests": [
+    {
+      "name": "Список диалогов",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {"dialogs": []},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Ошибка отправки без данных",
+      "method": "POST",
+      "path": "/",
+      "body": {"chatId": ""},
+      "expectedStatus": 400,
+      "expectedBody": {"error": "string"},
+      "bodyMatcher": "partial"
+    }
+  ]
+}

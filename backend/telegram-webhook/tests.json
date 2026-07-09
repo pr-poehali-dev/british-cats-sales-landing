@@ -1,0 +1,13 @@
+{
+  "tests": [
+    {
+      "name": "Webhook принимает пустой апдейт",
+      "method": "POST",
+      "path": "/",
+      "body": {},
+      "expectedStatus": 200,
+      "expectedBody": {"ok": true},
+      "bodyMatcher": "partial"
+    }
+  ]
+}
