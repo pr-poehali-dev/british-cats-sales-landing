@@ -158,7 +158,8 @@ h1,h2,h3{font-family:var(--disp);font-weight:600;text-transform:uppercase;line-h
 
 /* professions */
 .profs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:64px}
-.prof{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:34px 28px;position:relative;transform-style:preserve-3d;transition:border-color .4s;will-change:transform}
+.profs>*{height:100%}
+.prof{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:34px 28px;position:relative;transform-style:preserve-3d;transition:border-color .4s;will-change:transform;height:100%}
 .prof:hover{border-color:var(--cyan)}
 .prof .num{font-family:var(--mono);font-size:12px;color:var(--t3);letter-spacing:.1em}
 .prof h3{font-size:20px;margin:14px 0 12px}
