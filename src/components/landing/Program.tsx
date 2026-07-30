@@ -30,7 +30,16 @@ const MODULES = [
 
 const Program = () => {
   const [active, setActive] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const refs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width:900px)');
+    const upd = () => setIsMobile(mq.matches);
+    upd();
+    mq.addEventListener('change', upd);
+    return () => mq.removeEventListener('change', upd);
+  }, []);
 
   useEffect(() => {
     const io = new IntersectionObserver((entries) => {
@@ -40,7 +49,7 @@ const Program = () => {
           setActive((prev) => Math.max(prev, idx + 1));
         }
       });
-    }, { threshold: 0.6 });
+    }, { threshold: 0.6, rootMargin: '0px 0px -20% 0px' });
     refs.current.forEach((r) => r && io.observe(r));
     return () => io.disconnect();
   }, []);
@@ -66,20 +75,35 @@ const Program = () => {
             </div>
           </div>
           <div className="modules">
-            {MODULES.map((m, i) => (
-              <div
-                key={m.n}
-                data-idx={i}
-                ref={(el) => (refs.current[i] = el)}
-                className={`module${i < active ? ' active' : ''}`}
-              >
-                <div className="m-num">{m.n}</div>
-                <div>
-                  <h3>{m.t}</h3>
-                  <p>{m.d}</p>
+            {MODULES.map((m, i) => {
+              // На мобильном показываем модули постепенно: видимы только до active+1,
+              // следующий выезжает по мере прокрутки — список не грузит экран сразу.
+              const revealed = !isMobile || i <= active;
+              return (
+                <div
+                  key={m.n}
+                  data-idx={i}
+                  ref={(el) => (refs.current[i] = el)}
+                  className={`module${i < active ? ' active' : ''}`}
+                  style={isMobile ? {
+                    opacity: revealed ? 1 : 0,
+                    transform: revealed ? 'none' : 'translateY(28px)',
+                    maxHeight: revealed ? 400 : 0,
+                    paddingTop: revealed ? undefined : 0,
+                    paddingBottom: revealed ? undefined : 0,
+                    borderTopWidth: revealed ? undefined : 0,
+                    overflow: 'hidden',
+                    transition: 'opacity .5s var(--ease), transform .5s var(--ease), max-height .5s var(--ease), padding .5s var(--ease)',
+                  } : undefined}
+                >
+                  <div className="m-num">{m.n}</div>
+                  <div>
+                    <h3>{m.t}</h3>
+                    <p>{m.d}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
