@@ -32,6 +32,7 @@ const Program = () => {
   const [active, setActive] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const refs = useRef<(HTMLDivElement | null)[]>([]);
+  const trackRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width:900px)');
@@ -41,7 +42,9 @@ const Program = () => {
     return () => mq.removeEventListener('change', upd);
   }, []);
 
+  // Десктоп: подсветка модулей по мере попадания в зону видимости.
   useEffect(() => {
+    if (isMobile) return;
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         if (e.isIntersecting) {
@@ -52,50 +55,62 @@ const Program = () => {
     }, { threshold: 0.6, rootMargin: '0px 0px -20% 0px' });
     refs.current.forEach((r) => r && io.observe(r));
     return () => io.disconnect();
-  }, []);
+  }, [isMobile]);
 
-  const pct = Math.round((active / MODULES.length) * 100);
+  // Мобильный: sticky-карусель. Прогресс прокрутки трека → индекс активного модуля.
+  // Один блок виден за раз, при скролле уезжает влево, следующий приезжает справа.
+  useEffect(() => {
+    if (!isMobile) return;
+    const onScroll = () => {
+      const el = trackRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const scrollable = el.offsetHeight - window.innerHeight;
+      const passed = Math.min(Math.max(-rect.top, 0), scrollable);
+      const p = scrollable > 0 ? passed / scrollable : 0;
+      const idx = Math.min(MODULES.length - 1, Math.round(p * (MODULES.length - 1)));
+      setActive(idx);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [isMobile]);
+
+  const activeCount = isMobile ? active + 1 : active;
+  const pct = Math.round((activeCount / MODULES.length) * 100);
   const dash = 364;
   const offset = dash - (dash * pct) / 100;
 
-  return (
-    <section className="sec" id="program">
-      <div className="wrap">
-        <div className="prog-layout">
-          <div className="prog-sticky">
-            <Reveal className="eyebrow">// 03 · ПРОГРАММА</Reveal>
-            <Reveal as="h2" className="sec-title grad-text">24 модуля.<br />Ноль воды.</Reveal>
-            <Reveal as="p" className="sec-sub">Каждый модуль — практика на своём проекте. Листай — программа оживает.</Reveal>
-            <div className="prog-ring">
-              <svg width="130" height="130">
-                <circle cx="65" cy="65" r="58" fill="none" stroke="var(--line)" strokeWidth="3" />
-                <circle cx="65" cy="65" r="58" fill="none" stroke="var(--cyan)" strokeWidth="3" strokeDasharray={dash} strokeDashoffset={offset} strokeLinecap="round" style={{ transition: 'stroke-dashoffset .5s cubic-bezier(.16,1,.3,1)' }} />
-              </svg>
-              <div className="val mono">{pct}%</div>
-            </div>
-          </div>
-          <div className="modules">
+  const header = (
+    <div className="prog-sticky">
+      <Reveal className="eyebrow">// 03 · ПРОГРАММА</Reveal>
+      <Reveal as="h2" className="sec-title grad-text">24 модуля.<br />Ноль воды.</Reveal>
+      <Reveal as="p" className="sec-sub">Каждый модуль — практика на своём проекте. Листай — программа оживает.</Reveal>
+      <div className="prog-ring">
+        <svg width="130" height="130">
+          <circle cx="65" cy="65" r="58" fill="none" stroke="var(--line)" strokeWidth="3" />
+          <circle cx="65" cy="65" r="58" fill="none" stroke="var(--cyan)" strokeWidth="3" strokeDasharray={dash} strokeDashoffset={offset} strokeLinecap="round" style={{ transition: 'stroke-dashoffset .5s cubic-bezier(.16,1,.3,1)' }} />
+        </svg>
+        <div className="val mono">{pct}%</div>
+      </div>
+    </div>
+  );
+
+  if (isMobile) {
+    return (
+      <section className="sec" id="program">
+        <div className="wrap">{header}</div>
+        <div className="prog-track" ref={trackRef} style={{ height: `${MODULES.length * 60 + 100}vh` }}>
+          <div className="prog-stage">
+            <div className="prog-count mono">{String(active + 1).padStart(2, '0')} / {MODULES.length}</div>
             {MODULES.map((m, i) => {
-              // На мобильном показываем модули постепенно: видимы только до active+1,
-              // следующий выезжает по мере прокрутки — список не грузит экран сразу.
-              const revealed = !isMobile || i <= active;
+              const state = i === active ? 'cur' : i < active ? 'past' : 'next';
               return (
-                <div
-                  key={m.n}
-                  data-idx={i}
-                  ref={(el) => (refs.current[i] = el)}
-                  className={`module${i < active ? ' active' : ''}`}
-                  style={isMobile ? {
-                    opacity: revealed ? 1 : 0,
-                    transform: revealed ? 'none' : 'translateX(-60px)',
-                    maxHeight: revealed ? 400 : 0,
-                    paddingTop: revealed ? undefined : 0,
-                    paddingBottom: revealed ? undefined : 0,
-                    borderTopWidth: revealed ? undefined : 0,
-                    overflow: 'hidden',
-                    transition: 'opacity .5s var(--ease), transform .5s var(--ease), max-height .5s var(--ease), padding .5s var(--ease)',
-                  } : undefined}
-                >
+                <div key={m.n} className={`prog-slide ${state}`}>
                   <div className="m-num">{m.n}</div>
                   <div>
                     <h3>{m.t}</h3>
@@ -104,6 +119,32 @@ const Program = () => {
                 </div>
               );
             })}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="sec" id="program">
+      <div className="wrap">
+        <div className="prog-layout">
+          {header}
+          <div className="modules">
+            {MODULES.map((m, i) => (
+              <div
+                key={m.n}
+                data-idx={i}
+                ref={(el) => (refs.current[i] = el)}
+                className={`module${i < active ? ' active' : ''}`}
+              >
+                <div className="m-num">{m.n}</div>
+                <div>
+                  <h3>{m.t}</h3>
+                  <p>{m.d}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
