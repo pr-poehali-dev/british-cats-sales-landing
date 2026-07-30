@@ -87,7 +87,7 @@ const Program = () => {
                   className={`module${i < active ? ' active' : ''}`}
                   style={isMobile ? {
                     opacity: revealed ? 1 : 0,
-                    transform: revealed ? 'none' : 'translateY(28px)',
+                    transform: revealed ? 'none' : 'translateX(-60px)',
                     maxHeight: revealed ? 400 : 0,
                     paddingTop: revealed ? undefined : 0,
                     paddingBottom: revealed ? undefined : 0,
