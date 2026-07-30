@@ -1,30 +1,10 @@
-import { useState } from 'react';
-import Sidebar, { type Section } from '@/components/crm/Sidebar';
-import Dashboard from '@/components/crm/Dashboard';
-import Inbox from '@/components/crm/Inbox';
-import Tasks from '@/components/crm/Tasks';
-import Students from '@/components/crm/Students';
-import Funnel from '@/components/crm/Funnel';
-import Courses from '@/components/crm/Courses';
-import Schedule from '@/components/crm/Schedule';
-import Finance from '@/components/crm/Finance';
-
 const Index = () => {
-  const [section, setSection] = useState<Section>('dashboard');
-
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-background text-foreground">
-      <Sidebar active={section} onChange={setSection} />
-      <main className="flex-1 min-w-0 p-4 sm:p-6 md:p-8 grid-bg">
-        {section === 'dashboard' && <Dashboard />}
-        {section === 'inbox' && <Inbox />}
-        {section === 'tasks' && <Tasks />}
-        {section === 'students' && <Students />}
-        {section === 'funnel' && <Funnel />}
-        {section === 'courses' && <Courses />}
-        {section === 'schedule' && <Schedule />}
-        {section === 'finance' && <Finance />}
-      </main>
+    <div className="min-h-screen flex items-center justify-center bg-background text-foreground p-6">
+      <div className="text-center">
+        <h1 className="text-3xl font-bold mb-2">Новый проект</h1>
+        <p className="text-muted-foreground">Здесь будет ваш сайт</p>
+      </div>
     </div>
   );
 };
