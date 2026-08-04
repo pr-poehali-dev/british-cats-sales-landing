@@ -10,19 +10,19 @@ const PLANS = [
     badge: 'Выбор большинства', badgeO: false, hot: true,
     tag: 'ДЛЯ СТАРТА', name: 'БАЗА', sum: 'от 12 500 ₽', per: '/ МЕСЯЦ В РАССРОЧКУ',
     feats: ['3 месяца обучения, 72 часа практики', 'Домашние задания с проверкой кураторами', 'Общий чат потока', 'Записи всех занятий на 6 месяцев', 'Библиотека промптов школы', 'Экзамен и сертификат'],
-    btn: 'Взять базу', ghost: false,
+    btn: 'Взять базу', ghost: false, link: null as string | null,
   },
   {
     badge: null as string | null, badgeO: false, hot: false,
     tag: 'ДЛЯ КОМПАНИЙ', name: 'КОРПОРАТИВНОЕ ОБУЧЕНИЕ', sum: 'Обсуждается индивидуально', per: 'ОПЛАТА ОТ ЮРЛИЦА ПО ДОГОВОРУ',
     feats: ['Обучение команды нейросетям под задачи бизнеса', 'Программа адаптируется под ваши процессы', 'Групповые и индивидуальные форматы', 'Закрытый чат и сопровождение кураторов', 'Отчётность и закрывающие документы'],
-    btn: 'Обсудить обучение', ghost: true,
+    btn: 'Обсудить обучение', ghost: true, link: 'https://t.me/chernikovpsiholog',
   },
   {
     badge: 'Мест мало', badgeO: true, hot: false,
     tag: 'МАКСИМУМ', name: 'ИНДИВИДУАЛЬНЫЙ', sum: 'Обсуждается индивидуально', per: 'ЛИЧНОЕ ОБУЧЕНИЕ 1-НА-1',
     feats: ['Личное обучение один на один с наставником', 'Программа полностью под ваши цели и задачи', 'Занятия в удобном для вас графике', 'Разбор ваших проектов на каждой встрече', 'Прямой контакт с Сергеем и командой школы'],
-    btn: 'Записаться на обучение', ghost: true,
+    btn: 'Записаться на обучение', ghost: true, link: 'https://t.me/chernikovpsiholog',
   },
 ];
 
@@ -42,7 +42,11 @@ const Pricing = () => {
               <div className={`p-sum${/^\d/.test(p.sum) ? '' : ' txt'}`}>{p.sum}</div>
               <div className="p-per">{p.per}</div>
               <ul>{p.feats.map((f) => <li key={f}>{f}</li>)}</ul>
-              <a className={`btn${p.ghost ? ' btn-ghost' : ''}`} href="#final" style={{ justifyContent: 'center' }} onClick={(e) => scrollTo(e, '#final')}>{p.btn}</a>
+              {p.link ? (
+                <a className={`btn${p.ghost ? ' btn-ghost' : ''}`} href={p.link} target="_blank" rel="noopener noreferrer" style={{ justifyContent: 'center' }}>{p.btn}</a>
+              ) : (
+                <a className={`btn${p.ghost ? ' btn-ghost' : ''}`} href="#final" style={{ justifyContent: 'center' }} onClick={(e) => scrollTo(e, '#final')}>{p.btn}</a>
+              )}
             </Reveal>
           ))}
         </div>
