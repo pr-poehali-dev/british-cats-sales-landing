@@ -1,6 +1,6 @@
 import Reveal from './Reveal';
 
-const TOOLS = ['ChatGPT', 'Nano Banana', 'Seedance 2', 'GigaChat', 'Claude', 'Gemini', 'Kandinsky', 'Яндекс', 'Salebot'];
+const TOOLS = ['Nano Banana', 'Seedance 2', 'Gemini', 'Perplexity', 'Magnific', 'Kimi', 'Heygen', 'Manus', 'Suno', 'Gamma', 'Lipsync'];
 
 const Tools = () => {
   return (
@@ -14,7 +14,7 @@ const Tools = () => {
           ))}
         </div>
         <Reveal className="vpn-note">
-          <b>Честно про VPN:</b> российские сервисы работают напрямую. Для зарубежных (ChatGPT, Claude, Nano Banana) нужен VPN — бесплатного достаточно, покажем и настроим на первом занятии.
+          <b>Честно про VPN:</b> российские сервисы работают напрямую. Для зарубежных (Gemini, Perplexity, Nano Banana) нужен VPN — бесплатного достаточно, покажем и настроим на первом занятии.
         </Reveal>
       </div>
     </section>
