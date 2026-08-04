@@ -24,7 +24,7 @@ const Particles = () => {
       h = canvas.height = canvas.offsetHeight;
     };
     resize();
-    const count = Math.min(70, Math.floor(w / 22));
+    const count = Math.min(160, Math.max(60, Math.floor((w * h) / 14000)));
     for (let i = 0; i < count; i++) {
       dots.push({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3 });
     }
