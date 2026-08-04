@@ -350,7 +350,7 @@ footer{background:var(--deep);border-top:1px solid var(--line);padding:64px 0 40
 .foot-grid h5{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--t3);text-transform:uppercase;margin-bottom:16px}
 .foot-grid a{display:block;color:var(--t2);font-size:14.5px;padding:5px 0;transition:color .3s}
 .foot-grid a:hover{color:var(--cyan)}
-.foot-word{font-family:var(--disp);font-size:clamp(40px,8vw,120px);font-weight:700;color:transparent;-webkit-text-stroke:1px var(--line);text-transform:uppercase;text-align:center;margin:60px 0 30px;user-select:none;white-space:nowrap;overflow:hidden}
+.foot-word{font-family:var(--disp);font-size:clamp(28px,6.1vw,110px);font-weight:700;color:transparent;-webkit-text-stroke:1px var(--line);text-transform:uppercase;text-align:center;margin:60px 0 30px;user-select:none;white-space:nowrap;max-width:100%}
 .foot-bottom{border-top:1px solid var(--line);padding-top:24px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;color:var(--t3);letter-spacing:.06em}
 @media(max-width:800px){.foot-grid{grid-template-columns:1fr}}
 
