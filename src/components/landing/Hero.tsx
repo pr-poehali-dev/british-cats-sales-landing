@@ -3,7 +3,11 @@ import Countdown from './Countdown';
 
 const scrollTo = (e: React.MouseEvent, href: string) => {
   e.preventDefault();
-  document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+  const target = document.querySelector(href) as HTMLElement | null;
+  if (!target) return;
+  const navH = (document.getElementById('nav')?.offsetHeight ?? 0) + 12;
+  const top = target.getBoundingClientRect().top + window.scrollY - navH;
+  window.scrollTo({ top, behavior: 'smooth' });
 };
 
 const Particles = () => {
