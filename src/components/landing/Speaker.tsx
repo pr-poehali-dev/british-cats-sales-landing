@@ -64,6 +64,7 @@ const Speaker = () => {
                   style={{ left: lens.x, top: lens.y }}
                 />
               )}
+              {!lens && <span className="spk-hint">Наведи</span>}
             </div>
           </Reveal>
           <div>
