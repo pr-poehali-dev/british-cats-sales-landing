@@ -17,7 +17,10 @@ const Footer = () => {
       <div className="wrap">
         <div className="foot-grid">
           <div>
-            <img src="/site/logo.jpg" alt="Хакни Нейросети" />
+            <div className="foot-glitch">
+              <img className="fg-robot" src="https://cdn.poehali.dev/projects/d3e635a0-73f6-4725-9cb9-7faeace376fe/bucket/2a99f48e-b96a-4740-b7b5-20e600a11814.png" alt="" aria-hidden />
+              <img className="fg-human" src="/site/speaker.jpg" alt="Сергей Черников" />
+            </div>
             <p>Первая живая школа нейросетей на Дальнем Востоке. Учим зарабатывать с ИИ — с нуля, вживую, с кураторами.</p>
           </div>
           <div>

@@ -348,6 +348,17 @@ h1,h2,h3{font-family:var(--disp);font-weight:600;text-transform:uppercase;line-h
 footer{background:var(--deep);border-top:1px solid var(--line);padding:64px 0 40px}
 .foot-grid{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:40px}
 .foot-grid img{width:64px;height:64px;border-radius:50%;margin-bottom:18px}
+.foot-glitch{position:relative;width:120px;height:120px;border-radius:16px;overflow:hidden;margin-bottom:18px;border:1px solid var(--line)}
+.foot-glitch img{width:100%;height:100%;border-radius:0;margin:0;object-fit:cover;position:absolute;inset:0;display:block}
+.foot-glitch .fg-robot{z-index:1}
+.foot-glitch .fg-human{z-index:2;animation:footGlitch 1s steps(1) infinite}
+@keyframes footGlitch{
+  0%,87%{opacity:1;transform:translate(0,0);clip-path:none;filter:none}
+  88%{opacity:.15;transform:translate(-4px,2px);clip-path:inset(20% 0 45% 0);filter:hue-rotate(40deg) saturate(1.4)}
+  91%{opacity:.85;transform:translate(5px,-2px);clip-path:inset(55% 0 12% 0)}
+  94%{opacity:.2;transform:translate(-3px,0);clip-path:inset(8% 0 70% 0)}
+  97%,100%{opacity:1;transform:translate(0,0);clip-path:none;filter:none}
+}
 .foot-grid p{color:var(--t2);font-size:14px;max-width:340px}
 .foot-grid h5{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--t3);text-transform:uppercase;margin-bottom:16px}
 .foot-grid a{display:block;color:var(--t2);font-size:14.5px;padding:5px 0;transition:color .3s}
