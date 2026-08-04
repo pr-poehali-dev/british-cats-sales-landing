@@ -338,8 +338,11 @@ h1,h2,h3{font-family:var(--disp);font-weight:600;text-transform:uppercase;line-h
 .rev .who{display:flex;gap:12px;align-items:center;margin-top:22px}
 .rev .who b{font-size:14px;display:block}
 .rev .who span{font-family:var(--mono);font-size:11px;color:var(--t3)}
-.agg{margin-top:40px;display:inline-flex;align-items:center;gap:18px;border:1px solid var(--line);border-radius:999px;padding:14px 26px;font-family:var(--mono)}
+.rev-foot{margin-top:40px;display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.agg{display:inline-flex;align-items:center;gap:18px;border:1px solid var(--line);border-radius:999px;padding:14px 26px;font-family:var(--mono)}
 .agg b{color:var(--cyan);font-size:22px}
+.rev-2gis{display:inline-flex;align-items:center;gap:6px;color:var(--cyan);font-family:var(--mono);font-size:13px;letter-spacing:.04em;border-bottom:1px solid transparent;transition:border-color .3s,opacity .3s;padding-bottom:2px}
+.rev-2gis:hover{border-color:var(--cyan);opacity:.85}
 @media(max-width:960px){.rev-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:640px){.rev-grid{grid-template-columns:1fr}}
 

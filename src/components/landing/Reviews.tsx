@@ -100,7 +100,10 @@ const Reviews = () => {
             <ReviewCard key={r.name} r={r} />
           ))}
         </Reveal>
-        <Reveal className="agg"><b>4.9/5</b><span>средний рейтинг по отзывам выпускников</span></Reveal>
+        <div className="rev-foot">
+          <Reveal className="agg"><b>4.9/5</b><span>средний рейтинг по отзывам выпускников</span></Reveal>
+          <a className="rev-2gis" href="https://2gis.ru/vladivostok/firm/70000001105602364/tab/reviews?m=131.922771%2C43.170115%2F16" target="_blank" rel="noopener noreferrer">Читать все отзывы на 2ГИС →</a>
+        </div>
       </div>
     </section>
   );
