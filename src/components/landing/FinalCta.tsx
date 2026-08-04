@@ -16,7 +16,7 @@ const FinalCta = () => {
           <Countdown />
         </Reveal>
         <Reveal className="hero-cta" style={{ justifyContent: 'center' }}>
-          <a className="btn magnetic" href="https://t.me/chernikovgpt" target="_blank" rel="noopener">Занять место в Telegram →</a>
+          <a className="btn magnetic" href="https://t.me/chernikovgpt" target="_blank" rel="noopener">Занять место →</a>
           <a className="btn btn-ghost magnetic" href="https://t.me/ChernikovGPT_Bot" target="_blank" rel="noopener">Бесплатная консультация</a>
         </Reveal>
       </div>
