@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import Reveal from './Reveal';
 
 const CASES = [
@@ -35,6 +35,25 @@ const Cases = () => {
     box.current?.classList.remove('grabbing');
   };
 
+  const paused = useRef(false);
+
+  useEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    let raf = 0;
+    const speed = 0.4;
+    const step = () => {
+      if (!paused.current && !drag.current.down) {
+        el.scrollLeft += speed;
+        const half = el.scrollWidth / 2;
+        if (el.scrollLeft >= half) el.scrollLeft -= half;
+      }
+      raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
   return (
     <section className="sec" id="cases" style={{ background: 'var(--deep)' }}>
       <div className="wrap">
@@ -52,15 +71,16 @@ const Cases = () => {
         onMouseDown={(e) => onDown(e.pageX)}
         onMouseMove={(e) => onMove(e.pageX)}
         onMouseUp={onUp}
-        onMouseLeave={onUp}
         onTouchStart={(e) => onDown(e.touches[0].pageX)}
         onTouchMove={(e) => onMove(e.touches[0].pageX)}
         onTouchEnd={onUp}
+        onMouseEnter={() => { paused.current = true; }}
+        onMouseLeave={() => { paused.current = false; onUp(); }}
         style={{ overflowX: 'auto', scrollbarWidth: 'none' }}
       >
         <div className="cases-track">
-          {CASES.map((c) => (
-            <div className="case" key={c.name}>
+          {[...CASES, ...CASES].map((c, i) => (
+            <div className="case" key={`${c.name}-${i}`}>
               <div className="case-top">
                 <div className="avatar">{c.av}</div>
                 <div><b>{c.name}</b><span>{c.role}</span></div>
