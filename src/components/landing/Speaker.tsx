@@ -58,6 +58,12 @@ const Speaker = () => {
                   maskImage: `radial-gradient(circle 90px at ${lens.x}px ${lens.y}px, transparent 0, transparent 65px, #000 110px)`,
                 } : undefined}
               />
+              {lens && (
+                <span
+                  className="spk-glow"
+                  style={{ left: lens.x, top: lens.y }}
+                />
+              )}
             </div>
           </Reveal>
           <div>

@@ -213,6 +213,8 @@ h1,h2,h3{font-family:var(--disp);font-weight:600;text-transform:uppercase;line-h
 .spk-lens .spk-under{position:absolute;inset:0;object-fit:cover}
 .spk-lens .spk-top{position:relative;z-index:1}
 .spk-lens::after{content:'';position:absolute;inset:0;z-index:2;box-shadow:inset 0 0 40px rgba(0,0,0,.4);pointer-events:none}
+.spk-glow{position:absolute;z-index:3;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;pointer-events:none;border:2px solid var(--cyan);box-shadow:0 0 24px var(--cyan-glow),inset 0 0 24px var(--cyan-glow);opacity:.85;animation:spkGlowIn .3s var(--ease)}
+@keyframes spkGlowIn{from{opacity:0;transform:scale(.6)}to{opacity:.85;transform:scale(1)}}
 .tl{position:relative;padding-left:34px}
 .tl::before{content:'';position:absolute;left:8px;top:6px;bottom:6px;width:1px;background:var(--line)}
 .tl-line{position:absolute;left:8px;top:6px;width:1px;background:var(--cyan);height:0;box-shadow:0 0 12px var(--cyan-glow)}
