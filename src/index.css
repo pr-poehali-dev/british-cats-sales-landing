@@ -289,8 +289,8 @@ h1,h2,h3{font-family:var(--disp);font-weight:600;text-transform:uppercase;line-h
 .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:56px;align-items:stretch}
 .price{background:var(--bg2);border:1px solid var(--line);border-radius:20px;padding:36px 30px;display:flex;flex-direction:column;position:relative;transition:all .4s var(--ease)}
 .price:hover{transform:translateY(-6px)}
-.price.hot{border-color:var(--cyan);box-shadow:0 0 60px rgba(0,229,245,.12);transform:scale(1.03)}
-.price.hot:hover{transform:scale(1.03) translateY(-6px)}
+.price.hot{border-color:var(--cyan);box-shadow:0 0 60px rgba(0,229,245,.12)}
+.price.hot:hover{transform:translateY(-6px)}
 .price .p-tag{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--t3)}
 .price.hot .p-tag{color:var(--cyan)}
 .price h3{font-family:var(--disp);font-size:22px;margin:14px 0 4px}
