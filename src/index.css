@@ -118,12 +118,17 @@ h1,h2,h3{font-family:var(--disp);font-weight:600;text-transform:uppercase;line-h
 .hero-glitch .hg-robot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}
 .hero-glitch .hg-human{position:relative;z-index:2;animation:heroGlitch 1s steps(1) infinite}
 @keyframes heroGlitch{
-  0%,87%{opacity:1;transform:translate(0,0);clip-path:none;filter:saturate(.9)}
-  88%{opacity:.15;transform:translate(-6px,3px);clip-path:inset(18% 0 46% 0);filter:hue-rotate(45deg) saturate(1.6)}
-  91%{opacity:.85;transform:translate(7px,-3px);clip-path:inset(54% 0 10% 0)}
-  94%{opacity:.2;transform:translate(-4px,0);clip-path:inset(6% 0 68% 0)}
-  97%,100%{opacity:1;transform:translate(0,0);clip-path:none;filter:saturate(.9)}
+  0%,80%{opacity:1;transform:translate(0,0);clip-path:none;filter:saturate(.9)}
+  81%{opacity:.15;transform:translate(-6px,3px);clip-path:inset(18% 0 46% 0);filter:hue-rotate(45deg) saturate(1.6)}
+  85%{opacity:.85;transform:translate(7px,-3px);clip-path:inset(54% 0 10% 0)}
+  89%{opacity:.2;transform:translate(-5px,2px);clip-path:inset(6% 0 68% 0);filter:hue-rotate(-30deg) saturate(1.5)}
+  93%{opacity:.8;transform:translate(4px,-1px);clip-path:inset(38% 0 30% 0)}
+  97%{opacity:.25;transform:translate(-3px,0);clip-path:inset(70% 0 4% 0)}
+  100%{opacity:1;transform:translate(0,0);clip-path:none;filter:saturate(.9)}
 }
+.hero-glitch::before{content:'';position:absolute;inset:0;z-index:3;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,.16) 0,rgba(0,0,0,.16) 1px,transparent 1px,transparent 3px);mix-blend-mode:overlay;opacity:.6}
+.hero-glitch::after{content:'';position:absolute;inset:0;z-index:4;pointer-events:none;opacity:.05;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:180px;animation:heroNoise .5s steps(3) infinite}
+@keyframes heroNoise{0%{transform:translate(0,0)}33%{transform:translate(-6px,4px)}66%{transform:translate(5px,-5px)}100%{transform:translate(0,0)}}
 .brackets i{position:absolute;width:26px;height:26px;border:1.5px solid var(--cyan);transition:all .4s var(--ease)}
 .brackets i:nth-child(1){top:-10px;left:-10px;border-right:none;border-bottom:none}
 .brackets i:nth-child(2){top:-10px;right:-10px;border-left:none;border-bottom:none}
