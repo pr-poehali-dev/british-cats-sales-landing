@@ -11,26 +11,39 @@ const LINKS = [
 const Navbar = () => {
   const [solid, setSolid] = useState(false);
   const [hide, setHide] = useState(false);
+  const [open, setOpen] = useState(false);
   const lastY = useRef(0);
 
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
       setSolid(y > 40);
-      setHide(y > lastY.current && y > 400);
+      setHide(y > lastY.current && y > 400 && !open);
       lastY.current = y;
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [open]);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [open]);
 
   const scrollTo = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+    setOpen(false);
+    const target = document.querySelector(href) as HTMLElement | null;
+    if (!target) return;
+    setTimeout(() => {
+      const navH = (document.getElementById('nav')?.offsetHeight ?? 0) + 12;
+      const top = target.getBoundingClientRect().top + window.scrollY - navH;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }, 10);
   };
 
   return (
-    <nav id="nav" className={`${solid ? 'solid' : ''} ${hide ? 'hide' : ''}`}>
+    <nav id="nav" className={`${solid || open ? 'solid' : ''} ${hide ? 'hide' : ''}`}>
       <a className="nav-logo" href="#hero" onClick={(e) => scrollTo(e, '#hero')}>
         <img src="/site/logo.jpg" alt="ХН" />
         <b>ХАКНИ<br />НЕЙРОСЕТИ</b>
@@ -43,6 +56,21 @@ const Navbar = () => {
       <div className="nav-right">
         <span className="chip-seats">ОСТАЛОСЬ 7 МЕСТ</span>
         <a className="btn btn-sm" href="#final" onClick={(e) => scrollTo(e, '#final')}>Занять место</a>
+      </div>
+      <button
+        className={`nav-burger${open ? ' open' : ''}`}
+        aria-label="Меню"
+        aria-expanded={open}
+        onClick={() => setOpen((v) => !v)}
+      >
+        <span /><span /><span />
+      </button>
+      <div className={`nav-mobile${open ? ' open' : ''}`}>
+        {LINKS.map((l) => (
+          <a key={l.href} href={l.href} onClick={(e) => scrollTo(e, l.href)}>{l.label}</a>
+        ))}
+        <span className="chip-seats mob">ОСТАЛОСЬ 7 МЕСТ</span>
+        <a className="btn" href="#final" onClick={(e) => scrollTo(e, '#final')}>Занять место →</a>
       </div>
     </nav>
   );
