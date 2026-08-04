@@ -5,6 +5,14 @@ const TICKETS = [
   { date: '16.09', sub: 'СРЕДА + СУББОТА · 19:00', flow: 'ПОТОК 2', left: 'ОСТАЛОСЬ 3 МЕСТА' },
 ];
 
+const goToFinal = () => {
+  const target = document.getElementById('final');
+  if (!target) return;
+  const navH = (document.getElementById('nav')?.offsetHeight ?? 0) + 12;
+  const top = target.getBoundingClientRect().top + window.scrollY - navH;
+  window.scrollTo({ top, behavior: 'smooth' });
+};
+
 const Streams = () => {
   return (
     <section className="sec" id="streams">
@@ -15,9 +23,17 @@ const Streams = () => {
         <div className="streams">
           {TICKETS.map((t, i) => (
             <Reveal key={t.flow} className="ticket" delay={i * 0.1}>
-              <div className="t-date"><b>{t.date}</b><span>{t.sub}</span></div>
-              <div className="t-info">{t.flow}<br /><span className="left">{t.left}</span></div>
-              <div className="t-stub" />
+              <div
+                className="ticket-inner"
+                role="button"
+                tabIndex={0}
+                onClick={goToFinal}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToFinal(); } }}
+              >
+                <div className="t-date"><b>{t.date}</b><span>{t.sub}</span></div>
+                <div className="t-info">{t.flow}<br /><span className="left">{t.left}</span></div>
+                <div className="t-stub" />
+              </div>
             </Reveal>
           ))}
         </div>
