@@ -1,6 +1,6 @@
 import Reveal from './Reveal';
 
-const TOOLS = ['Nano Banana', 'Seedance 2', 'Gemini', 'Perplexity', 'Magnific', 'Kimi', 'Heygen', 'Manus', 'Suno', 'Gamma', 'Lipsync'];
+const TOOLS = ['Nano Banana', 'Seedance 2', 'Gemini', 'Perplexity', 'Magnific', 'Kimi', 'Heygen', 'Manus', 'Suno', 'Gamma', 'Lipsync', 'Gpt 2 image', 'Notebooklm', 'Kling Ai', 'Seedream'];
 
 const Tools = () => {
   return (
