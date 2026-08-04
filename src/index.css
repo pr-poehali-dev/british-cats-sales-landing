@@ -90,7 +90,7 @@ h1,h2,h3{font-family:var(--disp);font-weight:600;text-transform:uppercase;line-h
 
 /* hero */
 #hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden}
-#particles{position:absolute;inset:0;z-index:1}
+#particles{position:absolute;inset:0;width:100%;height:100%;z-index:1}
 .spot{position:absolute;top:-20%;width:44vw;height:130%;z-index:2;pointer-events:none;opacity:.5;
  background:conic-gradient(from 180deg at 50% 0%,transparent 42%,var(--cyan-dim) 50%,transparent 58%);filter:blur(10px);transform-origin:50% 0;animation:sway 9s ease-in-out infinite alternate}
 .spot.l{left:2%}.spot.r{right:2%;animation-delay:-4.5s}

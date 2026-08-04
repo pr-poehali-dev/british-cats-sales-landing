@@ -19,15 +19,29 @@ const Particles = () => {
     let w = 0, h = 0;
     const dots: { x: number; y: number; vx: number; vy: number }[] = [];
 
+    const seed = () => {
+      dots.length = 0;
+      const count = Math.min(220, Math.max(80, Math.floor((w * h) / 9000)));
+      for (let i = 0; i < count; i++) {
+        dots.push({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3 });
+      }
+    };
     const resize = () => {
+      const nw = canvas.offsetWidth;
+      const nh = canvas.offsetHeight;
+      if (nw === w && nh === h) return;
+      w = canvas.width = nw;
+      h = canvas.height = nh;
+      seed();
+    };
+    const forceReseed = () => {
       w = canvas.width = canvas.offsetWidth;
       h = canvas.height = canvas.offsetHeight;
+      seed();
     };
-    resize();
-    const count = Math.min(160, Math.max(60, Math.floor((w * h) / 14000)));
-    for (let i = 0; i < count; i++) {
-      dots.push({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - 0.5) * 0.3, vy: (Math.random() - 0.5) * 0.3 });
-    }
+    forceReseed();
+    const t1 = setTimeout(forceReseed, 300);
+    const t2 = setTimeout(forceReseed, 1200);
 
     const draw = () => {
       ctx.clearRect(0, 0, w, h);
@@ -44,11 +58,11 @@ const Particles = () => {
         for (let j = i + 1; j < dots.length; j++) {
           const dx = dots[i].x - dots[j].x, dy = dots[i].y - dots[j].y;
           const dist = Math.hypot(dx, dy);
-          if (dist < 120) {
+          if (dist < 150) {
             ctx.beginPath();
             ctx.moveTo(dots[i].x, dots[i].y);
             ctx.lineTo(dots[j].x, dots[j].y);
-            ctx.strokeStyle = `rgba(0,229,245,${0.12 * (1 - dist / 120)})`;
+            ctx.strokeStyle = `rgba(0,229,245,${0.12 * (1 - dist / 150)})`;
             ctx.stroke();
           }
         }
@@ -57,7 +71,9 @@ const Particles = () => {
     };
     draw();
     window.addEventListener('resize', resize);
-    return () => { cancelAnimationFrame(raf); window.removeEventListener('resize', resize); };
+    const ro = new ResizeObserver(() => resize());
+    ro.observe(canvas);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener('resize', resize); ro.disconnect(); clearTimeout(t1); clearTimeout(t2); };
   }, []);
   return <canvas id="particles" ref={ref} />;
 };
