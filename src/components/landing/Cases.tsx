@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react';
 import Reveal from './Reveal';
 
 const CASES = [
@@ -15,45 +14,6 @@ const CASES = [
 ];
 
 const Cases = () => {
-  const box = useRef<HTMLDivElement>(null);
-  const drag = useRef({ down: false, startX: 0, scroll: 0, moved: false });
-
-  const onDown = (x: number) => {
-    const el = box.current!;
-    drag.current = { down: true, startX: x, scroll: el.scrollLeft, moved: false };
-    el.classList.add('grabbing');
-  };
-  const onMove = (x: number) => {
-    if (!drag.current.down) return;
-    const el = box.current!;
-    const d = x - drag.current.startX;
-    if (Math.abs(d) > 4) drag.current.moved = true;
-    el.scrollLeft = drag.current.scroll - d;
-  };
-  const onUp = () => {
-    drag.current.down = false;
-    box.current?.classList.remove('grabbing');
-  };
-
-  const paused = useRef(false);
-
-  useEffect(() => {
-    const el = box.current;
-    if (!el) return;
-    let raf = 0;
-    const speed = 0.4;
-    const step = () => {
-      if (!paused.current && !drag.current.down) {
-        el.scrollLeft += speed;
-        const half = el.scrollWidth / 2;
-        if (el.scrollLeft >= half) el.scrollLeft -= half;
-      }
-      raf = requestAnimationFrame(step);
-    };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
-  }, []);
-
   return (
     <section className="sec" id="cases" style={{ background: 'var(--deep)' }}>
       <div className="wrap">
@@ -62,22 +22,9 @@ const Cases = () => {
             <Reveal className="eyebrow">// 06 · РЕЗУЛЬТАТЫ</Reveal>
             <Reveal as="h2" className="sec-title grad-text">Было → стало.<br />Кейсы студентов</Reveal>
           </div>
-          <Reveal className="drag-hint">ТЯНИ</Reveal>
         </div>
       </div>
-      <div
-        className="cases"
-        ref={box}
-        onMouseDown={(e) => onDown(e.pageX)}
-        onMouseMove={(e) => onMove(e.pageX)}
-        onMouseUp={onUp}
-        onTouchStart={(e) => onDown(e.touches[0].pageX)}
-        onTouchMove={(e) => onMove(e.touches[0].pageX)}
-        onTouchEnd={onUp}
-        onMouseEnter={() => { paused.current = true; }}
-        onMouseLeave={() => { paused.current = false; onUp(); }}
-        style={{ overflowX: 'auto', scrollbarWidth: 'none' }}
-      >
+      <div className="cases">
         <div className="cases-track">
           {[...CASES, ...CASES].map((c, i) => (
             <div className="case" key={`${c.name}-${i}`}>

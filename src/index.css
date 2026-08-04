@@ -249,9 +249,10 @@ h1,h2,h3{font-family:var(--disp);font-weight:600;text-transform:uppercase;line-h
 .cases-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
 .drag-hint{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--t3);text-transform:uppercase;display:flex;align-items:center;gap:10px}
 .drag-hint::before{content:'⟵ ⟶';color:var(--cyan);letter-spacing:2px}
-.cases{margin-top:44px;overflow:hidden;cursor:grab}
-.cases.grabbing{cursor:grabbing}
-.cases-track{display:flex;gap:16px;will-change:transform;width:max-content}
+.cases{margin-top:44px;overflow:hidden}
+.cases-track{display:flex;gap:16px;will-change:transform;width:max-content;animation:casesMarquee 60s linear infinite}
+.cases:hover .cases-track{animation-play-state:paused}
+@keyframes casesMarquee{from{transform:translateX(0)}to{transform:translateX(calc(-50% - 8px))}}
 .case{width:340px;flex-shrink:0;background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:26px;transition:border-color .3s;user-select:none}
 .case:hover{border-color:var(--cyan)}
 .case-top{display:flex;gap:14px;align-items:center;margin-bottom:18px}
