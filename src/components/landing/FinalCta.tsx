@@ -11,7 +11,7 @@ const FinalCta = () => {
           <span className="grad-text">Пока ты думаешь —</span><br />
           <span className="cyan">конкурент уже учится</span>
         </Reveal>
-        <Reveal as="p" className="sec-sub">Один вечер в неделю — и через 3 месяца ИИ работает на тебя. В группе 30 мест, осталось 7. Записи остаются навсегда — навыки тоже.</Reveal>
+        <Reveal as="p" className="sec-sub">Два вечера в неделю — и через 3 месяца ИИ работает на тебя. В группе 30 мест, осталось 7. Записи остаются навсегда — навыки тоже.</Reveal>
         <Reveal className="final-timer">
           <Countdown />
         </Reveal>
