@@ -10,9 +10,17 @@ const TL = [
   { y: '2026', h: '10 000+ выпускников', p: '6 профессий, новые инструменты: Seedance 2, GigaChat, Claude, Gemini.' },
 ];
 
+const REVEAL_IMG = 'https://cdn.poehali.dev/projects/d3e635a0-73f6-4725-9cb9-7faeace376fe/bucket/a12dbdc9-ff87-4bda-aec3-8fcf6fcc48eb.png';
+
 const Speaker = () => {
   const tlRef = useRef<HTMLDivElement>(null);
   const [lineH, setLineH] = useState(0);
+  const [lens, setLens] = useState<{ x: number; y: number } | null>(null);
+
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    setLens({ x: e.clientX - r.left, y: e.clientY - r.top });
+  };
 
   useEffect(() => {
     const onScroll = () => {
@@ -35,7 +43,22 @@ const Speaker = () => {
         <Reveal className="eyebrow">// 05 · СПИКЕР</Reveal>
         <div className="spk">
           <Reveal className="spk-photo">
-            <div className="frame"><img src="/site/speaker.jpg" alt="Сергей Черников" /></div>
+            <div
+              className="frame spk-lens"
+              onMouseMove={onMove}
+              onMouseLeave={() => setLens(null)}
+            >
+              <img className="spk-under" src={REVEAL_IMG} alt="" aria-hidden />
+              <img
+                className="spk-top"
+                src="/site/speaker.jpg"
+                alt="Сергей Черников"
+                style={lens ? {
+                  WebkitMaskImage: `radial-gradient(circle 90px at ${lens.x}px ${lens.y}px, transparent 0, transparent 65px, #000 110px)`,
+                  maskImage: `radial-gradient(circle 90px at ${lens.x}px ${lens.y}px, transparent 0, transparent 65px, #000 110px)`,
+                } : undefined}
+              />
+            </div>
           </Reveal>
           <div>
             <Reveal as="h2" className="sec-title grad-text">Сергей Черников</Reveal>
