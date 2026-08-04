@@ -29,8 +29,8 @@ const Versus = () => {
         <div className="vs">
           <Reveal className="vs-col on">
             <h3 className="cyan">ЖИВОЙ КЛАСС · ХАКНИ НЕЙРОСЕТИ</h3>
-            <div className="vs-pct"><CountUp to={85} suffix="%" /></div>
-            <VsBar w={85} />
+            <div className="vs-pct"><CountUp to={90} suffix="%" /></div>
+            <VsBar w={90} />
             <ul>
               <li>Спикер + 2 куратора-практика на каждом занятии</li>
               <li>Разбор твоих вопросов в реальном времени</li>
