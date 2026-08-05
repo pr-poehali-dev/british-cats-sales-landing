@@ -2171,20 +2171,22 @@ h3 {
 .rev-2gis {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  color: var(--cyan);
+  gap: 8px;
+  color: var(--bg);
+  background: var(--cyan);
   font-family: var(--mono);
   font-size: 13px;
+  font-weight: 700;
   letter-spacing: 0.04em;
-  border-bottom: 1px solid transparent;
+  border-radius: 999px;
+  padding: 13px 24px;
   transition:
-    border-color 0.3s,
-    opacity 0.3s;
-  padding-bottom: 2px;
+    transform 0.3s,
+    box-shadow 0.3s;
 }
 .rev-2gis:hover {
-  border-color: var(--cyan);
-  opacity: 0.85;
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(0, 229, 245, 0.35);
 }
 @media (max-width: 960px) {
   .rev-grid {
