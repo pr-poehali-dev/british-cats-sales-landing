@@ -1,13 +1,10 @@
 import { useEffect, useRef } from 'react';
 import Countdown from './Countdown';
+import { scrollToSection } from '@/lib/scroll';
 
 const scrollTo = (e: React.MouseEvent, href: string) => {
   e.preventDefault();
-  const target = document.querySelector(href) as HTMLElement | null;
-  if (!target) return;
-  const navH = (document.getElementById('nav')?.offsetHeight ?? 0) + 12;
-  const top = target.getBoundingClientRect().top + window.scrollY - navH;
-  window.scrollTo({ top, behavior: 'smooth' });
+  scrollToSection(href);
 };
 
 const Particles = () => {

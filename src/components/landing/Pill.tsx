@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { scrollToSection } from '@/lib/scroll';
 
 const TARGET = new Date('2026-09-14T00:00:00+10:00').getTime();
 
@@ -26,10 +27,7 @@ const Pill = () => {
         href="#pricing"
         onClick={(e) => {
           e.preventDefault();
-          const target = document.getElementById('pricing');
-          if (!target) return;
-          const navH = (document.getElementById('nav')?.offsetHeight ?? 0) + 12;
-          window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - navH, behavior: 'smooth' });
+          scrollToSection('#pricing');
         }}
       >
         Занять место

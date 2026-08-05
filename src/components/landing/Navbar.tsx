@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { scrollToSection } from '@/lib/scroll';
 
 const LINKS = [
   { href: '#program', label: 'Программа' },
@@ -33,13 +34,7 @@ const Navbar = () => {
   const scrollTo = (e: React.MouseEvent, href: string) => {
     e.preventDefault();
     setOpen(false);
-    const target = document.querySelector(href) as HTMLElement | null;
-    if (!target) return;
-    setTimeout(() => {
-      const navH = (document.getElementById('nav')?.offsetHeight ?? 0) + 12;
-      const top = target.getBoundingClientRect().top + window.scrollY - navH;
-      window.scrollTo({ top, behavior: 'smooth' });
-    }, 10);
+    setTimeout(() => scrollToSection(href), 10);
   };
 
   return (

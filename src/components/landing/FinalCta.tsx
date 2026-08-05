@@ -1,5 +1,6 @@
 import Reveal from './Reveal';
 import Countdown from './Countdown';
+import { scrollToSection } from '@/lib/scroll';
 
 const FinalCta = () => {
   return (
@@ -21,10 +22,7 @@ const FinalCta = () => {
             href="#pricing"
             onClick={(e) => {
               e.preventDefault();
-              const target = document.getElementById('pricing');
-              if (!target) return;
-              const navH = (document.getElementById('nav')?.offsetHeight ?? 0) + 12;
-              window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - navH, behavior: 'smooth' });
+              scrollToSection('#pricing');
             }}
           >
             Занять место →

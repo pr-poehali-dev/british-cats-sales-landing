@@ -43,7 +43,7 @@ const Pricing = () => {
               <div className="p-per">{p.per}</div>
               <ul>{p.feats.map((f) => <li key={f}>{f}</li>)}</ul>
               {p.link ? (
-                <a className={`btn${p.ghost ? ' btn-ghost' : ''}`} href={p.link} target="_blank" rel="noopener noreferrer" style={{ justifyContent: 'center' }}>{p.btn}</a>
+                <a id={i === 0 ? 'pricing-cta' : undefined} className={`btn${p.ghost ? ' btn-ghost' : ''}`} href={p.link} target="_blank" rel="noopener noreferrer" style={{ justifyContent: 'center' }}>{p.btn}</a>
               ) : (
                 <a className={`btn${p.ghost ? ' btn-ghost' : ''}`} href="#final" style={{ justifyContent: 'center' }} onClick={(e) => scrollTo(e, '#final')}>{p.btn}</a>
               )}

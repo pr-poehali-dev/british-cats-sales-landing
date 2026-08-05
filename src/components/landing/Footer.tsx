@@ -1,6 +1,8 @@
+import { scrollToSection } from '@/lib/scroll';
+
 const scrollTo = (e: React.MouseEvent, href: string) => {
   e.preventDefault();
-  document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+  scrollToSection(href);
 };
 
 const NAV = [
