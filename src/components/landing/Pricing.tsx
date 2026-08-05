@@ -10,7 +10,7 @@ const PLANS = [
     badge: 'Выбор большинства', badgeO: false, hot: true,
     tag: 'ДЛЯ СТАРТА', name: 'БАЗА', sum: 'от 12 500 ₽', per: '/ МЕСЯЦ В РАССРОЧКУ',
     feats: ['3 месяца обучения, 72 часа практики', 'Домашние задания с проверкой кураторами', 'Общий чат потока', 'Записи всех занятий на 6 месяцев', 'Библиотека промптов школы', 'Экзамен и сертификат'],
-    btn: 'Взять базу', ghost: false, link: null as string | null,
+    btn: 'Взять базу', ghost: false, link: 'https://torguykriptoy.getcourse.ru/chernikovgpt' as string | null,
   },
   {
     badge: null as string | null, badgeO: false, hot: false,
