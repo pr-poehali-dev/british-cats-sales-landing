@@ -38,7 +38,7 @@ const Footer = () => {
         </div>
         <div className="foot-word">ХАКНИ НЕЙРОСЕТИ</div>
         <div className="foot-bottom">
-          <span>© 2026 ХАКНИ НЕЙРОСЕТИ · ИП ЧЕРНИКОВ С.А.</span>
+          <span>© 2026 ХАКНИ НЕЙРОСЕТИ · ИП ЧЕРНИКОВ С.А. · ОГРН 321253600091137 · ИНН 783801003680</span>
           <span>VLADIVOSTOK · 43.11°N 131.88°E</span>
         </div>
       </div>
