@@ -16,7 +16,19 @@ const FinalCta = () => {
           <Countdown />
         </Reveal>
         <Reveal className="hero-cta" style={{ justifyContent: 'center' }}>
-          <a className="btn magnetic" href="https://t.me/chernikovgpt" target="_blank" rel="noopener">Занять место →</a>
+          <a
+            className="btn magnetic"
+            href="#pricing"
+            onClick={(e) => {
+              e.preventDefault();
+              const target = document.getElementById('pricing');
+              if (!target) return;
+              const navH = (document.getElementById('nav')?.offsetHeight ?? 0) + 12;
+              window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - navH, behavior: 'smooth' });
+            }}
+          >
+            Занять место →
+          </a>
           <a className="btn btn-ghost magnetic" href="https://t.me/ChernikovGPT_Bot" target="_blank" rel="noopener">Бесплатная консультация</a>
         </Reveal>
       </div>

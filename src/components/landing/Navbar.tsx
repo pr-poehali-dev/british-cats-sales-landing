@@ -55,7 +55,7 @@ const Navbar = () => {
       </div>
       <div className="nav-right">
         <span className="chip-seats">ОСТАЛОСЬ 7 МЕСТ</span>
-        <a className="btn btn-sm" href="#final" onClick={(e) => scrollTo(e, '#final')}>Занять место</a>
+        <a className="btn btn-sm" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Занять место</a>
       </div>
       <button
         className={`nav-burger${open ? ' open' : ''}`}
@@ -70,7 +70,7 @@ const Navbar = () => {
           <a key={l.href} href={l.href} onClick={(e) => scrollTo(e, l.href)}>{l.label}</a>
         ))}
         <span className="chip-seats mob">ОСТАЛОСЬ 7 МЕСТ</span>
-        <a className="btn" href="#final" onClick={(e) => scrollTo(e, '#final')}>Занять место →</a>
+        <a className="btn" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Занять место →</a>
       </div>
     </nav>
   );

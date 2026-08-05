@@ -95,7 +95,7 @@ const Hero = () => {
           <div>
             <p className="hero-sub">Практический курс по нейросетям для новичков — даже если начинаешь с нуля. 3 месяца в живом классе с кураторами, и ИИ начнёт работать на тебя.</p>
             <div className="hero-cta">
-              <a className="btn magnetic" href="#final" onClick={(e) => scrollTo(e, '#final')}>Занять место →</a>
+              <a className="btn magnetic" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Занять место →</a>
               <a className="btn btn-ghost magnetic" href="#program" onClick={(e) => scrollTo(e, '#program')}>Программа курса</a>
             </div>
             <div className="timer-wrap">

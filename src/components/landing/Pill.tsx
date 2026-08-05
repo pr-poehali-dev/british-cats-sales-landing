@@ -21,7 +21,19 @@ const Pill = () => {
     <div id="pill" className={show ? 'show' : ''}>
       <span>До старта потока:</span>
       <b>{days} дней</b>
-      <a className="btn btn-sm" href="https://t.me/chernikovgpt" target="_blank" rel="noopener">Занять место</a>
+      <a
+        className="btn btn-sm"
+        href="#pricing"
+        onClick={(e) => {
+          e.preventDefault();
+          const target = document.getElementById('pricing');
+          if (!target) return;
+          const navH = (document.getElementById('nav')?.offsetHeight ?? 0) + 12;
+          window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - navH, behavior: 'smooth' });
+        }}
+      >
+        Занять место
+      </a>
     </div>
   );
 };
