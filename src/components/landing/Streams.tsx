@@ -1,17 +1,12 @@
 import Reveal from './Reveal';
+import { scrollToSection } from '@/lib/scroll';
 
 const TICKETS = [
   { date: '14.09', sub: 'ПОНЕДЕЛЬНИК + ЧЕТВЕРГ · 19:00', flow: 'ПОТОК 1', left: 'ОСТАЛОСЬ 4 МЕСТА' },
   { date: '16.09', sub: 'СРЕДА + СУББОТА · 19:00', flow: 'ПОТОК 2', left: 'ОСТАЛОСЬ 3 МЕСТА' },
 ];
 
-const goToFinal = () => {
-  const target = document.getElementById('final');
-  if (!target) return;
-  const navH = (document.getElementById('nav')?.offsetHeight ?? 0) + 12;
-  const top = target.getBoundingClientRect().top + window.scrollY - navH;
-  window.scrollTo({ top, behavior: 'smooth' });
-};
+const goToFinal = () => scrollToSection('#pricing');
 
 const Streams = () => {
   return (
