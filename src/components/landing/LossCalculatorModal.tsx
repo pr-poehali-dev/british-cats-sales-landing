@@ -27,8 +27,8 @@ const PRESETS: Record<string, { rate: number; routine: number; count: number; se
   ecom: { rate: 1200, routine: 12, count: 10, sel: ['content', 'deck', 'video'] },
 };
 
-const COURSE_FEE = 37500;
-const SUBS_YEAR = 24000;
+const COURSE_FEE = 150000;
+const SUBS_YEAR = 60000;
 const ROUTINE_AI_KEEP = 0.3;
 
 const fmtMoney = (v: number) => `${Math.round(v).toLocaleString('ru-RU')} ₽`;
@@ -281,7 +281,7 @@ const LossCalculatorModal = ({ open, onClose }: LossCalculatorModalProps) => {
                 Хватит терять — занять место →
               </a>
 
-              <div className="lc-res-note"><b>* РАСЧЁТ:</b> ЦЕНЫ ПО РЫНКУ ВЛАДИВОСТОКА/ФРИЛАНСА НА ОСНОВЕ КЕЙСОВ ВЫПУСКНИКОВ ШКОЛЫ. ИНВЕСТИЦИЯ В ИИ: КУРС «БАЗА» 37 500 ₽ + ПОДПИСКИ НА НЕЙРОСЕТИ ~2 000 ₽/МЕС. ИИ СНИМАЕТ ~70% РУТИННЫХ ЗАДАЧ.</div>
+              <div className="lc-res-note"><b>* РАСЧЁТ:</b> ЦЕНЫ ПО РЫНКУ ВЛАДИВОСТОКА/ФРИЛАНСА НА ОСНОВЕ КЕЙСОВ ВЫПУСКНИКОВ ШКОЛЫ. ИНВЕСТИЦИЯ В ИИ: КУРС «БАЗА» 150 000 ₽ + ПОДПИСКИ НА НЕЙРОСЕТИ ~5 000 ₽/МЕС. ИИ СНИМАЕТ ~70% РУТИННЫХ ЗАДАЧ.</div>
             </div>
           </div>
         </div>
