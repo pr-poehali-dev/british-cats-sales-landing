@@ -117,10 +117,6 @@ const Program = () => {
           <div className="prog-stage">
             <div className="prog-topbar">
               <div className="prog-count mono">{String(active + 1).padStart(2, '0')} / {MODULES.length}</div>
-              <button type="button" className="prog-skip mono" onClick={handleSkip}>
-                Пропустить
-                <Icon name="ChevronsDown" size={14} />
-              </button>
             </div>
             {MODULES.map((m, i) => {
               const state = i === active ? 'cur' : i < active ? 'past' : 'next';
@@ -134,6 +130,10 @@ const Program = () => {
                 </div>
               );
             })}
+            <button type="button" className="prog-skip mono" onClick={handleSkip}>
+              Пропустить анимацию
+              <Icon name="ChevronsDown" size={16} />
+            </button>
           </div>
         </div>
       </section>

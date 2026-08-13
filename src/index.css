@@ -1283,7 +1283,7 @@ h3 {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  padding: 0 20px;
+  padding: 0 20px 76px;
 }
 .prog-topbar {
   position: absolute;
@@ -1293,8 +1293,7 @@ h3 {
   z-index: 5;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  justify-content: center;
 }
 .prog-count {
   font-size: 13px;
@@ -1302,29 +1301,51 @@ h3 {
   letter-spacing: 2px;
 }
 .prog-skip {
+  position: absolute;
+  left: 50%;
+  bottom: max(28px, env(safe-area-inset-bottom, 0px) + 18px);
+  transform: translateX(-50%);
+  z-index: 6;
   display: flex;
   align-items: center;
-  gap: 6px;
-  background: rgba(0, 229, 245, 0.08);
-  border: 1px solid var(--line);
+  gap: 8px;
+  background: var(--cyan);
+  border: none;
   border-radius: 999px;
-  padding: 8px 14px;
-  font-size: 12px;
+  padding: 13px 24px;
+  font-size: 13px;
+  font-weight: 700;
   letter-spacing: 0.05em;
-  color: var(--t2);
+  color: var(--bg);
   text-transform: uppercase;
   cursor: pointer;
   white-space: nowrap;
+  box-shadow: 0 8px 30px var(--cyan-glow);
+  animation: progSkipPulse 2.4s ease-in-out infinite;
   transition:
-    color 0.25s,
-    border-color 0.25s,
-    background 0.25s;
+    transform 0.25s var(--ease),
+    box-shadow 0.25s;
 }
 .prog-skip:hover,
 .prog-skip:active {
-  color: var(--cyan);
-  border-color: var(--cyan);
-  background: var(--cyan-dim);
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 12px 40px var(--cyan-glow);
+}
+@keyframes progSkipPulse {
+  0%,
+  100% {
+    box-shadow: 0 8px 30px var(--cyan-glow);
+  }
+  50% {
+    box-shadow:
+      0 8px 30px var(--cyan-glow),
+      0 0 0 8px var(--cyan-dim);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .prog-skip {
+    animation: none;
+  }
 }
 .prog-slide {
   position: absolute;
