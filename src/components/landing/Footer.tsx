@@ -1,4 +1,5 @@
 import { scrollToSection } from '@/lib/scroll';
+import Reveal from './Reveal';
 
 const scrollTo = (e: React.MouseEvent, href: string) => {
   e.preventDefault();
@@ -12,6 +13,13 @@ const NAV = [
   { href: '#pricing', label: 'Тарифы' },
   { href: '#faq', label: 'Вопросы' },
 ];
+
+const FootWord = () => (
+  <Reveal className="foot-word-wrap">
+    <span className="foot-word" aria-hidden="true">ХАКНИ НЕЙРОСЕТИ</span>
+    <span className="foot-word foot-word-shine" aria-hidden="true">ХАКНИ НЕЙРОСЕТИ</span>
+  </Reveal>
+);
 
 const Footer = () => {
   return (
@@ -36,7 +44,7 @@ const Footer = () => {
             ))}
           </div>
         </div>
-        <div className="foot-word">ХАКНИ НЕЙРОСЕТИ</div>
+        <FootWord />
         <div className="foot-bottom">
           <span>© 2026 ХАКНИ НЕЙРОСЕТИ · ИП ЧЕРНИКОВ С.Н. · ОГРН 321253600091137 · ИНН 783801003680</span>
           <span>VLADIVOSTOK · 43.11°N 131.88°E</span>
