@@ -1080,36 +1080,100 @@ h3 {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-.trustline {
+.trustline-head {
   margin-top: 56px;
   padding-top: 32px;
   border-top: 1px solid var(--line);
-  display: flex;
-  gap: 18px;
-  flex-wrap: wrap;
-  align-items: center;
 }
-.trustline em {
+.trustline-head em {
   font-family: var(--mono);
   font-size: 11px;
   letter-spacing: 0.14em;
   color: var(--t3);
   text-transform: uppercase;
   font-style: normal;
-  margin-right: 8px;
 }
-.trustline span {
+.trust-rows {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.trust-marquee {
+  position: relative;
+  overflow: hidden;
+  margin-left: calc(clamp(20px, 4vw, 64px) * -1);
+  margin-right: calc(clamp(20px, 4vw, 64px) * -1);
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+}
+.trust-track {
+  display: flex;
+  width: max-content;
+  gap: 14px;
+}
+.trust-track.left {
+  animation: trust-left 34s linear infinite;
+}
+.trust-track.right {
+  animation: trust-right 34s linear infinite;
+}
+.trust-set {
+  display: flex;
+  gap: 14px;
+  padding-left: 14px;
+}
+.trust-marquee:hover .trust-track {
+  animation-play-state: paused;
+}
+@keyframes trust-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes trust-right {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+.trust-item {
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 18px;
   color: var(--t2);
   border: 1px solid var(--line);
-  padding: 8px 14px;
+  background: var(--bg2);
+  padding: 14px 24px;
   border-radius: 999px;
+  white-space: nowrap;
   transition: all 0.3s;
 }
-.trustline span:hover {
+.trust-item:hover {
   border-color: var(--cyan);
   color: var(--cyan);
+  transform: translateY(-3px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .trust-track {
+    animation: none;
+  }
 }
 
 /* professions */

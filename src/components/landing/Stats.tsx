@@ -10,6 +10,23 @@ const STATS = [
 
 const TRUST = ['Опора России', 'Мой Бизнес', 'Росмолодёжь', 'Штаб общественной поддержки', 'ПАО «Дальприбор»', 'Бизнес Завтрак', 'Пасифик Медиа', 'VLPACIFIC', 'LogisticForce', 'Аэропорт Владивосток', 'Энергостройсервис', 'ЦРП Владивостока', 'Плесы Песчаного', 'АН Перспектива', 'Геометрия Уюта', 'Кинотеатр ШАХТЕР'];
 
+const TRUST_A = TRUST.slice(0, 8);
+const TRUST_B = TRUST.slice(8);
+
+const TrustMarquee = ({ items, dir }: { items: string[]; dir: 'left' | 'right' }) => (
+  <div className="trust-marquee">
+    <div className={`trust-track ${dir}`}>
+      {[0, 1].map((copy) => (
+        <div className="trust-set" key={copy} aria-hidden={copy === 1}>
+          {items.map((t) => (
+            <span className="trust-item" key={`${copy}-${t}`}>{t}</span>
+          ))}
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
 const Stats = () => {
   return (
     <section className="sec" id="stats">
@@ -25,10 +42,13 @@ const Stats = () => {
             </Reveal>
           ))}
         </div>
-        <Reveal className="trustline">
+        <Reveal className="trustline-head">
           <em>Нам доверяют:</em>
-          {TRUST.map((t) => <span key={t}>{t}</span>)}
         </Reveal>
+        <div className="trust-rows">
+          <TrustMarquee items={TRUST_A} dir="left" />
+          <TrustMarquee items={TRUST_B} dir="right" />
+        </div>
       </div>
     </section>
   );
