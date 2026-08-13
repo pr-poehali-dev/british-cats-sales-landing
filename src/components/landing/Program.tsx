@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Reveal from './Reveal';
 import Icon from '@/components/ui/icon';
+import { scrollToSection } from '@/lib/scroll';
 
 const MODULES = [
   { n: '01', t: 'Основы нейросетей', d: 'Как устроены LLM, что они умеют на самом деле, где границы. Снимаем магию — оставляем инструмент.' },
@@ -82,11 +83,7 @@ const Program = () => {
   }, [isMobile]);
 
   const handleSkip = () => {
-    const el = trackRef.current;
-    if (!el) return;
-    const scrollable = el.offsetHeight - window.innerHeight;
-    const targetTop = el.getBoundingClientRect().top + window.scrollY + scrollable;
-    window.scrollTo({ top: targetTop, behavior: 'smooth' });
+    scrollToSection('#tools');
   };
 
   const activeCount = isMobile ? active + 1 : active;
@@ -131,7 +128,7 @@ const Program = () => {
               );
             })}
             <button type="button" className="prog-skip mono" onClick={handleSkip}>
-              Пропустить анимацию
+              Пропустить блок
               <Icon name="ChevronsDown" size={16} />
             </button>
           </div>
