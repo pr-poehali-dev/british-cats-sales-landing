@@ -95,7 +95,7 @@ const Versus = () => {
           </Reveal>
         </div>
         <Reveal className="vs-calc-cta" delay={0.15}>
-          <button type="button" className="btn btn-ghost" onClick={() => setCalcOpen(true)}>
+          <button type="button" className="btn" onClick={() => setCalcOpen(true)}>
             <Icon name="Calculator" size={18} />
             Посчитать, сколько теряю без ИИ
           </button>
