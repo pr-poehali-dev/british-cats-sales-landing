@@ -1189,6 +1189,9 @@ h3 {
   position: sticky;
   top: 110px;
 }
+.prog-download {
+  margin-top: 26px;
+}
 .prog-ring {
   width: 130px;
   height: 130px;

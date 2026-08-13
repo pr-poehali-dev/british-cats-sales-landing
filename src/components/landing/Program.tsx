@@ -96,6 +96,18 @@ const Program = () => {
       <Reveal className="eyebrow">// 03 · ПРОГРАММА</Reveal>
       <Reveal as="h2" className="sec-title grad-text">24 модуля.<br />Ноль воды.</Reveal>
       <Reveal as="p" className="sec-sub">Каждый модуль — практика на своём проекте. Листай — программа оживает.</Reveal>
+      <Reveal>
+        <a
+          className="btn btn-ghost btn-sm prog-download"
+          href="https://cdn.poehali.dev/projects/d3e635a0-73f6-4725-9cb9-7faeace376fe/bucket/59140a36-aa2c-45a5-8af4-734797273ad3.pdf"
+          download
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Icon name="Download" size={16} />
+          Скачать подробную программу
+        </a>
+      </Reveal>
       <div className="prog-ring">
         <svg width="130" height="130">
           <circle cx="65" cy="65" r="58" fill="none" stroke="var(--line)" strokeWidth="3" />
