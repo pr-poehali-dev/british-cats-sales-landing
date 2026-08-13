@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import Reveal from './Reveal';
 import CountUp from './CountUp';
+import Icon from '@/components/ui/icon';
+
+const WORD = 'УСВАИВАЕМОСТЬ';
 
 const VsBar = ({ w, off }: { w: number; off?: boolean }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -20,6 +23,39 @@ const VsBar = ({ w, off }: { w: number; off?: boolean }) => {
   );
 };
 
+const VsLabel = ({ off }: { off?: boolean }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [shown, setShown] = useState(0);
+  useEffect(() => {
+    const el = ref.current!;
+    const io = new IntersectionObserver((e) => {
+      if (e[0].isIntersecting) {
+        io.disconnect();
+        const step = (i: number) => {
+          setShown(i);
+          if (i < WORD.length) setTimeout(() => step(i + 1), 55);
+        };
+        setTimeout(() => step(1), 300);
+      }
+    }, { threshold: 0.4 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  const done = shown >= WORD.length;
+  return (
+    <div className={`vs-label ${off ? 'off' : 'on'}`} ref={ref}>
+      <span className="vs-label-text">{WORD.slice(0, shown)}</span>
+      {done && (
+        <Icon
+          name={off ? 'OctagonX' : 'CheckCircle2'}
+          size={18}
+          className="vs-label-icon"
+        />
+      )}
+    </div>
+  );
+};
+
 const Versus = () => {
   return (
     <section className="sec" id="versus" style={{ background: 'var(--deep)' }}>
@@ -29,7 +65,10 @@ const Versus = () => {
         <div className="vs">
           <Reveal className="vs-col on">
             <h3 className="cyan">ЖИВОЙ КЛАСС · ХАКНИ НЕЙРОСЕТИ</h3>
-            <div className="vs-pct"><CountUp to={90} suffix="%" /></div>
+            <div className="vs-pct-row">
+              <div className="vs-pct"><CountUp to={90} suffix="%" /></div>
+              <VsLabel />
+            </div>
             <VsBar w={90} />
             <ul>
               <li>Спикер + 2 куратора-практика на каждом занятии</li>
@@ -40,7 +79,10 @@ const Versus = () => {
           </Reveal>
           <Reveal className="vs-col off" delay={0.1}>
             <h3 style={{ color: 'var(--t2)' }}>ТИПИЧНЫЙ ОНЛАЙН-КУРС</h3>
-            <div className="vs-pct"><CountUp to={12} suffix="%" /></div>
+            <div className="vs-pct-row">
+              <div className="vs-pct"><CountUp to={12} suffix="%" /></div>
+              <VsLabel off />
+            </div>
             <VsBar w={12} off />
             <ul>
               <li>Записи, которые «посмотришь потом»</li>
