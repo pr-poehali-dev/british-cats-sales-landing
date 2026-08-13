@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import Reveal from './Reveal';
 import CountUp from './CountUp';
 import Icon from '@/components/ui/icon';
+import LossCalculatorModal from './LossCalculatorModal';
 
 const WORD = 'УСВАИВАЕМОСТЬ';
 
@@ -57,6 +58,7 @@ const VsLabel = ({ off }: { off?: boolean }) => {
 };
 
 const Versus = () => {
+  const [calcOpen, setCalcOpen] = useState(false);
   return (
     <section className="sec" id="versus" style={{ background: 'var(--deep)' }}>
       <div className="wrap">
@@ -92,7 +94,14 @@ const Versus = () => {
             </ul>
           </Reveal>
         </div>
+        <Reveal className="vs-calc-cta" delay={0.15}>
+          <button type="button" className="btn btn-ghost" onClick={() => setCalcOpen(true)}>
+            <Icon name="Calculator" size={18} />
+            Посчитать, сколько теряю без ИИ
+          </button>
+        </Reveal>
       </div>
+      <LossCalculatorModal open={calcOpen} onClose={() => setCalcOpen(false)} />
     </section>
   );
 };

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { scrollToSection } from '@/lib/scroll';
+import LossCalculatorModal from './LossCalculatorModal';
 
 const LINKS = [
   { href: '#program', label: 'Программа' },
@@ -13,6 +14,7 @@ const Navbar = () => {
   const [solid, setSolid] = useState(false);
   const [hide, setHide] = useState(false);
   const [open, setOpen] = useState(false);
+  const [calcOpen, setCalcOpen] = useState(false);
   const lastY = useRef(0);
 
   useEffect(() => {
@@ -49,6 +51,7 @@ const Navbar = () => {
         ))}
       </div>
       <div className="nav-right">
+        <button type="button" className="btn btn-ghost btn-sm" onClick={() => setCalcOpen(true)}>Калькулятор потерь</button>
         <span className="chip-seats">ОСТАЛОСЬ 7 МЕСТ</span>
         <a className="btn btn-sm" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Занять место</a>
       </div>
@@ -64,9 +67,11 @@ const Navbar = () => {
         {LINKS.map((l) => (
           <a key={l.href} href={l.href} onClick={(e) => scrollTo(e, l.href)}>{l.label}</a>
         ))}
+        <button type="button" className="btn btn-ghost" onClick={() => { setOpen(false); setCalcOpen(true); }}>Калькулятор потерь</button>
         <span className="chip-seats mob">ОСТАЛОСЬ 7 МЕСТ</span>
         <a className="btn" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Занять место →</a>
       </div>
+      <LossCalculatorModal open={calcOpen} onClose={() => setCalcOpen(false)} />
     </nav>
   );
 };
