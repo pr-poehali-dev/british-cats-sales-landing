@@ -1285,14 +1285,46 @@ h3 {
   overflow: hidden;
   padding: 0 20px;
 }
-.prog-count {
+.prog-topbar {
   position: absolute;
   top: 100px;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 22px;
+  right: 22px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.prog-count {
   font-size: 13px;
   color: var(--cyan);
   letter-spacing: 2px;
+}
+.prog-skip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 229, 245, 0.08);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: var(--t2);
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    color 0.25s,
+    border-color 0.25s,
+    background 0.25s;
+}
+.prog-skip:hover,
+.prog-skip:active {
+  color: var(--cyan);
+  border-color: var(--cyan);
+  background: var(--cyan-dim);
 }
 .prog-slide {
   position: absolute;

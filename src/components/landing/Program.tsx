@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Reveal from './Reveal';
+import Icon from '@/components/ui/icon';
 
 const MODULES = [
   { n: '01', t: 'Основы нейросетей', d: 'Как устроены LLM, что они умеют на самом деле, где границы. Снимаем магию — оставляем инструмент.' },
@@ -80,6 +81,14 @@ const Program = () => {
     };
   }, [isMobile]);
 
+  const handleSkip = () => {
+    const el = trackRef.current;
+    if (!el) return;
+    const scrollable = el.offsetHeight - window.innerHeight;
+    const targetTop = el.getBoundingClientRect().top + window.scrollY + scrollable;
+    window.scrollTo({ top: targetTop, behavior: 'smooth' });
+  };
+
   const activeCount = isMobile ? active + 1 : active;
   const pct = Math.round((activeCount / MODULES.length) * 100);
   const dash = 364;
@@ -106,7 +115,13 @@ const Program = () => {
         <div className="wrap">{header}</div>
         <div className="prog-track" ref={trackRef} style={{ height: `${MODULES.length * 60 + 100}vh` }}>
           <div className="prog-stage">
-            <div className="prog-count mono">{String(active + 1).padStart(2, '0')} / {MODULES.length}</div>
+            <div className="prog-topbar">
+              <div className="prog-count mono">{String(active + 1).padStart(2, '0')} / {MODULES.length}</div>
+              <button type="button" className="prog-skip mono" onClick={handleSkip}>
+                Пропустить
+                <Icon name="ChevronsDown" size={14} />
+              </button>
+            </div>
             {MODULES.map((m, i) => {
               const state = i === active ? 'cur' : i < active ? 'past' : 'next';
               return (
