@@ -4,7 +4,7 @@ import CountUp from './CountUp';
 import Icon from '@/components/ui/icon';
 import LossCalculatorModal from './LossCalculatorModal';
 
-const WORD = 'УСВАИВАЕМОСТЬ';
+const WORD = 'УСВОЯЕМОСТЬ';
 
 const VsBar = ({ w, off }: { w: number; off?: boolean }) => {
   const ref = useRef<HTMLDivElement>(null);
