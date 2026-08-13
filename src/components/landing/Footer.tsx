@@ -1,5 +1,6 @@
 import { scrollToSection } from '@/lib/scroll';
 import Reveal from './Reveal';
+import { useFitWidth } from '@/hooks/use-fit-width';
 
 const scrollTo = (e: React.MouseEvent, href: string) => {
   e.preventDefault();
@@ -14,12 +15,19 @@ const NAV = [
   { href: '#faq', label: 'Вопросы' },
 ];
 
-const FootWord = () => (
-  <Reveal className="foot-word-wrap">
-    <span className="foot-word" aria-hidden="true">ХАКНИ НЕЙРОСЕТИ</span>
-    <span className="foot-word foot-word-shine" aria-hidden="true">ХАКНИ НЕЙРОСЕТИ</span>
-  </Reveal>
-);
+const FootWord = () => {
+  const { wrapRef, innerRef } = useFitWidth<HTMLDivElement, HTMLDivElement>();
+  return (
+    <Reveal className="foot-word-outer">
+      <div ref={wrapRef} className="foot-word-wrap">
+        <div ref={innerRef} className="foot-word-inner">
+          <span className="foot-word" aria-hidden="true">ХАКНИ НЕЙРОСЕТИ</span>
+          <span className="foot-word foot-word-shine" aria-hidden="true">ХАКНИ НЕЙРОСЕТИ</span>
+        </div>
+      </div>
+    </Reveal>
+  );
+};
 
 const Footer = () => {
   return (

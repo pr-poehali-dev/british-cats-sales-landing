@@ -2331,10 +2331,20 @@ footer {
 .foot-grid a:hover {
   color: var(--cyan);
 }
-.foot-word-wrap {
-  position: relative;
+.foot-word-outer {
   margin: 60px 0 30px;
+}
+.foot-word-wrap {
+  width: 100%;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+.foot-word-inner {
+  position: relative;
+  display: inline-block;
+  transform-origin: center center;
+  will-change: transform;
 }
 .foot-word {
   display: block;
@@ -2347,7 +2357,6 @@ footer {
   text-align: center;
   user-select: none;
   white-space: nowrap;
-  max-width: 100%;
 }
 .foot-word-shine {
   position: absolute;
@@ -2378,7 +2387,7 @@ footer {
   pointer-events: none;
   animation: footShine 5s linear infinite;
 }
-.foot-word-wrap:hover .foot-word-shine {
+.foot-word-inner:hover .foot-word-shine {
   animation-duration: 1.6s;
   filter: drop-shadow(0 0 14px var(--cyan))
     drop-shadow(0 0 46px var(--cyan-glow));
