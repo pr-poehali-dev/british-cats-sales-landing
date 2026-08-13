@@ -1306,7 +1306,7 @@ h3 {
 .prog-skip {
   position: absolute;
   left: 50%;
-  bottom: max(100px, env(safe-area-inset-bottom, 0px) + 90px);
+  bottom: max(176px, env(safe-area-inset-bottom, 0px) + 166px);
   transform: translateX(-50%);
   z-index: 6;
   display: flex;
