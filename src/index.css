@@ -1746,6 +1746,28 @@ h3 {
     position: static;
     max-width: 340px;
   }
+  .spk-hint {
+    display: none;
+  }
+  .spk-lens .spk-top {
+    animation: heroGlitch 1s steps(1) infinite;
+  }
+  .spk-lens::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.16) 0,
+      rgba(0, 0, 0, 0.16) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    mix-blend-mode: overlay;
+    opacity: 0.6;
+  }
 }
 
 /* cases */

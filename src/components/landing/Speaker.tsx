@@ -11,7 +11,7 @@ const TL = [
   { y: '2026', h: 'Благодарности за вклад в предпринимательство', p: 'От ЦРП, Опоры России и Правительства Приморского края.' },
 ];
 
-const REVEAL_IMG = 'https://cdn.poehali.dev/projects/d3e635a0-73f6-4725-9cb9-7faeace376fe/bucket/a12dbdc9-ff87-4bda-aec3-8fcf6fcc48eb.png';
+const REVEAL_IMG = 'https://cdn.poehali.dev/projects/d3e635a0-73f6-4725-9cb9-7faeace376fe/bucket/1946ff7d-ffc3-444f-999e-77e10e27cf34.jpeg';
 
 const Speaker = () => {
   const tlRef = useRef<HTMLDivElement>(null);
