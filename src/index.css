@@ -2772,46 +2772,65 @@ footer {
 }
 .gift-btns {
   display: flex;
-  flex-direction: column;
   gap: 12px;
 }
-.gift-btn {
+.gift-card {
+  flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 15px 20px;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 15px;
-  color: var(--bg);
+  gap: 14px;
+  padding: 22px 12px;
+  border-radius: 18px;
+  background: var(--bg);
+  border: 1px solid var(--line);
   transition:
     transform 0.3s var(--ease),
+    border-color 0.3s,
     box-shadow 0.3s;
 }
-.gift-btn:hover {
-  transform: translateY(-2px);
+.gift-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--cyan);
+  box-shadow: 0 10px 30px var(--cyan-glow);
 }
-.gift-btn-tg {
+.gift-card-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--bg);
+}
+.gift-card-icon-tg {
   background: #29a9eb;
-  box-shadow: 0 0 0 0 rgba(41, 169, 235, 0.4);
 }
-.gift-btn-tg:hover {
-  box-shadow: 0 8px 30px rgba(41, 169, 235, 0.4);
-}
-.gift-btn-vk {
+.gift-card-icon-vk {
   background: #0077ff;
-  box-shadow: 0 0 0 0 rgba(0, 119, 255, 0.4);
+  font-family: var(--disp);
+  font-weight: 700;
+  font-size: 14px;
 }
-.gift-btn-vk:hover {
-  box-shadow: 0 8px 30px rgba(0, 119, 255, 0.4);
-}
-.gift-btn-max {
+.gift-card-icon-max {
   background: var(--cyan);
-  box-shadow: 0 0 0 0 var(--cyan-glow);
 }
-.gift-btn-max:hover {
-  box-shadow: 0 8px 30px var(--cyan-glow);
+.gift-card-label {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--t1);
+}
+@media (max-width: 480px) {
+  .gift-btns {
+    gap: 8px;
+  }
+  .gift-card {
+    padding: 16px 6px;
+  }
+  .gift-card-label {
+    font-size: 10px;
+  }
 }
 .gift-fab {
   position: fixed;

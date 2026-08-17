@@ -101,31 +101,35 @@ const GiftPopup = () => {
             href={LINKS.tg}
             target="_blank"
             rel="noopener noreferrer"
-            className="gift-btn gift-btn-tg"
+            className="gift-card"
             onClick={handleLinkClick('telegram')}
           >
-            <Icon name="Send" size={22} />
-            Telegram
-          </a>
-          <a
-            href={LINKS.vk}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="gift-btn gift-btn-vk"
-            onClick={handleLinkClick('vk')}
-          >
-            <Icon name="MessageCircle" size={22} />
-            ВКонтакте
+            <span className="gift-card-icon gift-card-icon-tg">
+              <Icon name="Send" size={22} />
+            </span>
+            <span className="gift-card-label">Telegram</span>
           </a>
           <a
             href={LINKS.max}
             target="_blank"
             rel="noopener noreferrer"
-            className="gift-btn gift-btn-max"
+            className="gift-card"
             onClick={handleLinkClick('max')}
           >
-            <Icon name="MessageSquare" size={22} />
-            MAX
+            <span className="gift-card-icon gift-card-icon-max">
+              <Icon name="MessageCircle" size={22} />
+            </span>
+            <span className="gift-card-label">MAX</span>
+          </a>
+          <a
+            href={LINKS.vk}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="gift-card"
+            onClick={handleLinkClick('vk')}
+          >
+            <span className="gift-card-icon gift-card-icon-vk">VK</span>
+            <span className="gift-card-label">ВКонтакте</span>
           </a>
         </div>
       </div>
