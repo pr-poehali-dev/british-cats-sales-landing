@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Icon from '@/components/ui/icon';
+import { ymGoal } from '@/lib/analytics';
 
 const LINKS = {
   tg: 'https://t.me/HackNeuro_bot?start=s=3803564',
@@ -57,7 +58,8 @@ const GiftPopup = () => {
     setPhase('open');
   };
 
-  const handleLinkClick = () => {
+  const handleLinkClick = (channel: 'telegram' | 'vk' | 'max') => () => {
+    ymGoal('gift_popup_click', { channel });
     setClicked(true);
     localStorage.setItem(STORAGE_KEY, '1');
     clearReopenTimer();
@@ -100,7 +102,7 @@ const GiftPopup = () => {
             target="_blank"
             rel="noopener noreferrer"
             className="gift-btn gift-btn-tg"
-            onClick={handleLinkClick}
+            onClick={handleLinkClick('telegram')}
           >
             <Icon name="Send" size={22} />
             Telegram
@@ -110,7 +112,7 @@ const GiftPopup = () => {
             target="_blank"
             rel="noopener noreferrer"
             className="gift-btn gift-btn-vk"
-            onClick={handleLinkClick}
+            onClick={handleLinkClick('vk')}
           >
             <Icon name="MessageCircle" size={22} />
             ВКонтакте
@@ -120,7 +122,7 @@ const GiftPopup = () => {
             target="_blank"
             rel="noopener noreferrer"
             className="gift-btn gift-btn-max"
-            onClick={handleLinkClick}
+            onClick={handleLinkClick('max')}
           >
             <Icon name="MessageSquare" size={22} />
             MAX
