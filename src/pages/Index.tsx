@@ -9,6 +9,7 @@ import Professions from '@/components/landing/Professions';
 import Program from '@/components/landing/Program';
 import Tools from '@/components/landing/Tools';
 import Speaker from '@/components/landing/Speaker';
+import Awards from '@/components/landing/Awards';
 import Cases from '@/components/landing/Cases';
 import Income from '@/components/landing/Income';
 import Versus from '@/components/landing/Versus';
@@ -39,6 +40,7 @@ const Index = () => {
       <Program />
       <Tools />
       <Speaker />
+      <Awards />
       <Ticker items={TICK2} reverse />
       <Cases />
       <Income />

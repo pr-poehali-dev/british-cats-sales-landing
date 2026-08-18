@@ -74,7 +74,7 @@ const Speaker = () => {
             <div className="tl" ref={tlRef}>
               <div className="tl-line" style={{ height: lineH }} />
               {TL.map((t) => (
-                <Reveal key={t.y} className="tl-item">
+                <Reveal key={t.h} className="tl-item">
                   <b>{t.y}</b>
                   <h4>{t.h}</h4>
                   <p>{t.p}</p>

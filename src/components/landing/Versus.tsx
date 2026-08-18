@@ -62,7 +62,7 @@ const Versus = () => {
   return (
     <section className="sec" id="versus" style={{ background: 'var(--deep)' }}>
       <div className="wrap">
-        <Reveal className="eyebrow">// 08 · ФОРМАТ</Reveal>
+        <Reveal className="eyebrow">// 09 · ФОРМАТ</Reveal>
         <Reveal as="h2" className="sec-title grad-text">Почему живой класс,<br />а не онлайн-записи</Reveal>
         <div className="vs">
           <Reveal className="vs-col on">

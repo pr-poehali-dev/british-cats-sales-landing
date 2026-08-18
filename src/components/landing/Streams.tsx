@@ -12,7 +12,7 @@ const Streams = () => {
   return (
     <section className="sec" id="streams">
       <div className="wrap">
-        <Reveal className="eyebrow">// 09 · РАСПИСАНИЕ</Reveal>
+        <Reveal className="eyebrow">// 10 · РАСПИСАНИЕ</Reveal>
         <Reveal as="h2" className="sec-title grad-text">Два потока.<br />Сентябрь 2026</Reveal>
         <Reveal as="p" className="sec-sub">Владивосток, ул. Русская 41а, 3 этаж. Пропустил занятие — запись остаётся на 6 месяцев.</Reveal>
         <div className="streams">

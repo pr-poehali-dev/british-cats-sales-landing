@@ -10,7 +10,7 @@ const Income = () => {
   return (
     <section className="sec" id="income">
       <div className="wrap">
-        <Reveal className="eyebrow">// 07 · ЗАРАБОТОК</Reveal>
+        <Reveal className="eyebrow">// 08 · ЗАРАБОТОК</Reveal>
         <Reveal as="h2" className="sec-title grad-text">Сколько приносят<br />ИИ-навыки</Reveal>
         <div className="income">
           {INC.map((x, i) => (

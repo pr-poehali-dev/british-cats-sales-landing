@@ -19,7 +19,7 @@ const Cases = () => {
       <div className="wrap">
         <div className="cases-head">
           <div>
-            <Reveal className="eyebrow">// 06 · РЕЗУЛЬТАТЫ</Reveal>
+            <Reveal className="eyebrow">// 07 · РЕЗУЛЬТАТЫ</Reveal>
             <Reveal as="h2" className="sec-title grad-text">Было → стало.<br />Кейсы студентов</Reveal>
           </div>
         </div>
