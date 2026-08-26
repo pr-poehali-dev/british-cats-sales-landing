@@ -8,7 +8,7 @@ const scrollTo = (e: React.MouseEvent, href: string) => {
 const PLANS = [
   {
     badge: 'Выбор большинства', badgeO: false, hot: true,
-    tag: 'ДЛЯ СТАРТА', name: 'БАЗА', old: 'Полная стоимость 150 000 ₽', sum: 'от 12 500 ₽', per: '/ МЕСЯЦ В РАССРОЧКУ',
+    tag: 'ДЛЯ СТАРТА', name: 'БАЗА', old: 'Стоимость 150 000 ₽', sum: 'от 12 500 ₽', per: '/ МЕСЯЦ В РАССРОЧКУ',
     feats: ['3 месяца обучения, 72 часа практики', 'Домашние задания с проверкой кураторами', 'Общий чат потока', 'Записи всех занятий на 6 месяцев', 'Библиотека промптов школы', 'Экзамен и сертификат'],
     btn: 'Взять базу', ghost: false, link: 'https://torguykriptoy.getcourse.ru/chernikovgpt' as string | null,
   },
