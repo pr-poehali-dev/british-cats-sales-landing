@@ -2188,18 +2188,11 @@ h3 {
   font-size: 22px;
   margin: 14px 0 4px;
 }
-.p-price-row {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-.p-old {
+.p-full {
   font-family: var(--mono);
-  font-size: clamp(16px, 1.6vw, 20px);
-  color: var(--t3);
-  text-decoration: line-through;
-  margin-top: 18px;
+  font-size: 13px;
+  color: var(--t2);
+  margin-top: 16px;
 }
 .price .p-sum {
   font-family: var(--mono);

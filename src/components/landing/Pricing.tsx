@@ -8,7 +8,7 @@ const scrollTo = (e: React.MouseEvent, href: string) => {
 const PLANS = [
   {
     badge: 'Выбор большинства', badgeO: false, hot: true,
-    tag: 'ДЛЯ СТАРТА', name: 'БАЗА', old: '150 000 ₽', sum: 'от 12 500 ₽', per: '/ МЕСЯЦ В РАССРОЧКУ',
+    tag: 'ДЛЯ СТАРТА', name: 'БАЗА', old: 'Полная стоимость 150 000 ₽', sum: 'от 12 500 ₽', per: '/ МЕСЯЦ В РАССРОЧКУ',
     feats: ['3 месяца обучения, 72 часа практики', 'Домашние задания с проверкой кураторами', 'Общий чат потока', 'Записи всех занятий на 6 месяцев', 'Библиотека промптов школы', 'Экзамен и сертификат'],
     btn: 'Взять базу', ghost: false, link: 'https://torguykriptoy.getcourse.ru/chernikovgpt' as string | null,
   },
@@ -39,10 +39,8 @@ const Pricing = () => {
               {p.badge && <div className={`p-badge${p.badgeO ? ' o' : ''}`}>{p.badge}</div>}
               <div className="p-tag">{p.tag}</div>
               <h3>{p.name}</h3>
-              <div className="p-price-row">
-                {'old' in p && p.old && <span className="p-old">{p.old}</span>}
-                <div className={`p-sum${/^\d/.test(p.sum) ? '' : ' txt'}`}>{p.sum}</div>
-              </div>
+              {'old' in p && p.old && <div className="p-full">{p.old}</div>}
+              <div className={`p-sum${/^\d/.test(p.sum) ? '' : ' txt'}`}>{p.sum}</div>
               <div className="p-per">{p.per}</div>
               <ul>{p.feats.map((f) => <li key={f}>{f}</li>)}</ul>
               {p.link ? (
