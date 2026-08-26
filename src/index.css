@@ -2188,6 +2188,19 @@ h3 {
   font-size: 22px;
   margin: 14px 0 4px;
 }
+.p-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.p-old {
+  font-family: var(--mono);
+  font-size: clamp(16px, 1.6vw, 20px);
+  color: var(--t3);
+  text-decoration: line-through;
+  margin-top: 18px;
+}
 .price .p-sum {
   font-family: var(--mono);
   font-size: clamp(30px, 3vw, 40px);
