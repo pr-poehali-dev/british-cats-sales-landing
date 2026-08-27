@@ -632,12 +632,40 @@ h3 {
   flex-wrap: wrap;
   align-items: center;
 }
+.hero-note-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
 .hero-cta-note {
   color: var(--t3);
   font-family: var(--mono);
   font-size: 12px;
-  margin-top: 16px;
   letter-spacing: 0.02em;
+}
+.hero-cta-note.glow {
+  color: var(--cyan);
+  padding: 8px 14px;
+  border: 1px solid var(--cyan-dim);
+  border-radius: 999px;
+  background: var(--cyan-dim);
+  text-shadow: 0 0 12px var(--cyan-glow);
+  animation: notePulse 2.6s ease-in-out infinite;
+}
+@keyframes notePulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 var(--cyan-dim);
+  }
+  50% {
+    box-shadow: 0 0 18px 2px var(--cyan-glow);
+  }
+}
+.hero-download {
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .hero-meta {
   display: flex;

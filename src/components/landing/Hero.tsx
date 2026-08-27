@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import Countdown from './Countdown';
+import Icon from '@/components/ui/icon';
 import { scrollToSection } from '@/lib/scroll';
 
 const scrollTo = (e: React.MouseEvent, href: string) => {
@@ -95,7 +96,19 @@ const Hero = () => {
               <a className="btn magnetic" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Занять место →</a>
               <a className="btn btn-ghost magnetic" href="#program" onClick={(e) => scrollTo(e, '#program')}>Программа курса</a>
             </div>
-            <div className="hero-cta-note">Рассрочка от 12 500 ₽/мес · Курс окупается 1–2 заказами (один ИИ-проект стоит от 30 000 ₽)</div>
+            <div className="hero-note-row">
+              <div className="hero-cta-note glow">Рассрочка от 12 500 ₽/мес · Курс окупается 1–2 заказами (один ИИ-проект стоит от 30 000 ₽)</div>
+              <a
+                className="btn btn-ghost btn-sm hero-download"
+                href="https://cdn.poehali.dev/projects/d3e635a0-73f6-4725-9cb9-7faeace376fe/bucket/59140a36-aa2c-45a5-8af4-734797273ad3.pdf"
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icon name="Download" size={14} />
+                Скачать программу
+              </a>
+            </div>
             <div className="timer-wrap">
               <div>
                 <div className="timer-label">ДО СТАРТА ПОТОКА · 14.09.2026</div>
