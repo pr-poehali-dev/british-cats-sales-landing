@@ -30,7 +30,7 @@ const Pricing = () => {
   return (
     <section className="sec" id="pricing" style={{ background: 'var(--deep)' }}>
       <div className="wrap">
-        <Reveal className="eyebrow">// 11 · ТАРИФЫ</Reveal>
+        <Reveal className="eyebrow">// 12 · ТАРИФЫ</Reveal>
         <Reveal as="h2" className="sec-title grad-text">Выбери формат</Reveal>
         <Reveal as="p" className="sec-sub">Все тарифы — полные 3 месяца программы. Рассрочка от 12 500 ₽/мес, кредит на 3/6/12 месяцев, оплата от юрлица по договору.</Reveal>
         <div className="price-grid">

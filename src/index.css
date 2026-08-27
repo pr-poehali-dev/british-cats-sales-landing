@@ -3562,3 +3562,53 @@ footer {
     padding: 20px;
   }
 }
+
+.class-grid {
+  margin-top: 48px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.class-photo {
+  aspect-ratio: 4 / 5;
+  background: var(--bg2);
+  border: 1px dashed var(--line);
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--t3);
+}
+.class-photo span {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+.class-cta {
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--line);
+  padding-top: 32px;
+}
+.class-cta p {
+  color: var(--t2);
+  font-size: 16px;
+  max-width: 480px;
+}
+@media (max-width: 960px) {
+  .class-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 640px) {
+  .class-cta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

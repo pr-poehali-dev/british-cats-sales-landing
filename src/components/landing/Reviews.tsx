@@ -99,7 +99,7 @@ const Reviews = () => {
   return (
     <section className="sec" id="reviews">
       <div className="wrap">
-        <Reveal className="eyebrow">// 12 · ОТЗЫВЫ</Reveal>
+        <Reveal className="eyebrow">// 13 · ОТЗЫВЫ</Reveal>
         <Reveal as="h2" className="sec-title grad-text">Что говорят студенты</Reveal>
         <Reveal className="rev-grid">
           {REVIEWS.map((r) => (

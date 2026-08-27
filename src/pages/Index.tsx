@@ -13,6 +13,7 @@ import Awards from '@/components/landing/Awards';
 import Cases from '@/components/landing/Cases';
 import Income from '@/components/landing/Income';
 import Versus from '@/components/landing/Versus';
+import ClassPhotos from '@/components/landing/ClassPhotos';
 import Streams from '@/components/landing/Streams';
 import Pricing from '@/components/landing/Pricing';
 import Reviews from '@/components/landing/Reviews';
@@ -45,6 +46,7 @@ const Index = () => {
       <Cases />
       <Income />
       <Versus />
+      <ClassPhotos />
       <Streams />
       <Pricing />
       <Reviews />

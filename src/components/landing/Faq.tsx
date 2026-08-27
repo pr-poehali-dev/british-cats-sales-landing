@@ -29,7 +29,7 @@ const Faq = () => {
   return (
     <section className="sec" id="faq" style={{ background: 'var(--deep)' }}>
       <div className="wrap">
-        <Reveal className="eyebrow">// 13 · ВОПРОСЫ</Reveal>
+        <Reveal className="eyebrow">// 14 · ВОПРОСЫ</Reveal>
         <Reveal as="h2" className="sec-title grad-text">Частые вопросы</Reveal>
         <Reveal className="faq">
           {QA.map((x) => <FaqItem key={x.q} {...x} />)}

@@ -7,7 +7,7 @@ const FinalCta = () => {
     <section id="final">
       <div className="spot l" /><div className="spot r" />
       <div className="wrap inner">
-        <Reveal className="eyebrow" style={{ justifyContent: 'center' }}>// 13 · РЕШЕНИЕ</Reveal>
+        <Reveal className="eyebrow" style={{ justifyContent: 'center' }}>// 15 · РЕШЕНИЕ</Reveal>
         <Reveal as="h2">
           <span className="grad-text">Пока ты думаешь —</span><br />
           <span className="cyan">конкурент уже учится</span>
