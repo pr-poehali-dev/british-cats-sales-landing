@@ -4,6 +4,7 @@ import elenaOrehova from '@/assets/reviews/elena-orehova.jpg';
 import vasilisa from '@/assets/reviews/vasilisa.jpg';
 import vitalyRymar from '@/assets/reviews/vitaly-rymar.jpg';
 import alenaVinokurova from '@/assets/reviews/alena-vinokurova.jpg';
+import marinaMorskaya from '@/assets/reviews/marina-morskaya.jpg';
 
 const REVIEWS = [
   {
@@ -53,7 +54,7 @@ const REVIEWS = [
 Если хотите разобраться и не знаете, с чего начать, — вам сюда. И главное: никакие онлайн-курсы не заменят эффективность и качество офлайн-обучения.`,
   },
   {
-    av: 'ММ', name: 'Марина Морская', role: 'ВЫПУСКНИЦА', full: 5,
+    av: 'ММ', photo: marinaMorskaya, name: 'Марина Морская', role: 'ВЫПУСКНИЦА', full: 5,
     text: `Три месяца. Один курс. И моя жизнь после ИИ уже никогда не будет прежней 💥
 
 Пришла в «ХАКНИ НЕЙРОСЕТИ» просто разобраться, что вообще происходит с этим ИИ. Ушла — с сертификатом, кучей навыков и абсолютно новым направлением, в которое влюбилась с головой.
