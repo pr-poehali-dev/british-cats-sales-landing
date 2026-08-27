@@ -90,11 +90,12 @@ const Hero = () => {
         </h1>
         <div className="hero-grid">
           <div>
-            <p className="hero-sub">Практический курс по нейросетям для новичков — даже если начинаешь с нуля. 3 месяца в живом классе с кураторами, и ИИ начнёт работать на тебя.</p>
+            <p className="hero-sub">Практический курс по нейросетям для предпринимателей и специалистов — даже если начинаешь с нуля. 3 месяца в живом классе с кураторами, и ИИ начнёт работать на тебя.</p>
             <div className="hero-cta">
               <a className="btn magnetic" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Занять место →</a>
               <a className="btn btn-ghost magnetic" href="#program" onClick={(e) => scrollTo(e, '#program')}>Программа курса</a>
             </div>
+            <div className="hero-cta-note">Рассрочка от 12 500 ₽/мес · Курс окупается 1–2 заказами (один ИИ-проект стоит от 30 000 ₽)</div>
             <div className="timer-wrap">
               <div>
                 <div className="timer-label">ДО СТАРТА ПОТОКА · 14.09.2026</div>
@@ -115,7 +116,7 @@ const Hero = () => {
             </div>
             <div className="brackets"><i /><i /><i /><i /></div>
             <div className="float-tag t1">СЕРГЕЙ ЧЕРНИКОВ · СПИКЕР</div>
-            <div className="float-tag t2">10 000+ ВЫПУСКНИКОВ</div>
+            <div className="float-tag t2">10 000+ УЧЕНИКОВ НА ПРОГРАММАХ С 2018 ГОДА</div>
           </div>
         </div>
       </div>

@@ -632,6 +632,13 @@ h3 {
   flex-wrap: wrap;
   align-items: center;
 }
+.hero-cta-note {
+  color: var(--t3);
+  font-family: var(--mono);
+  font-size: 12px;
+  margin-top: 16px;
+  letter-spacing: 0.02em;
+}
 .hero-meta {
   display: flex;
   gap: 26px;
@@ -840,6 +847,10 @@ h3 {
   right: -8px;
   animation-delay: -2.5s;
   color: var(--t2);
+  max-width: 190px;
+  white-space: normal;
+  line-height: 1.4;
+  text-align: right;
 }
 @keyframes floaty {
   0%,
