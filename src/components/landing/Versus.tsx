@@ -95,9 +95,10 @@ const Versus = () => {
           </Reveal>
         </div>
         <Reveal className="vs-calc-cta" delay={0.15}>
+          <p className="vs-calc-hook">Каждый месяц без ИИ — это рутина, которую можно было отдать нейросети. Узнай цену вопроса за 30 секунд.</p>
           <button type="button" className="btn" onClick={() => setCalcOpen(true)}>
             <Icon name="Calculator" size={18} />
-            Посчитать, сколько теряю без ИИ
+            Сколько ты теряешь без ИИ?
           </button>
         </Reveal>
       </div>

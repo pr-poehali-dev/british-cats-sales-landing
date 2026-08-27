@@ -51,7 +51,7 @@ const Navbar = () => {
         ))}
       </div>
       <div className="nav-right">
-        <button type="button" className="btn btn-ghost btn-sm" onClick={() => setCalcOpen(true)}>Калькулятор потерь</button>
+        <button type="button" className="btn btn-ghost btn-sm" onClick={() => setCalcOpen(true)}>Сколько ты теряешь без ИИ?</button>
         <span className="chip-seats">ОСТАЛОСЬ 7 МЕСТ</span>
         <a className="btn btn-sm" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Занять место</a>
       </div>
@@ -67,7 +67,7 @@ const Navbar = () => {
         {LINKS.map((l) => (
           <a key={l.href} href={l.href} onClick={(e) => scrollTo(e, l.href)}>{l.label}</a>
         ))}
-        <button type="button" className="btn btn-ghost" onClick={() => { setOpen(false); setCalcOpen(true); }}>Калькулятор потерь</button>
+        <button type="button" className="btn btn-ghost" onClick={() => { setOpen(false); setCalcOpen(true); }}>Сколько ты теряешь без ИИ?</button>
         <span className="chip-seats mob">ОСТАЛОСЬ 7 МЕСТ</span>
         <a className="btn" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Занять место →</a>
       </div>

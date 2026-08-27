@@ -95,6 +95,7 @@ const GiftPopup = () => {
         <span className="gift-eyebrow">Вам подарок</span>
         <h3 className="gift-title">Получи первые 3 урока бесплатно</h3>
         <p className="gift-sub">Подпишись на нашего бота в Telegram, ВКонтакте или MAX</p>
+        <p className="gift-note">Бот выдаст уроки и пригласит на бесплатный мастер-класс в живом классе</p>
 
         <div className="gift-btns">
           <a

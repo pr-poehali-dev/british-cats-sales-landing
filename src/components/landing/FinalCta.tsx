@@ -29,6 +29,7 @@ const FinalCta = () => {
           </a>
           <a className="btn btn-ghost magnetic" href="https://t.me/ChernikovGPT_Bot" target="_blank" rel="noopener">Бесплатная консультация</a>
         </Reveal>
+        <Reveal as="p" className="final-microtext" delay={0.1}>Осталось 7 мест из 30 · Отвечаем в течение 15 минут в рабочее время</Reveal>
       </div>
     </section>
   );
