@@ -1,12 +1,15 @@
 import Reveal from './Reveal';
-import Icon from '@/components/ui/icon';
 import { scrollToSection } from '@/lib/scroll';
+import photo1 from '@/assets/class/class-1.jpg';
+import photo2 from '@/assets/class/class-2.jpg';
+import photo3 from '@/assets/class/class-3.jpg';
+import photo4 from '@/assets/class/class-4.jpg';
 
 const PHOTOS = [
-  { alt: 'Живой класс на Русской 41а' },
-  { alt: 'Практика на занятии' },
-  { alt: 'Работа в группах' },
-  { alt: 'Разбор проектов с куратором' },
+  { src: photo1, alt: 'Живой класс на Русской 41а' },
+  { src: photo2, alt: 'Практика на занятии' },
+  { src: photo3, alt: 'Выпускники с сертификатами школы' },
+  { src: photo4, alt: 'Разбор материала в группе' },
 ];
 
 const ClassPhotos = () => {
@@ -17,10 +20,9 @@ const ClassPhotos = () => {
         <Reveal as="h2" className="sec-title grad-text">Как проходит занятие</Reveal>
         <Reveal as="p" className="sec-sub">Владивосток, ул. Русская 41а, 3 этаж. Так выглядит наш класс изнутри.</Reveal>
         <Reveal className="class-grid">
-          {PHOTOS.map((p, i) => (
-            <div className="class-photo" key={i}>
-              <Icon name="Camera" size={28} />
-              <span>Фото скоро</span>
+          {PHOTOS.map((p) => (
+            <div className="class-photo" key={p.src}>
+              <img src={p.src} alt={p.alt} loading="lazy" />
             </div>
           ))}
         </Reveal>
