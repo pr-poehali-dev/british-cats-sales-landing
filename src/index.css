@@ -2290,6 +2290,22 @@ h3 {
   background: var(--orange);
   color: #fff;
 }
+.price-guarantee {
+  margin-top: 40px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--cyan-dim);
+  border: 1px solid var(--cyan-dim);
+  border-radius: 14px;
+  padding: 18px 24px;
+  color: var(--cyan);
+}
+.price-guarantee span {
+  color: var(--t1);
+  font-size: 15px;
+  line-height: 1.4;
+}
 .price-note {
   margin-top: 28px;
   color: var(--t3);
