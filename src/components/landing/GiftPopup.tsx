@@ -26,6 +26,7 @@ const GiftPopup = () => {
     const subscribed = localStorage.getItem(STORAGE_KEY) === '1';
     if (subscribed) {
       setClicked(true);
+      setPhase('collapsed');
       return;
     }
     const alreadyShown = sessionStorage.getItem(SESSION_KEY) === '1';
