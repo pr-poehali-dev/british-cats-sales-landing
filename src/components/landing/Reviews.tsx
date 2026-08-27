@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import Reveal from './Reveal';
 import elenaOrehova from '@/assets/reviews/elena-orehova.jpg';
+import vasilisa from '@/assets/reviews/vasilisa.jpg';
 
 const REVIEWS = [
   {
-    av: 'ВА', name: 'Василиса', role: 'ВЫПУСКНИЦА · 29 АПРЕЛЯ 2026', full: 5,
+    av: 'ВА', photo: vasilisa, name: 'Василиса', role: 'ВЫПУСКНИЦА · 29 АПРЕЛЯ 2026', full: 5,
     text: `Нейросети 😄 это не про две кнопки и сразу результат, а про усиления своих навыков и знаний.
 
 Я повидала столько пустых онлайн-курсов, что ими можно было бы вымостить дорогу до Луны. Поэтому, когда я узнала, что у нас во Владивостоке есть оффлайн-школа по нейросетям, я пошла не задумываясь.
