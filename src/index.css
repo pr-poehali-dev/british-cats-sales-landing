@@ -1886,6 +1886,11 @@ h3 {
   background: linear-gradient(135deg, var(--bg), var(--line));
   color: var(--cyan);
   border: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.avatar-photo {
+  object-fit: cover;
+  padding: 0;
 }
 .case-top b {
   display: block;

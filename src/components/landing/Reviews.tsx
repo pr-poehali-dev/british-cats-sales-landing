@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Reveal from './Reveal';
+import elenaOrehova from '@/assets/reviews/elena-orehova.jpg';
 
 const REVIEWS = [
   {
@@ -23,7 +24,7 @@ const REVIEWS = [
 Стоило ли оно того? Обучение уже окупилось. Это лучшая инвестиция в свои мозги за последнее время.`,
   },
   {
-    av: 'ЕО', name: 'Елена Орехова', role: 'ВЫПУСКНИЦА', full: 5,
+    av: 'ЕО', photo: elenaOrehova, name: 'Елена Орехова', role: 'ВЫПУСКНИЦА', full: 5,
     text: `Классный эксперт владелец 🤝
 
 Прошла поток обучения — великолепно! Очень много прикладной инфо, если что-то трудно — ВСЕГДА ВСЁ ПОЯСНИТ! Рекомендую однозначно 🤝`,
@@ -88,7 +89,11 @@ const ReviewCard = ({ r }: { r: typeof REVIEWS[number] }) => {
         {open ? 'Свернуть' : 'Читать полностью'}
       </button>
       <div className="who">
-        <div className="avatar">{r.av}</div>
+        {'photo' in r && r.photo ? (
+          <img className="avatar avatar-photo" src={r.photo} alt={r.name} />
+        ) : (
+          <div className="avatar">{r.av}</div>
+        )}
         <div><b>{r.name}</b><span>{r.role}</span></div>
       </div>
     </div>
