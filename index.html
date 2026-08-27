@@ -53,5 +53,37 @@
 <noscript><div><img src="https://mc.yandex.ru/watch/103597090"
  style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
+
+<script>
+(function(){
+  function getParam(name){
+    var m = new RegExp('[?&]'+name+'=([^&]+)').exec(window.location.search);
+    return m ? decodeURIComponent(m[1].replace(/\+/g,' ')) : null;
+  }
+  var keys = ['gcpc','gcao','utm_source','utm_medium','utm_campaign','utm_content','utm_term'];
+  keys.forEach(function(k){
+    var v = getParam(k);
+    if (v) localStorage.setItem('ref_' + k, v);
+  });
+
+  function buildQuery(){
+    var parts = [];
+    keys.forEach(function(k){
+      var v = localStorage.getItem('ref_' + k);
+      if (v) parts.push(k + '=' + encodeURIComponent(v));
+    });
+    return parts.join('&');
+  }
+
+  document.addEventListener('click', function(e){
+    var a = e.target.closest('a[href*="getcourse.ru"]');
+    if (!a) return;
+    var qs = buildQuery();
+    if (!qs) return;
+    var sep = a.href.indexOf('?') === -1 ? '?' : '&';
+    a.href = a.href + sep + qs;
+  }, true);
+})();
+</script>
 </body>
 </html>
