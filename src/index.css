@@ -1239,59 +1239,6 @@ h3 {
 .prof:hover {
   border-color: var(--cyan);
 }
-.prof-icon {
-  width: 64px;
-  height: 64px;
-  margin-bottom: 22px;
-  perspective: 600px;
-}
-.prof-icon-inner {
-  width: 100%;
-  height: 100%;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform-style: preserve-3d;
-  animation: profFloat 4.5s ease-in-out infinite;
-  box-shadow:
-    0 8px 20px -6px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  transition: transform 0.4s var(--ease);
-}
-.prof:hover .prof-icon-inner {
-  transform: rotateY(180deg) rotateX(8deg);
-}
-.prof-icon-cyan .prof-icon-inner {
-  background: linear-gradient(145deg, var(--cyan-dim), var(--bg2) 65%);
-  border: 1px solid var(--cyan);
-  color: var(--cyan);
-}
-.prof-icon-orange .prof-icon-inner {
-  background: linear-gradient(145deg, var(--orange-dim), var(--bg2) 65%);
-  border: 1px solid var(--orange);
-  color: var(--orange);
-}
-.prof-icon-cyan .prof-icon-inner svg {
-  filter: drop-shadow(0 0 8px var(--cyan-glow));
-}
-.prof-icon-orange .prof-icon-inner svg {
-  filter: drop-shadow(0 0 8px rgba(255, 92, 57, 0.45));
-}
-@keyframes profFloat {
-  0%,
-  100% {
-    transform: translateY(0) rotateX(0) rotateY(0);
-  }
-  50% {
-    transform: translateY(-6px) rotateX(6deg) rotateY(-10deg);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .prof-icon-inner {
-    animation: none;
-  }
-}
 .prof .num {
   font-family: var(--mono);
   font-size: 12px;

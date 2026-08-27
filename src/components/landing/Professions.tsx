@@ -1,17 +1,16 @@
 import { useRef, useEffect } from 'react';
 import Reveal from './Reveal';
-import Icon from '@/components/ui/icon';
 
 const PROFS = [
-  { num: '01', icon: 'Smartphone', accent: 'cyan', title: 'СММ-специалист', text: 'Контент и стратегии продвижения: посты за минуты, контент-планы на месяц, разбор аудитории.' },
-  { num: '02', icon: 'TrendingUp', accent: 'orange', title: 'Маркетолог', text: 'Анализ рынка и ЦА, рекламные тексты, воронки и стратегии, которые продают.' },
-  { num: '03', icon: 'Palette', accent: 'cyan', title: 'Дизайнер', text: 'Визуал, логотипы, фирменный стиль и презентации студийного уровня без студии.' },
-  { num: '04', icon: 'Clapperboard', accent: 'orange', title: 'Видеомейкер', text: 'Ролики, монтаж, клипы и реклама — генерация видео из текста и фото.' },
-  { num: '05', icon: 'Camera', accent: 'cyan', title: 'Блогер / контент-мейкер', text: 'Нейро-аватары и клоны, Reels по трендам, съёмка без камеры.' },
-  { num: '06', icon: 'BrainCircuit', accent: 'orange', title: 'Предприниматель с ИИ', text: 'Автоматизация рутины, нейросотрудники, автоворонки — бизнес без лишних наймов.' },
+  { num: '01', title: 'СММ-специалист', text: 'Контент и стратегии продвижения: посты за минуты, контент-планы на месяц, разбор аудитории.' },
+  { num: '02', title: 'Маркетолог', text: 'Анализ рынка и ЦА, рекламные тексты, воронки и стратегии, которые продают.' },
+  { num: '03', title: 'Дизайнер', text: 'Визуал, логотипы, фирменный стиль и презентации студийного уровня без студии.' },
+  { num: '04', title: 'Видеомейкер', text: 'Ролики, монтаж, клипы и реклама — генерация видео из текста и фото.' },
+  { num: '05', title: 'Блогер / контент-мейкер', text: 'Нейро-аватары и клоны, Reels по трендам, съёмка без камеры.' },
+  { num: '06', title: 'Предприниматель с ИИ', text: 'Автоматизация рутины, нейросотрудники, автоворонки — бизнес без лишних наймов.' },
 ];
 
-const ProfCard = ({ num, icon, accent, title, text }: { num: string; icon: string; accent: string; title: string; text: string }) => {
+const ProfCard = ({ num, title, text }: { num: string; title: string; text: string }) => {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = ref.current!;
@@ -26,11 +25,6 @@ const ProfCard = ({ num, icon, accent, title, text }: { num: string; icon: strin
   return (
     <div className="prof" ref={ref}>
       <div className="glare" />
-      <div className={`prof-icon prof-icon-${accent}`}>
-        <div className="prof-icon-inner">
-          <Icon name={icon} size={28} />
-        </div>
-      </div>
       <div className="num">{num}</div>
       <h3>{title}</h3>
       <p>{text}</p>
