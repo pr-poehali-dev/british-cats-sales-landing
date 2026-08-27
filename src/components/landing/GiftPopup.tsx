@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Icon from '@/components/ui/icon';
 import { ymGoal } from '@/lib/analytics';
+import { GIFT_POPUP_OPEN_EVENT } from '@/lib/giftPopup';
 
 const LINKS = {
   tg: 'https://t.me/HackNeuro_bot?start=s=3803564',
@@ -10,23 +11,58 @@ const LINKS = {
 };
 
 const STORAGE_KEY = 'gift-popup-subscribed';
+const SESSION_KEY = 'gift-popup-session-shown';
 const OPEN_DELAY = 30000;
-const REOPEN_DELAY = 45000;
+const SCROLL_THRESHOLD = 0.5;
 
 type Phase = 'idle' | 'open' | 'collapsed';
 
 const GiftPopup = () => {
   const [phase, setPhase] = useState<Phase>('idle');
   const [clicked, setClicked] = useState(false);
-  const reopenTimer = useRef<number>();
 
+  // Автопоказ: один раз за сессию, через 30 сек или на 50% скролла — что раньше.
   useEffect(() => {
-    if (localStorage.getItem(STORAGE_KEY) === '1') {
+    const subscribed = localStorage.getItem(STORAGE_KEY) === '1';
+    if (subscribed) {
       setClicked(true);
       return;
     }
-    const t = window.setTimeout(() => setPhase('open'), OPEN_DELAY);
-    return () => window.clearTimeout(t);
+    const alreadyShown = sessionStorage.getItem(SESSION_KEY) === '1';
+    if (alreadyShown) {
+      setPhase('collapsed');
+      return;
+    }
+
+    let triggered = false;
+    const trigger = () => {
+      if (triggered) return;
+      triggered = true;
+      sessionStorage.setItem(SESSION_KEY, '1');
+      setPhase('open');
+      window.clearTimeout(timer);
+      window.removeEventListener('scroll', onScroll);
+    };
+    const onScroll = () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      if (total > 0 && window.scrollY / total >= SCROLL_THRESHOLD) trigger();
+    };
+    const timer = window.setTimeout(trigger, OPEN_DELAY);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener('scroll', onScroll);
+    };
+  }, []);
+
+  // Ручное открытие по клику из других мест сайта (например, кнопка «Записаться»).
+  useEffect(() => {
+    const handler = () => {
+      sessionStorage.setItem(SESSION_KEY, '1');
+      setPhase('open');
+    };
+    window.addEventListener(GIFT_POPUP_OPEN_EVENT, handler);
+    return () => window.removeEventListener(GIFT_POPUP_OPEN_EVENT, handler);
   }, []);
 
   useEffect(() => {
@@ -36,25 +72,11 @@ const GiftPopup = () => {
     };
   }, [phase]);
 
-  useEffect(() => () => {
-    if (reopenTimer.current) window.clearTimeout(reopenTimer.current);
-  }, []);
-
-  const clearReopenTimer = () => {
-    if (reopenTimer.current) {
-      window.clearTimeout(reopenTimer.current);
-      reopenTimer.current = undefined;
-    }
-  };
-
   const handleClose = () => {
     setPhase('collapsed');
-    clearReopenTimer();
-    reopenTimer.current = window.setTimeout(() => setPhase('open'), REOPEN_DELAY);
   };
 
   const handleFabClick = () => {
-    clearReopenTimer();
     setPhase('open');
   };
 
@@ -62,7 +84,6 @@ const GiftPopup = () => {
     ymGoal('gift_popup_click', { channel });
     setClicked(true);
     localStorage.setItem(STORAGE_KEY, '1');
-    clearReopenTimer();
     setPhase('collapsed');
   };
 

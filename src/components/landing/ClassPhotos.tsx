@@ -1,5 +1,5 @@
 import Reveal from './Reveal';
-import { scrollToSection } from '@/lib/scroll';
+import { openGiftPopup } from '@/lib/giftPopup';
 import photo1 from '@/assets/class/class-1.jpg';
 import photo2 from '@/assets/class/class-2.jpg';
 import photo3 from '@/assets/class/class-3.jpg';
@@ -28,16 +28,9 @@ const ClassPhotos = () => {
         </Reveal>
         <Reveal className="class-cta" delay={0.1}>
           <p>Хочешь посмотреть своими глазами — приходи на пробное занятие</p>
-          <a
-            className="btn btn-ghost magnetic"
-            href="#pricing"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection('#pricing');
-            }}
-          >
+          <button type="button" className="btn btn-ghost magnetic" onClick={() => openGiftPopup()}>
             Записаться →
-          </a>
+          </button>
         </Reveal>
       </div>
     </section>
