@@ -22,7 +22,7 @@ const Pill = () => {
     <div id="pill" className={show ? 'show' : ''}>
       <span>До старта потока:</span>
       <b>{days} дней</b>
-      <span className="pill-seats">Осталось 7 мест</span>
+      <span className="pill-seats">Осталось 3 места</span>
       <a
         className="btn btn-sm"
         href="#pricing"

@@ -23,7 +23,7 @@ import Footer from '@/components/landing/Footer';
 import Pill from '@/components/landing/Pill';
 import GiftPopup from '@/components/landing/GiftPopup';
 
-const TICK1 = ['НЕ ЗНАТЬ AI — ДОРОГО!', 'СТАРТ 14.09.2026', 'ОСТАЛОСЬ 7 МЕСТ', 'ЖИВОЙ КЛАСС', 'ВЛАДИВОСТОК'];
+const TICK1 = ['НЕ ЗНАТЬ AI — ДОРОГО!', 'СТАРТ 14.09.2026', 'ОСТАЛОСЬ 3 МЕСТА', 'ЖИВОЙ КЛАСС', 'ВЛАДИВОСТОК'];
 const TICK2 = ['САЙТ ЗА 30 МИНУТ', 'РЕКЛАМНЫЙ РОЛИК', 'ИИ-АГЕНТ В TELEGRAM', 'КОНТЕНТ-ПЛАН', 'НЕЙРО-АВАТАР', 'ВОРОНКА ПРОДАЖ'];
 
 const Index = () => {
