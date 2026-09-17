@@ -12,7 +12,7 @@ const FinalCta = () => {
           <span className="grad-text">Пока ты думаешь —</span><br />
           <span className="cyan">конкурент уже учится</span>
         </Reveal>
-        <Reveal as="p" className="sec-sub">Продажи на текущий поток закрыты — набор полностью укомплектован. Следующий старт в декабре, оставь заявку и попади в числе первых. Записи остаются на полгода — навыки остаются <span className="cyan">навсегда</span>.</Reveal>
+        <Reveal as="p" className="sec-sub">Продажи на текущий поток закрыты — набор полностью укомплектован. Следующие потоки стартуют 7 и 9 декабря, оставь заявку и попади в числе первых. Записи остаются на полгода — навыки остаются <span className="cyan">навсегда</span>.</Reveal>
         <Reveal className="final-timer">
           <Countdown />
         </Reveal>
