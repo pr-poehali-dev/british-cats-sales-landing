@@ -52,8 +52,8 @@ const Navbar = () => {
       </div>
       <div className="nav-right">
         <button type="button" className="btn btn-ghost btn-sm" onClick={() => setCalcOpen(true)}>Сколько ты теряешь без ИИ?</button>
-        <span className="chip-seats">ОСТАЛОСЬ 3 МЕСТА</span>
-        <a className="btn btn-sm" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Занять место</a>
+        <span className="chip-seats">ПРОДАЖИ ЗАКРЫТЫ</span>
+        <a className="btn btn-sm" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Заявка на декабрь</a>
       </div>
       <button
         className={`nav-burger${open ? ' open' : ''}`}
@@ -68,8 +68,8 @@ const Navbar = () => {
           <a key={l.href} href={l.href} onClick={(e) => scrollTo(e, l.href)}>{l.label}</a>
         ))}
         <button type="button" className="btn btn-ghost" onClick={() => { setOpen(false); setCalcOpen(true); }}>Сколько ты теряешь без ИИ?</button>
-        <span className="chip-seats mob">ОСТАЛОСЬ 3 МЕСТА</span>
-        <a className="btn" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Занять место →</a>
+        <span className="chip-seats mob">ПРОДАЖИ ЗАКРЫТЫ</span>
+        <a className="btn" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Заявка на декабрь →</a>
       </div>
       <LossCalculatorModal open={calcOpen} onClose={() => setCalcOpen(false)} />
     </nav>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { scrollToSection } from '@/lib/scroll';
 
-const TARGET = new Date('2026-09-14T00:00:00+10:00').getTime();
+const TARGET = new Date('2026-12-07T00:00:00+10:00').getTime();
 
 const Pill = () => {
   const [show, setShow] = useState(false);
@@ -22,7 +22,7 @@ const Pill = () => {
     <div id="pill" className={show ? 'show' : ''}>
       <span>До старта потока:</span>
       <b>{days} дней</b>
-      <span className="pill-seats">Осталось 3 места</span>
+      <span className="pill-seats">Продажи закрыты</span>
       <a
         className="btn btn-sm"
         href="#pricing"
@@ -31,7 +31,7 @@ const Pill = () => {
           scrollToSection('#pricing');
         }}
       >
-        Занять место
+        Заявка на декабрь
       </a>
     </div>
   );

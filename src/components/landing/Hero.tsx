@@ -93,7 +93,7 @@ const Hero = () => {
           <div>
             <p className="hero-sub">Практический курс по нейросетям для предпринимателей и специалистов — даже если начинаешь с нуля. 3 месяца в живом классе с кураторами, и ИИ начнёт работать на тебя.</p>
             <div className="hero-cta">
-              <a className="btn magnetic" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Занять место →</a>
+              <a className="btn magnetic" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Оставить заявку на декабрь →</a>
               <a className="btn btn-ghost magnetic" href="#program" onClick={(e) => scrollTo(e, '#program')}>Программа курса</a>
             </div>
             <div className="hero-note-row">
@@ -111,7 +111,7 @@ const Hero = () => {
             </div>
             <div className="timer-wrap">
               <div>
-                <div className="timer-label">ДО СТАРТА ПОТОКА · 14.09.2026</div>
+                <div className="timer-label">ДО СТАРТА ПОТОКА · 07.12.2026</div>
                 <Countdown />
               </div>
             </div>

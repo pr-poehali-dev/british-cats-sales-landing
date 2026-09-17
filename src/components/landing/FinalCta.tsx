@@ -12,7 +12,7 @@ const FinalCta = () => {
           <span className="grad-text">Пока ты думаешь —</span><br />
           <span className="cyan">конкурент уже учится</span>
         </Reveal>
-        <Reveal as="p" className="sec-sub">Два вечера в неделю — и через 3 месяца ИИ работает на тебя. В группе 30 мест, осталось 3. Записи остаются на полгода — навыки остаются <span className="cyan">навсегда</span>.</Reveal>
+        <Reveal as="p" className="sec-sub">Продажи на текущий поток закрыты — набор полностью укомплектован. Следующий старт в декабре, оставь заявку и попади в числе первых. Записи остаются на полгода — навыки остаются <span className="cyan">навсегда</span>.</Reveal>
         <Reveal className="final-timer">
           <Countdown />
         </Reveal>
@@ -25,11 +25,11 @@ const FinalCta = () => {
               scrollToSection('#pricing');
             }}
           >
-            Занять место →
+            Оставить заявку на декабрь →
           </a>
           <a className="btn btn-ghost magnetic" href="https://t.me/ChernikovGPT_Bot" target="_blank" rel="noopener">Бесплатная консультация</a>
         </Reveal>
-        <Reveal as="p" className="final-microtext" delay={0.1}>Осталось 3 места из 30 · Отвечаем в течение 15 минут в рабочее время</Reveal>
+        <Reveal as="p" className="final-microtext" delay={0.1}>Продажи закрыты · Следующий поток — декабрь · Отвечаем в течение 15 минут в рабочее время</Reveal>
       </div>
     </section>
   );
