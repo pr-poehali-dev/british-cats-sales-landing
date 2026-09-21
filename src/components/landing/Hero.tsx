@@ -83,15 +83,16 @@ const Hero = () => {
       <div className="spot l" /><div className="spot r" />
       <div className="grid-bg" />
       <div className="wrap hero-inner">
-        <div className="hero-tag"><i />ВЛАДИВОСТОК · ЖИВОЙ КЛАСС · 43.11°N 131.88°E</div>
+        <div className="hero-tag"><i />ВЛАДИВОСТОК · ЖИВОЕ ОБУЧЕНИЕ · 43.11°N 131.88°E</div>
         <h1>
           <span className="row"><span className="grad-text">НАУЧИСЬ</span></span>
           <span className="row"><span className="grad-text">ЗАРАБАТЫВАТЬ</span></span>
           <span className="row"><span className="cyan">С НЕЙРОСЕТЯМИ</span></span>
+          <span className="h1-seo">Курсы нейросетей во Владивостоке — живая школа «Хакни Нейросети»</span>
         </h1>
         <div className="hero-grid">
           <div>
-            <p className="hero-sub">Практический курс по нейросетям для предпринимателей и специалистов — даже если начинаешь с нуля. 3 месяца в живом классе с кураторами, и ИИ начнёт работать на тебя.</p>
+            <p className="hero-sub">Практический трёхмесячный курс по нейросетям и искусственному интеллекту для предпринимателей, специалистов и фрилансеров — даже если начинаешь с нуля. ChatGPT, Gemini, Perplexity, ИИ-агенты, сайты, дизайн, видео, контент и автоматизация бизнеса — с практикой в живом классе с кураторами.</p>
             <div className="hero-cta">
               <a className="btn magnetic" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Оставить заявку на декабрь →</a>
               <a className="btn btn-ghost magnetic" href="#program" onClick={(e) => scrollTo(e, '#program')}>Программа курса</a>

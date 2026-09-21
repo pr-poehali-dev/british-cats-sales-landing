@@ -7,7 +7,7 @@ import alenaVinokurova from '@/assets/reviews/alena-vinokurova.jpg';
 import marinaMorskaya from '@/assets/reviews/marina-morskaya.jpg';
 import annaDubinets from '@/assets/reviews/anna-dubinets.jpg';
 
-const REVIEWS = [
+export const REVIEWS = [
   {
     av: 'ВА', photo: vasilisa, name: 'Василиса', role: 'ВЫПУСКНИЦА · 29 АПРЕЛЯ 2026', full: 5,
     text: `Нейросети 😄 это не про две кнопки и сразу результат, а про усиления своих навыков и знаний.

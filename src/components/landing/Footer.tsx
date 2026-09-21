@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { scrollToSection } from '@/lib/scroll';
 import Reveal from './Reveal';
 import { useFitWidth } from '@/hooks/use-fit-width';
@@ -35,15 +36,25 @@ const Footer = () => {
       <div className="wrap">
         <div className="foot-grid">
           <div>
-            <img src="/site/logo.jpg" alt="Хакни Нейросети" />
-            <p>Первая живая школа нейросетей на Дальнем Востоке. Учим зарабатывать с ИИ — с нуля, вживую, с кураторами.</p>
+            <img src="/site/logo.jpg" alt="Хакни Нейросети — школа искусственного интеллекта во Владивостоке" />
+            <p>Школа практического обучения искусственному интеллекту во Владивостоке. Учим предпринимателей, специалистов и компании применять нейросети в работе — с нуля, вживую, с кураторами.</p>
           </div>
           <div>
             <h5>Контакты</h5>
             <a href="https://t.me/chernikovgpt" target="_blank" rel="noopener">Telegram-канал — @chernikovgpt</a>
             <a href="https://t.me/ChernikovGPT_Bot" target="_blank" rel="noopener">Бот консультаций — @ChernikovGPT_Bot</a>
-            <a>Владивосток, ул. Русская 41а, 3 этаж</a>
-            <a>Пн–Пт · 10:00–19:00</a>
+            <a href="https://2gis.ru/vladivostok/firm/70000001105602364" target="_blank" rel="noopener">Владивосток, ул. Русская, 41а, 3 этаж</a>
+            <a>Пн–Сб · 10:00–20:00</a>
+          </div>
+          <div>
+            <h5>Разделы</h5>
+            <Link to="/course">Курс нейросетей</Link>
+            <Link to="/corporate">Корпоративное обучение</Link>
+            <Link to="/neyroseti-s-nulya">Нейросети с нуля</Link>
+            <Link to="/zarabotok-na-neyrosetyah">Заработок на нейросетях</Link>
+            <Link to="/about">О школе</Link>
+            <Link to="/sergey-chernikov">Сергей Черников</Link>
+            <Link to="/reviews">Отзывы</Link>
           </div>
           <div>
             <h5>Навигация</h5>

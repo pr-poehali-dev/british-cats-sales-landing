@@ -7,13 +7,19 @@ interface Props {
   duration?: number;
 }
 
+const format = (v: number, dec: number) =>
+  dec > 0 ? v.toFixed(dec) : Math.round(v).toLocaleString('ru-RU');
+
 const CountUp = ({ to, dec = 0, suffix = '', duration = 1600 }: Props) => {
-  const [val, setVal] = useState(0);
+  const final = `${format(to, dec)}${suffix}`;
+  const [val, setVal] = useState<number | null>(null);
   const ref = useRef<HTMLElement>(null);
   const done = useRef(false);
 
   useEffect(() => {
-    const el = ref.current!;
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const io = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && !done.current) {
         done.current = true;
@@ -21,7 +27,7 @@ const CountUp = ({ to, dec = 0, suffix = '', duration = 1600 }: Props) => {
         const step = (now: number) => {
           const p = Math.min(1, (now - start) / duration);
           const eased = 1 - Math.pow(1 - p, 3);
-          setVal(to * eased);
+          setVal(p < 1 ? to * eased : null);
           if (p < 1) requestAnimationFrame(step);
         };
         requestAnimationFrame(step);
@@ -29,10 +35,15 @@ const CountUp = ({ to, dec = 0, suffix = '', duration = 1600 }: Props) => {
     }, { threshold: 0.4 });
     io.observe(el);
     return () => io.disconnect();
-  }, [to, duration]);
+  }, [to, dec, duration]);
 
-  const shown = dec > 0 ? val.toFixed(dec) : Math.round(val).toLocaleString('ru-RU');
-  return <b ref={ref}>{shown}{suffix}</b>;
+  return (
+    <b ref={ref} aria-label={final}>
+      <span aria-hidden={val !== null ? true : undefined}>
+        {val === null ? final : `${format(val, dec)}${suffix}`}
+      </span>
+    </b>
+  );
 };
 
 export default CountUp;
