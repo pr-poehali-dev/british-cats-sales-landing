@@ -212,11 +212,11 @@ h3 {
   }
 }
 @media (hover: hover) {
-  body {
+  body.custom-cursor {
     cursor: none;
   }
-  a,
-  button {
+  body.custom-cursor a,
+  body.custom-cursor button {
     cursor: none;
   }
 }

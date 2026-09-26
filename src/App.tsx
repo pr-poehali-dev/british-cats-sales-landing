@@ -18,8 +18,13 @@ import RequireAuth from "./components/cabinet/RequireAuth";
 import Login from "./pages/cabinet/Login";
 import StudentHome from "./pages/cabinet/StudentHome";
 import ProfileSetup from "./pages/cabinet/ProfileSetup";
+import StudentProfile from "./pages/cabinet/StudentProfile";
+import Survey from "./pages/cabinet/Survey";
 import AdminHome from "./pages/cabinet/AdminHome";
 import AdminCodes from "./pages/cabinet/AdminCodes";
+import AdminSurveys from "./pages/cabinet/AdminSurveys";
+import AdminStudents from "./pages/cabinet/AdminStudents";
+import AdminStudentCard from "./pages/cabinet/AdminStudentCard";
 import "./styles/cabinet.css";
 
 const queryClient = new QueryClient();
@@ -53,8 +58,13 @@ const App = () => (
           <Route path="/cabinet/login" element={<Login />} />
           <Route path="/cabinet/setup" element={<RequireAuth role="student"><ProfileSetup /></RequireAuth>} />
           <Route path="/cabinet" element={<RequireAuth role="student"><StudentHome /></RequireAuth>} />
+          <Route path="/cabinet/profile" element={<RequireAuth role="student"><StudentProfile /></RequireAuth>} />
+          <Route path="/cabinet/survey/:assignmentId" element={<RequireAuth role="student"><Survey /></RequireAuth>} />
           <Route path="/cabinet/admin" element={<RequireAuth role="admin"><AdminHome /></RequireAuth>} />
           <Route path="/cabinet/admin/codes" element={<RequireAuth role="admin"><AdminCodes /></RequireAuth>} />
+          <Route path="/cabinet/admin/surveys" element={<RequireAuth role="admin"><AdminSurveys /></RequireAuth>} />
+          <Route path="/cabinet/admin/students" element={<RequireAuth role="admin"><AdminStudents /></RequireAuth>} />
+          <Route path="/cabinet/admin/students/:studentId" element={<RequireAuth role="admin"><AdminStudentCard /></RequireAuth>} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>

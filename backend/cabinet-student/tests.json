@@ -1,0 +1,21 @@
+{
+  "tests": [
+    {
+      "name": "Без токена доступ запрещён",
+      "method": "GET",
+      "path": "/?action=dashboard",
+      "expectedStatus": 403,
+      "expectedBody": {"error": "string"},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Создание профиля без авторизации запрещено",
+      "method": "POST",
+      "path": "/?action=profile-create",
+      "body": {"first_name": "Тест"},
+      "expectedStatus": 403,
+      "expectedBody": {"error": "string"},
+      "bodyMatcher": "partial"
+    }
+  ]
+}

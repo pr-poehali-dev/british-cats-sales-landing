@@ -6,6 +6,7 @@ const Cursor = () => {
 
   useEffect(() => {
     if (window.matchMedia('(hover:none),(pointer:coarse)').matches) return;
+    document.body.classList.add('custom-cursor');
     const dot = dotRef.current!;
     const ring = ringRef.current!;
     let rx = 0, ry = 0, tx = 0, ty = 0;
@@ -30,6 +31,7 @@ const Cursor = () => {
     return () => {
       window.removeEventListener('mousemove', move);
       cancelAnimationFrame(raf);
+      document.body.classList.remove('custom-cursor');
     };
   }, []);
 

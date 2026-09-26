@@ -1,4 +1,6 @@
 {
+  "cabinet-admin-surveys": "https://functions.poehali.dev/de13a511-86d7-4730-8e8f-733db500da3a",
+  "cabinet-student": "https://functions.poehali.dev/fa11e14f-1baa-4d70-a358-e91b0d5b1b03",
   "cabinet-auth": "https://functions.poehali.dev/fce7abf3-0217-42e4-8ce2-4867b7e551f8",
   "cabinet-admin-codes": "https://functions.poehali.dev/c63146df-a632-48d1-b9ec-f519bf2ebec7"
 }

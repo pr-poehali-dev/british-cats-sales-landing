@@ -28,6 +28,90 @@ export interface Me {
   period: string | null;
 }
 
+export interface Question {
+  id: number;
+  position: number;
+  question_code: string;
+  text: string;
+  hint: string | null;
+  type: string;
+  options_json: string[] | { min: number; max: number } | null;
+  is_required: boolean;
+  max_choices: number | null;
+  conditional_logic_json: { depends_on: string; not_equals?: string; in?: string[] } | null;
+}
+
+export interface Assignment {
+  assignment_id: number;
+  questionnaire_id: number;
+  title: string;
+  type: 'entrance' | 'checkpoint' | 'final';
+  period: string | null;
+  status: 'available' | 'in_progress' | 'completed' | 'locked';
+  completed_at: string | null;
+  current_question: number | null;
+  score: string | null;
+  test_correct: number | null;
+  test_total: number | null;
+  total_questions: number;
+  answered: number;
+}
+
+export type Answers = Record<string, unknown>;
+
+export interface SurveyData {
+  assignment: { id: number; status: string; questionnaire_id: number; title: string; type: string; period: string | null };
+  questions: Question[];
+  response: {
+    answers: Answers;
+    current_question: number;
+    status: string;
+    score: string | null;
+    test_correct: number | null;
+    test_total: number | null;
+  };
+}
+
+export interface StudentDashboard {
+  profile: Profile;
+  group_name: string | null;
+  course_name: string | null;
+  period: string | null;
+  assignments: Assignment[];
+}
+
+export interface AdminStudent {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  city: string | null;
+  industry: string;
+  profession: string | null;
+  employment_type: string;
+  created_at: string;
+  group_name: string | null;
+  course_name: string | null;
+  completed_count: number;
+  entrance_score: string | null;
+  final_score: string | null;
+  last_csat: number | null;
+  last_continue: string | null;
+  attention: boolean;
+}
+
+export interface AdminSurvey {
+  id: number;
+  title: string;
+  type: 'entrance' | 'checkpoint' | 'final';
+  period: string | null;
+  status: 'draft' | 'available' | 'closed';
+  questions_count: number;
+  assigned: number;
+  completed: number;
+}
+
 export interface AccessCode {
   id: number;
   code_hint: string;
@@ -63,6 +147,8 @@ const call = async <T>(url: string, action: string, init?: RequestInit): Promise
 
 const AUTH = func2url['cabinet-auth'];
 const CODES = func2url['cabinet-admin-codes'];
+const STUDENT = func2url['cabinet-student'];
+const SURVEYS = func2url['cabinet-admin-surveys'];
 
 export const api = {
   login: (code: string) =>
@@ -86,4 +172,29 @@ export const api = {
     call<{ ok: boolean }>(CODES, 'enable', { method: 'POST', body: JSON.stringify({ id }) }),
   regenerateCode: (id: number) =>
     call<{ id: number; code: string }>(CODES, 'regenerate', { method: 'POST', body: JSON.stringify({ id }) }),
+
+  createProfile: (payload: Record<string, unknown>) =>
+    call<{ profile_id: number }>(STUDENT, 'profile-create', { method: 'POST', body: JSON.stringify(payload) }),
+  updateProfile: (payload: Record<string, unknown>) =>
+    call<{ ok: boolean }>(STUDENT, 'profile-update', { method: 'POST', body: JSON.stringify(payload) }),
+  dashboard: () => call<StudentDashboard>(STUDENT, 'dashboard'),
+  getSurvey: (assignmentId: number) =>
+    call<SurveyData>(STUDENT, `survey-get&assignment_id=${assignmentId}`),
+  saveAnswer: (payload: { assignment_id: number; question_code: string; value: unknown; current_question: number }) =>
+    call<{ ok: boolean }>(STUDENT, 'answer-save', { method: 'POST', body: JSON.stringify(payload) }),
+  completeSurvey: (assignmentId: number) =>
+    call<{ test_correct: number | null; test_total: number | null; score: number | null; already?: boolean }>(
+      STUDENT, 'survey-complete', { method: 'POST', body: JSON.stringify({ assignment_id: assignmentId }) },
+    ),
+  progress: () => call<{ items: Record<string, unknown>[] }>(STUDENT, 'progress'),
+
+  adminSurveys: () => call<{ surveys: AdminSurvey[] }>(SURVEYS, 'list'),
+  setSurveyStatus: (id: number, status: 'draft' | 'available' | 'closed') =>
+    call<{ ok: boolean }>(SURVEYS, 'set-status', { method: 'POST', body: JSON.stringify({ id, status }) }),
+  adminStudents: () => call<{ students: AdminStudent[] }>(SURVEYS, 'students'),
+  adminStudent: (id: number) =>
+    call<{ profile: Record<string, unknown>; responses: Record<string, unknown>[]; questions: Record<string, unknown>[] }>(
+      SURVEYS, `student&id=${id}`,
+    ),
+  adminAnalytics: () => call<Record<string, unknown>>(SURVEYS, 'analytics'),
 };

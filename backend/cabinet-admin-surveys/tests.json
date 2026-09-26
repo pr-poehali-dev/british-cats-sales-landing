@@ -1,0 +1,20 @@
+{
+  "tests": [
+    {
+      "name": "Без токена список анкет запрещён",
+      "method": "GET",
+      "path": "/?action=list",
+      "expectedStatus": 403,
+      "expectedBody": {"error": "string"},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Список учеников без прав запрещён",
+      "method": "GET",
+      "path": "/?action=students",
+      "expectedStatus": 403,
+      "expectedBody": {"error": "string"},
+      "bodyMatcher": "partial"
+    }
+  ]
+}

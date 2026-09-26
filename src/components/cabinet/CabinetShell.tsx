@@ -9,7 +9,9 @@ const STUDENT_NAV = [
 
 const ADMIN_NAV = [
   { to: '/cabinet/admin', label: 'ОБЗОР', end: true },
-  { to: '/cabinet/admin/codes', label: 'КОДЫ ДОСТУПА' },
+  { to: '/cabinet/admin/students', label: 'УЧЕНИКИ' },
+  { to: '/cabinet/admin/surveys', label: 'АНКЕТЫ' },
+  { to: '/cabinet/admin/codes', label: 'КОДЫ' },
 ];
 
 const CabinetShell = ({ children }: { children: ReactNode }) => {
