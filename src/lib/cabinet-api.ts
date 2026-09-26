@@ -80,6 +80,43 @@ export interface StudentDashboard {
   assignments: Assignment[];
 }
 
+export interface ProgressItem {
+  type: 'entrance' | 'checkpoint' | 'final';
+  title: string;
+  period: string | null;
+  completed_at: string;
+  score: number | null;
+  self_score: number | null;
+  satisfaction: number | null;
+  ai_frequency: string | null;
+  applied: string | null;
+  comprehension: string | null;
+  activity: string | null;
+}
+
+export interface ReportRow {
+  label: string;
+  before: string;
+  after: string;
+  delta: string | null;
+  positive: boolean;
+}
+
+export interface ReportData {
+  ready: boolean;
+  has_entrance?: boolean;
+  has_final?: boolean;
+  rows?: ReportRow[];
+  goal?: { text: string | null; task: string | null; reached: string | null; task_solved: string | null };
+  main_result?: string | null;
+  changes?: string | null;
+  next_plans?: string | null;
+  satisfaction?: number | null;
+  new_tasks?: string[];
+  dynamics?: { period: string; satisfaction: number | null; self_score: number | null; applied: string | null }[];
+  completed_at?: string;
+}
+
 export interface AdminStudent {
   id: number;
   first_name: string;
@@ -186,7 +223,8 @@ export const api = {
     call<{ test_correct: number | null; test_total: number | null; score: number | null; already?: boolean }>(
       STUDENT, 'survey-complete', { method: 'POST', body: JSON.stringify({ assignment_id: assignmentId }) },
     ),
-  progress: () => call<{ items: Record<string, unknown>[] }>(STUDENT, 'progress'),
+  progress: () => call<{ items: ProgressItem[]; has_enough: boolean }>(STUDENT, 'progress'),
+  report: () => call<ReportData>(STUDENT, 'report'),
 
   adminSurveys: () => call<{ surveys: AdminSurvey[] }>(SURVEYS, 'list'),
   setSurveyStatus: (id: number, status: 'draft' | 'available' | 'closed') =>
@@ -197,4 +235,9 @@ export const api = {
       SURVEYS, `student&id=${id}`,
     ),
   adminAnalytics: () => call<Record<string, unknown>>(SURVEYS, 'analytics'),
+  deleteStudent: (id: number, keepCode: boolean) =>
+    call<{ ok: boolean }>(SURVEYS, 'student-delete', {
+      method: 'POST',
+      body: JSON.stringify({ id, keep_code: keepCode }),
+    }),
 };

@@ -9,19 +9,38 @@ const AdminStudents = () => {
   const [error, setError] = useState('');
   const [group, setGroup] = useState('');
   const [onlyAttention, setOnlyAttention] = useState(false);
+  const [toDelete, setToDelete] = useState<AdminStudent | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  const load = async () => {
+    try {
+      const d = await api.adminStudents();
+      setStudents(d.students);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Ошибка загрузки');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    (async () => {
-      try {
-        const d = await api.adminStudents();
-        setStudents(d.students);
-      } catch (e) {
-        setError(e instanceof Error ? e.message : 'Ошибка загрузки');
-      } finally {
-        setLoading(false);
-      }
-    })();
+    load();
   }, []);
+
+  const remove = async (keepCode: boolean) => {
+    if (!toDelete) return;
+    setBusy(true);
+    setError('');
+    try {
+      await api.deleteStudent(toDelete.id, keepCode);
+      setToDelete(null);
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Не удалось удалить');
+    } finally {
+      setBusy(false);
+    }
+  };
 
   const groups = useMemo(
     () => Array.from(new Set(students.map((s) => s.group_name).filter(Boolean))) as string[],
@@ -108,9 +127,14 @@ const AdminStudents = () => {
                       ) : <span className="cab-muted">—</span>}
                     </td>
                     <td>
-                      <Link className="cab-btn cab-btn-ghost cab-btn-sm" to={`/cabinet/admin/students/${s.id}`}>
-                        Открыть
-                      </Link>
+                      <div className="cab-row-actions">
+                        <Link className="cab-btn cab-btn-ghost cab-btn-sm" to={`/cabinet/admin/students/${s.id}`}>
+                          Открыть
+                        </Link>
+                        <button className="cab-btn cab-btn-ghost cab-btn-sm cab-danger" onClick={() => setToDelete(s)}>
+                          Удалить
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -119,6 +143,29 @@ const AdminStudents = () => {
           </div>
         )}
       </div>
+
+      {toDelete && (
+        <div className="cab-modal" onClick={() => !busy && setToDelete(null)}>
+          <div className="cab-modal-box" onClick={(e) => e.stopPropagation()}>
+            <h2>Удалить ученика?</h2>
+            <p>
+              Профиль <b>{toDelete.first_name} {toDelete.last_name}</b> и все его ответы будут удалены безвозвратно.
+              Выберите, что сделать с кодом доступа.
+            </p>
+            <div className="cab-row-actions">
+              <button className="cab-btn cab-btn-sm cab-danger" disabled={busy} onClick={() => remove(true)}>
+                Удалить, код освободить
+              </button>
+              <button className="cab-btn cab-btn-sm cab-danger" disabled={busy} onClick={() => remove(false)}>
+                Удалить и отключить код
+              </button>
+              <button className="cab-btn cab-btn-ghost cab-btn-sm" disabled={busy} onClick={() => setToDelete(null)}>
+                Отмена
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </CabinetShell>
   );
 };

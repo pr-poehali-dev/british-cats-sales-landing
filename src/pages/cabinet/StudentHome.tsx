@@ -70,6 +70,9 @@ const StudentHome = () => {
 
   if (loading) return <CabinetShell><div className="cab-loading">ЗАГРУЗКА…</div></CabinetShell>;
 
+  const completedCount = data?.assignments.filter((a) => a.status === 'completed').length ?? 0;
+  const hasFinal = !!data?.assignments.some((a) => a.type === 'final' && a.status === 'completed');
+
   return (
     <CabinetShell>
       <p className="cab-eyebrow">// ЛИЧНЫЙ КАБИНЕТ</p>
@@ -90,6 +93,25 @@ const StudentHome = () => {
         </div>
       ) : (
         data.assignments.map(card)
+      )}
+
+      {completedCount >= 2 && (
+        <div className="cab-card cab-cta-card">
+          <div>
+            <h2>{hasFinal ? 'Отчёт «Было → Стало» готов' : 'Ваша динамика'}</h2>
+            <p className="cab-task-meta">
+              {hasFinal
+                ? 'Полное сравнение стартовых и итоговых показателей.'
+                : 'Посмотрите, как меняются ваши результаты от анкеты к анкете.'}
+            </p>
+          </div>
+          <button
+            className="cab-btn cab-inline-btn"
+            onClick={() => nav(hasFinal ? '/cabinet/report' : '/cabinet/progress')}
+          >
+            {hasFinal ? 'Открыть отчёт' : 'Смотреть динамику'}
+          </button>
+        </div>
       )}
     </CabinetShell>
   );

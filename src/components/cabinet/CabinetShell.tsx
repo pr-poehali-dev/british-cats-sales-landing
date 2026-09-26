@@ -4,6 +4,8 @@ import { useCabinet } from '@/contexts/CabinetAuth';
 
 const STUDENT_NAV = [
   { to: '/cabinet', label: 'ГЛАВНАЯ', end: true },
+  { to: '/cabinet/progress', label: 'ДИНАМИКА' },
+  { to: '/cabinet/report', label: 'ИТОГИ' },
   { to: '/cabinet/profile', label: 'ПРОФИЛЬ' },
 ];
 

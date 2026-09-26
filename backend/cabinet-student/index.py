@@ -96,6 +96,8 @@ def handler(event: Dict[str, Any], context) -> Dict[str, Any]:
                 return survey_complete(conn, cur, event, me)
             if action == 'progress':
                 return progress(cur, me)
+            if action == 'report':
+                return report(cur, me)
         return resp(400, {'error': 'Неизвестное действие'})
     finally:
         conn.close()
@@ -387,7 +389,17 @@ def survey_complete(conn, cur, event: Dict[str, Any], me: Dict[str, Any]) -> Dic
     })
 
 
-def progress(cur, me: Dict[str, Any]) -> Dict[str, Any]:
+FREQ_ORDER = [
+    'Не использую', 'Пробовал несколько раз', 'Использую время от времени',
+    'Использую каждую неделю', 'Использую почти ежедневно',
+]
+RESULT_ORDER = [
+    'Пока никакого', 'Сэкономил время', 'Улучшил качество работы', 'Сделал учебный проект',
+    'Применил в рабочей задаче', 'Выполнил задачу для клиента', 'Получил доход с помощью AI',
+]
+
+
+def fetch_completed(cur, profile_id: int) -> List[Dict[str, Any]]:
     cur.execute(
         """
         SELECT q.type, q.title, q.period, r.score, r.test_correct, r.test_total,
@@ -398,6 +410,135 @@ def progress(cur, me: Dict[str, Any]) -> Dict[str, Any]:
         WHERE r.student_profile_id = %s AND r.status = 'completed'
         ORDER BY r.completed_at
         """,
-        (me['profile_id'],),
+        (profile_id,),
     )
-    return resp(200, {'items': [dict(r) for r in cur.fetchall()]})
+    return [dict(r) for r in cur.fetchall()]
+
+
+def progress(cur, me: Dict[str, Any]) -> Dict[str, Any]:
+    items = fetch_completed(cur, me['profile_id'])
+
+    timeline = []
+    for it in items:
+        a = it['answers_json'] or {}
+        timeline.append({
+            'type': it['type'],
+            'title': it['title'],
+            'period': it['period'],
+            'completed_at': it['completed_at'],
+            'score': float(it['score']) if it['score'] is not None else None,
+            'self_score': a.get('ai_self_score') or a.get('cp_self_score'),
+            'satisfaction': a.get('cp_satisfaction') or a.get('fin_satisfaction'),
+            'ai_frequency': a.get('ai_frequency'),
+            'applied': a.get('cp_applied') or a.get('ai_result'),
+            'comprehension': a.get('cp_comprehension'),
+            'activity': a.get('cp_activity'),
+        })
+
+    has_enough = len(timeline) >= 2
+    return resp(200, {'items': timeline, 'has_enough': has_enough})
+
+
+def level_change(order: List[str], before: Optional[str], after: Optional[str]) -> Optional[int]:
+    if before in order and after in order:
+        return order.index(after) - order.index(before)
+    return None
+
+
+def report(cur, me: Dict[str, Any]) -> Dict[str, Any]:
+    items = fetch_completed(cur, me['profile_id'])
+    entrance = next((i for i in items if i['type'] == 'entrance'), None)
+    final = next((i for i in items if i['type'] == 'final'), None)
+    checkpoints = [i for i in items if i['type'] == 'checkpoint']
+
+    if not entrance or not final:
+        return resp(200, {'ready': False, 'has_entrance': bool(entrance), 'has_final': bool(final)})
+
+    ea = entrance['answers_json'] or {}
+    fa = final['answers_json'] or {}
+
+    e_score = float(entrance['score']) if entrance['score'] is not None else None
+    f_score = float(final['score']) if final['score'] is not None else None
+    score_delta = round(f_score - e_score, 1) if e_score is not None and f_score is not None else None
+
+    e_self = ea.get('ai_self_score')
+    f_self = fa.get('ai_self_score')
+    self_delta = (f_self - e_self) if isinstance(e_self, int) and isinstance(f_self, int) else None
+
+    rows = [
+        {
+            'label': 'Результат теста',
+            'before': f'{e_score:.0f}%' if e_score is not None else '—',
+            'after': f'{f_score:.0f}%' if f_score is not None else '—',
+            'delta': f'{score_delta:+.0f} п.п.' if score_delta is not None else None,
+            'positive': score_delta is not None and score_delta > 0,
+        },
+        {
+            'label': 'Самооценка навыков (1–10)',
+            'before': str(e_self) if e_self is not None else '—',
+            'after': str(f_self) if f_self is not None else '—',
+            'delta': f'{self_delta:+d}' if self_delta is not None else None,
+            'positive': self_delta is not None and self_delta > 0,
+        },
+        {
+            'label': 'Частота применения AI',
+            'before': ea.get('ai_frequency') or '—',
+            'after': fa.get('ai_frequency') or '—',
+            'delta': None,
+            'positive': (level_change(FREQ_ORDER, ea.get('ai_frequency'), fa.get('ai_frequency')) or 0) > 0,
+        },
+        {
+            'label': 'Практический результат',
+            'before': ea.get('ai_result') or '—',
+            'after': fa.get('ai_result') or '—',
+            'delta': None,
+            'positive': (level_change(RESULT_ORDER, ea.get('ai_result'), fa.get('ai_result')) or 0) > 0,
+        },
+        {
+            'label': 'Готовых проектов',
+            'before': 'Не было',
+            'after': fa.get('fin_projects_count') or '—',
+            'delta': None,
+            'positive': fa.get('fin_projects_count') not in (None, 'Ни одного'),
+        },
+        {
+            'label': 'Клиентские задачи',
+            'before': 'Не выполнял' if ea.get('ai_result') != 'Выполнил задачу для клиента' else 'Выполнял',
+            'after': fa.get('fin_client_tasks') or '—',
+            'delta': None,
+            'positive': fa.get('fin_client_tasks') not in (None, 'Нет'),
+        },
+    ]
+
+    tasks_before = ea.get('ai_tasks') or []
+    tasks_after = fa.get('ai_tasks') or []
+    new_tasks = [t for t in tasks_after if t not in tasks_before] if isinstance(tasks_after, list) else []
+
+    dynamics = [
+        {
+            'period': c['period'] or c['title'],
+            'satisfaction': (c['answers_json'] or {}).get('cp_satisfaction'),
+            'self_score': (c['answers_json'] or {}).get('cp_self_score'),
+            'applied': (c['answers_json'] or {}).get('cp_applied'),
+            'completed_at': c['completed_at'],
+        }
+        for c in checkpoints
+    ]
+
+    return resp(200, {
+        'ready': True,
+        'rows': rows,
+        'goal': {
+            'text': ea.get('goal_result'),
+            'task': ea.get('goal_task'),
+            'reached': fa.get('fin_goal_reached'),
+            'task_solved': fa.get('fin_task_solved'),
+        },
+        'main_result': fa.get('fin_main_result'),
+        'changes': fa.get('fin_changes'),
+        'next_plans': fa.get('fin_next'),
+        'satisfaction': fa.get('fin_satisfaction'),
+        'new_tasks': new_tasks,
+        'dynamics': dynamics,
+        'completed_at': final['completed_at'],
+    })

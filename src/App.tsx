@@ -20,6 +20,8 @@ import StudentHome from "./pages/cabinet/StudentHome";
 import ProfileSetup from "./pages/cabinet/ProfileSetup";
 import StudentProfile from "./pages/cabinet/StudentProfile";
 import Survey from "./pages/cabinet/Survey";
+import ProgressPage from "./pages/cabinet/Progress";
+import Report from "./pages/cabinet/Report";
 import AdminHome from "./pages/cabinet/AdminHome";
 import AdminCodes from "./pages/cabinet/AdminCodes";
 import AdminSurveys from "./pages/cabinet/AdminSurveys";
@@ -60,6 +62,8 @@ const App = () => (
           <Route path="/cabinet" element={<RequireAuth role="student"><StudentHome /></RequireAuth>} />
           <Route path="/cabinet/profile" element={<RequireAuth role="student"><StudentProfile /></RequireAuth>} />
           <Route path="/cabinet/survey/:assignmentId" element={<RequireAuth role="student"><Survey /></RequireAuth>} />
+          <Route path="/cabinet/progress" element={<RequireAuth role="student"><ProgressPage /></RequireAuth>} />
+          <Route path="/cabinet/report" element={<RequireAuth role="student"><Report /></RequireAuth>} />
           <Route path="/cabinet/admin" element={<RequireAuth role="admin"><AdminHome /></RequireAuth>} />
           <Route path="/cabinet/admin/codes" element={<RequireAuth role="admin"><AdminCodes /></RequireAuth>} />
           <Route path="/cabinet/admin/surveys" element={<RequireAuth role="admin"><AdminSurveys /></RequireAuth>} />

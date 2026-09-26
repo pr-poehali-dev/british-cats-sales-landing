@@ -81,6 +81,10 @@ def handler(event: Dict[str, Any], context) -> Dict[str, Any]:
                 return student_card(cur, params)
             if action == 'analytics':
                 return analytics(cur)
+            if action == 'student-report':
+                return student_report(cur, params)
+            if action == 'student-delete' and method == 'POST':
+                return student_delete(conn, cur, event)
         return resp(400, {'error': 'Неизвестное действие'})
     finally:
         conn.close()
@@ -211,6 +215,60 @@ def student_card(cur, params: Dict[str, Any]) -> Dict[str, Any]:
     questions = [dict(r) for r in cur.fetchall()]
 
     return resp(200, {'profile': dict(prof), 'responses': responses, 'questions': questions})
+
+
+def student_delete(conn, cur, event: Dict[str, Any]) -> Dict[str, Any]:
+    b = json.loads(event.get('body') or '{}')
+    pid = int(b.get('id', 0))
+    keep_code = bool(b.get('keep_code'))
+    if not pid:
+        return resp(400, {'error': 'Не указан ученик'})
+
+    cur.execute("SELECT access_code_id FROM student_profiles WHERE id = %s", (pid,))
+    row = cur.fetchone()
+    if not row:
+        return resp(404, {'error': 'Ученик не найден'})
+    code_id = row['access_code_id']
+
+    cur.execute(
+        """
+        DELETE FROM responses
+        WHERE assignment_id IN (
+            SELECT id FROM questionnaire_assignments WHERE student_profile_id = %s
+        )
+        """,
+        (pid,),
+    )
+    cur.execute("DELETE FROM questionnaire_assignments WHERE student_profile_id = %s", (pid,))
+    cur.execute("DELETE FROM student_profiles WHERE id = %s", (pid,))
+    cur.execute("DELETE FROM sessions WHERE access_code_id = %s", (code_id,))
+
+    if keep_code:
+        cur.execute(
+            "UPDATE access_codes SET status = 'new', activated_at = NULL WHERE id = %s",
+            (code_id,),
+        )
+    else:
+        cur.execute("UPDATE access_codes SET status = 'disabled' WHERE id = %s", (code_id,))
+
+    conn.commit()
+    return resp(200, {'ok': True})
+
+
+def student_report(cur, params: Dict[str, Any]) -> Dict[str, Any]:
+    pid = int(params.get('id', 0))
+    cur.execute(
+        """
+        SELECT q.type, q.title, q.period, r.score, r.answers_json, r.completed_at
+        FROM responses r
+        JOIN questionnaire_assignments a ON a.id = r.assignment_id
+        JOIN questionnaires q ON q.id = a.questionnaire_id
+        WHERE r.student_profile_id = %s AND r.status = 'completed'
+        ORDER BY r.completed_at
+        """,
+        (pid,),
+    )
+    return resp(200, {'items': [dict(r) for r in cur.fetchall()]})
 
 
 def analytics(cur) -> Dict[str, Any]:
