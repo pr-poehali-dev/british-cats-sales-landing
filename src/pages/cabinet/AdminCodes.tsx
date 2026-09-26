@@ -4,9 +4,9 @@ import Icon from '@/components/ui/icon';
 import { api, type AccessCode } from '@/lib/cabinet-api';
 
 const STATUS_LABEL: Record<string, { text: string; cls: string }> = {
-  new: { text: 'НЕ АКТИВИРОВАН', cls: 'gray' },
-  activated: { text: 'АКТИВИРОВАН', cls: 'green' },
-  disabled: { text: 'ОТКЛЮЧЁН', cls: 'red' },
+  new: { text: 'НЕ ИСПОЛЬЗОВАЛСЯ', cls: 'gray' },
+  activated: { text: 'АКТИВЕН', cls: 'green' },
+  disabled: { text: 'ЗАКРЫТ', cls: 'red' },
 };
 
 const fmt = (d: string | null) =>
@@ -17,8 +17,8 @@ const AdminCodes = () => {
   const [stats, setStats] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [fresh, setFresh] = useState<{ id: number; code: string }[]>([]);
-  const [form, setForm] = useState({ count: 1, group_name: '', course_name: '', period: '', note: '' });
+  const [fresh, setFresh] = useState<{ id: number; code: string; group_name?: string }[]>([]);
+  const [form, setForm] = useState({ group_name: '', course_name: '', period: '', custom_code: '', max_students: '' });
   const [busy, setBusy] = useState(false);
   const [confirmAll, setConfirmAll] = useState(false);
 
@@ -43,13 +43,14 @@ const AdminCodes = () => {
     setError('');
     try {
       const res = await api.createCodes({
-        count: Number(form.count) || 1,
         group_name: form.group_name,
         course_name: form.course_name,
         period: form.period,
-        note: form.note,
+        custom_code: form.custom_code,
+        max_students: form.max_students ? Number(form.max_students) : null,
       });
       setFresh(res.created);
+      setForm({ group_name: '', course_name: '', period: '', custom_code: '', max_students: '' });
       await load();
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Не удалось создать');
@@ -72,6 +73,7 @@ const AdminCodes = () => {
 
   const regen = async (id: number) => {
     setBusy(true);
+    setError('');
     try {
       const res = await api.regenerateCode(id);
       setFresh([res]);
@@ -88,19 +90,20 @@ const AdminCodes = () => {
   return (
     <CabinetShell>
       <p className="cab-eyebrow">// АДМИНИСТРИРОВАНИЕ</p>
-      <h1 className="cab-h1">Коды доступа учеников</h1>
+      <h1 className="cab-h1">Пароли потоков</h1>
       <p className="cab-sub">
-        Создайте персональный пароль и передайте его ученику. При первом входе он сам заполнит профиль.
-        Пароль показывается только один раз — после этого его можно лишь заменить на новый.
+        Один пароль на весь поток — выдайте его всей группе. Каждый ученик при первом входе создаёт
+        свой профиль и придумывает личный PIN, по которому система узнаёт именно его.
+        Анкеты учеников не пересекаются: чужие ответы не видит никто, кроме вас.
       </p>
 
       {error && <div className="cab-error">{error}</div>}
 
       <div className="cab-stats">
-        <div className="cab-stat"><b>{stats.total ?? 0}</b><span>всего кодов</span></div>
-        <div className="cab-stat"><b>{stats.activated ?? 0}</b><span>активированы</span></div>
-        <div className="cab-stat"><b>{stats.with_profile ?? 0}</b><span>профилей создано</span></div>
-        <div className="cab-stat"><b>{stats.disabled ?? 0}</b><span>отключены</span></div>
+        <div className="cab-stat"><b>{stats.total ?? 0}</b><span>потоков</span></div>
+        <div className="cab-stat"><b>{stats.activated ?? 0}</b><span>активных</span></div>
+        <div className="cab-stat"><b>{stats.students ?? 0}</b><span>учеников всего</span></div>
+        <div className="cab-stat"><b>{stats.disabled ?? 0}</b><span>закрыто</span></div>
       </div>
 
       {codes.length > 0 && (
@@ -108,20 +111,17 @@ const AdminCodes = () => {
           <div>
             <h2>Массовое управление доступом</h2>
             <p className="cab-task-meta">
-              Отключение мгновенно завершает все активные сессии. Данные и ответы учеников сохраняются.
+              Закрытие мгновенно завершает все сессии. Профили и ответы учеников сохраняются.
             </p>
           </div>
           <div className="cab-row-actions">
             <button className="cab-btn cab-btn-ghost cab-btn-sm cab-danger" disabled={busy} onClick={() => setConfirmAll(true)}>
-              <Icon name="Lock" size={15} /> Отключить все коды
+              <Icon name="Lock" size={15} /> Закрыть все потоки
             </button>
             {(stats.disabled ?? 0) > 0 && (
-              <button
-                className="cab-btn cab-btn-ghost cab-btn-sm"
-                disabled={busy}
-                onClick={() => act(() => api.enableAllCodes())}
-              >
-                <Icon name="LockOpen" size={15} /> Включить все
+              <button className="cab-btn cab-btn-ghost cab-btn-sm" disabled={busy}
+                onClick={() => act(() => api.enableAllCodes())}>
+                <Icon name="LockOpen" size={15} /> Открыть все
               </button>
             )}
           </div>
@@ -129,22 +129,11 @@ const AdminCodes = () => {
       )}
 
       <div className="cab-card">
-        <h2>Создать коды</h2>
+        <h2>Создать поток</h2>
         <div className="cab-form-grid">
           <div className="cab-field">
-            <label>Количество</label>
-            <input
-              className="cab-input"
-              type="number"
-              min={1}
-              max={50}
-              value={form.count}
-              onChange={(e) => setForm({ ...form, count: Number(e.target.value) })}
-            />
-          </div>
-          <div className="cab-field">
-            <label>Группа</label>
-            <input className="cab-input" value={form.group_name} placeholder="Поток 1, декабрь"
+            <label>Название потока *</label>
+            <input className="cab-input" value={form.group_name} placeholder="Поток 5"
               onChange={(e) => setForm({ ...form, group_name: e.target.value })} />
           </div>
           <div className="cab-field">
@@ -157,15 +146,26 @@ const AdminCodes = () => {
             <input className="cab-input" value={form.period} placeholder="декабрь 2026 — март 2027"
               onChange={(e) => setForm({ ...form, period: e.target.value })} />
           </div>
+          <div className="cab-field">
+            <label>Лимит учеников</label>
+            <input className="cab-input" type="number" min={1} value={form.max_students} placeholder="без лимита"
+              onChange={(e) => setForm({ ...form, max_students: e.target.value })} />
+          </div>
         </div>
-        <button className="cab-btn cab-inline-btn" onClick={create} disabled={busy}>
+        <div className="cab-field">
+          <label>Свой пароль (необязательно)</label>
+          <input className="cab-input" value={form.custom_code} placeholder="оставьте пустым — создам сам"
+            onChange={(e) => setForm({ ...form, custom_code: e.target.value.toUpperCase() })} />
+        </div>
+
+        <button className="cab-btn cab-inline-btn" onClick={create} disabled={busy || !form.group_name.trim()}>
           <Icon name="Plus" size={16} />
-          {busy ? 'Создаём…' : 'Создать коды'}
+          {busy ? 'Создаём…' : 'Создать поток'}
         </button>
 
         {fresh.length > 0 && (
           <div className="cab-codes-out">
-            <h3>Новые пароли — скопируйте сейчас</h3>
+            <h3>Пароль потока — скопируйте сейчас</h3>
             {fresh.map((c) => (
               <div className="cab-code-line" key={c.id}>
                 <span>{c.code}</span>
@@ -175,7 +175,8 @@ const AdminCodes = () => {
               </div>
             ))}
             <p className="cab-warn">
-              После обновления страницы пароли больше не отобразятся — в базе хранится только их зашифрованный отпечаток.
+              Выдайте этот пароль всей группе. После обновления страницы он больше не отобразится —
+              в базе хранится только зашифрованный отпечаток. Если пароль потеряется, создайте новый.
             </p>
           </div>
         )}
@@ -185,17 +186,17 @@ const AdminCodes = () => {
         {loading ? (
           <div className="cab-empty">Загрузка…</div>
         ) : codes.length === 0 ? (
-          <div className="cab-empty">Кодов пока нет. Создайте первый выше.</div>
+          <div className="cab-empty">Потоков пока нет. Создайте первый выше.</div>
         ) : (
           <div className="cab-table-wrap" style={{ border: 'none', borderRadius: 0 }}>
             <table className="cab-table">
               <thead>
                 <tr>
-                  <th>Код</th>
-                  <th>Ученик</th>
-                  <th>Группа</th>
+                  <th>Поток</th>
+                  <th>Пароль</th>
+                  <th>Учеников</th>
                   <th>Статус</th>
-                  <th>Активирован</th>
+                  <th>Первый вход</th>
                   <th>Действия</th>
                 </tr>
               </thead>
@@ -204,19 +205,15 @@ const AdminCodes = () => {
                   const st = STATUS_LABEL[c.status];
                   return (
                     <tr key={c.id}>
+                      <td>
+                        {c.group_name || '—'}
+                        {c.period && <><br /><span className="cab-muted" style={{ fontSize: 12 }}>{c.period}</span></>}
+                      </td>
                       <td className="cab-muted" style={{ fontFamily: 'var(--mono)' }}>{c.code_hint}</td>
                       <td>
-                        {c.profile_id ? (
-                          <>
-                            {c.first_name} {c.last_name}
-                            <br />
-                            <span className="cab-muted" style={{ fontSize: 12 }}>{c.email}</span>
-                          </>
-                        ) : (
-                          <span className="cab-muted">профиль не создан</span>
-                        )}
+                        {c.students_count}
+                        {c.max_students ? <span className="cab-muted"> / {c.max_students}</span> : null}
                       </td>
-                      <td className="cab-muted">{c.group_name || '—'}</td>
                       <td><span className={`cab-badge ${st.cls}`}>{st.text}</span></td>
                       <td className="cab-muted">{fmt(c.activated_at)}</td>
                       <td>
@@ -227,12 +224,12 @@ const AdminCodes = () => {
                           {c.status === 'disabled' ? (
                             <button className="cab-btn cab-btn-ghost cab-btn-sm" disabled={busy}
                               onClick={() => act(() => api.enableCode(c.id))}>
-                              Включить
+                              Открыть
                             </button>
                           ) : (
-                            <button className="cab-btn cab-btn-ghost cab-btn-sm" disabled={busy}
+                            <button className="cab-btn cab-btn-ghost cab-btn-sm cab-danger" disabled={busy}
                               onClick={() => act(() => api.disableCode(c.id))}>
-                              Отключить
+                              Закрыть
                             </button>
                           )}
                         </div>
@@ -249,18 +246,15 @@ const AdminCodes = () => {
       {confirmAll && (
         <div className="cab-modal" onClick={() => !busy && setConfirmAll(false)}>
           <div className="cab-modal-box" onClick={(e) => e.stopPropagation()}>
-            <h2>Отключить все коды?</h2>
+            <h2>Закрыть все потоки?</h2>
             <p>
-              Вход будет закрыт для всех учеников — сейчас активных кодов {(stats.total ?? 0) - (stats.disabled ?? 0)}.
-              Профили и ответы сохранятся, доступ можно вернуть кнопкой «Включить все».
+              Вход будет закрыт для всех учеников — сейчас открытых потоков {(stats.total ?? 0) - (stats.disabled ?? 0)}.
+              Профили и ответы сохранятся, доступ вернётся кнопкой «Открыть все».
             </p>
             <div className="cab-row-actions">
-              <button
-                className="cab-btn cab-btn-sm cab-danger"
-                disabled={busy}
-                onClick={async () => { await act(() => api.disableAllCodes()); setConfirmAll(false); }}
-              >
-                Да, отключить все
+              <button className="cab-btn cab-btn-sm cab-danger" disabled={busy}
+                onClick={async () => { await act(() => api.disableAllCodes()); setConfirmAll(false); }}>
+                Да, закрыть все
               </button>
               <button className="cab-btn cab-btn-ghost cab-btn-sm" disabled={busy} onClick={() => setConfirmAll(false)}>
                 Отмена

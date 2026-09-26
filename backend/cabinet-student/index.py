@@ -1,7 +1,8 @@
 import json
 import os
 import hashlib
-from datetime import datetime
+import secrets
+from datetime import datetime, timedelta
 from typing import Dict, Any, Optional, List
 
 import psycopg2
@@ -47,11 +48,10 @@ def current_student(cur, event: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         return None
     cur.execute(
         """
-        SELECT s.access_code_id, s.role, ac.group_name, ac.course_name, ac.period,
-               p.id AS profile_id
+        SELECT s.access_code_id, s.role, s.student_profile_id AS profile_id,
+               ac.group_name, ac.course_name, ac.period
         FROM sessions s
         JOIN access_codes ac ON ac.id = s.access_code_id
-        LEFT JOIN student_profiles p ON p.access_code_id = ac.id
         WHERE s.token_hash = %s AND s.expires_at > NOW() AND ac.status <> 'disabled'
         """,
         (hash_value(token),),
@@ -60,6 +60,21 @@ def current_student(cur, event: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     if not row or row['role'] != 'student':
         return None
     return dict(row)
+
+
+def pending_ticket(cur, ticket: str) -> Optional[Dict[str, Any]]:
+    cur.execute(
+        """
+        SELECT s.id, s.access_code_id, ac.max_students
+        FROM sessions s
+        JOIN access_codes ac ON ac.id = s.access_code_id
+        WHERE s.token_hash = %s AND s.role = 'pending'
+          AND s.expires_at > NOW() AND ac.status <> 'disabled'
+        """,
+        (hash_value(ticket),),
+    )
+    row = cur.fetchone()
+    return dict(row) if row else None
 
 
 def handler(event: Dict[str, Any], context) -> Dict[str, Any]:
@@ -74,12 +89,13 @@ def handler(event: Dict[str, Any], context) -> Dict[str, Any]:
     conn = db()
     try:
         with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            if action == 'profile-create' and method == 'POST':
+                return profile_create(conn, cur, event)
+
             me = current_student(cur, event)
             if not me:
                 return resp(403, {'error': 'Доступ запрещён'})
 
-            if action == 'profile-create' and method == 'POST':
-                return profile_create(conn, cur, event, me)
             if action == 'profile-update' and method == 'POST':
                 return profile_update(conn, cur, event, me)
 
@@ -98,16 +114,22 @@ def handler(event: Dict[str, Any], context) -> Dict[str, Any]:
                 return progress(cur, me)
             if action == 'report':
                 return report(cur, me)
+            if action == 'pin-change' and method == 'POST':
+                return pin_change(conn, cur, event, me)
         return resp(400, {'error': 'Неизвестное действие'})
     finally:
         conn.close()
 
 
-def profile_create(conn, cur, event: Dict[str, Any], me: Dict[str, Any]) -> Dict[str, Any]:
-    if me.get('profile_id'):
-        return resp(409, {'error': 'Профиль уже создан'})
-
+def profile_create(conn, cur, event: Dict[str, Any]) -> Dict[str, Any]:
     b = json.loads(event.get('body') or '{}')
+    ticket = str(b.get('ticket', ''))
+    tk = pending_ticket(cur, ticket)
+    if not tk:
+        return resp(401, {'error': 'Сессия входа истекла. Введите пароль группы заново.'})
+
+    code_id = tk['access_code_id']
+
     required = ['first_name', 'last_name', 'phone', 'email', 'industry', 'employment_type']
     for f in required:
         if not str(b.get(f, '')).strip():
@@ -115,27 +137,55 @@ def profile_create(conn, cur, event: Dict[str, Any], me: Dict[str, Any]) -> Dict
     if not b.get('consent'):
         return resp(400, {'error': 'Необходимо согласие на обработку данных'})
 
+    pin = str(b.get('pin', '')).strip()
+    if not pin.isdigit() or not (4 <= len(pin) <= 6):
+        return resp(400, {'error': 'PIN должен состоять из 4–6 цифр'})
+
+    cur.execute(
+        "SELECT COUNT(*) AS c FROM student_profiles WHERE access_code_id = %s AND pin_hash = %s",
+        (code_id, hash_value(pin)),
+    )
+    if cur.fetchone()['c'] > 0:
+        return resp(409, {'error': 'Такой PIN в этой группе уже занят. Придумайте другой.'})
+
+    if tk.get('max_students'):
+        cur.execute("SELECT COUNT(*) AS c FROM student_profiles WHERE access_code_id = %s", (code_id,))
+        if cur.fetchone()['c'] >= tk['max_students']:
+            return resp(409, {'error': 'В этой группе больше нет свободных мест'})
+
     cur.execute(
         """
         INSERT INTO student_profiles
             (access_code_id, first_name, last_name, phone, email, city, industry,
-             profession, employment_type, consent_accepted_at)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
+             profession, employment_type, pin_hash, pin_hint, consent_accepted_at)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
         RETURNING id
         """,
         (
-            me['access_code_id'],
+            code_id,
             b['first_name'].strip()[:100], b['last_name'].strip()[:100],
             b['phone'].strip()[:50], b['email'].strip()[:200],
             (b.get('city') or '').strip()[:100] or None,
             b['industry'].strip()[:200],
             (b.get('profession') or '').strip()[:200] or None,
             b['employment_type'].strip()[:100],
+            hash_value(pin), pin[:1] + '•' * (len(pin) - 1),
         ),
     )
     profile_id = cur.fetchone()['id']
+
+    cur.execute("DELETE FROM sessions WHERE id = %s", (tk['id'],))
+    token = secrets.token_urlsafe(32)
+    expires = datetime.utcnow() + timedelta(days=30)
+    cur.execute(
+        """
+        INSERT INTO sessions (token_hash, access_code_id, role, student_profile_id, expires_at)
+        VALUES (%s, %s, 'student', %s, %s)
+        """,
+        (hash_value(token), code_id, profile_id, expires),
+    )
     conn.commit()
-    return resp(200, {'profile_id': profile_id})
+    return resp(200, {'profile_id': profile_id, 'token': token})
 
 
 def profile_update(conn, cur, event: Dict[str, Any], me: Dict[str, Any]) -> Dict[str, Any]:
@@ -173,6 +223,37 @@ def profile_update(conn, cur, event: Dict[str, Any], me: Dict[str, Any]) -> Dict
             (b.get('employment_type') or '').strip()[:100],
             Json(history), me['profile_id'],
         ),
+    )
+    conn.commit()
+    return resp(200, {'ok': True})
+
+
+def pin_change(conn, cur, event: Dict[str, Any], me: Dict[str, Any]) -> Dict[str, Any]:
+    b = json.loads(event.get('body') or '{}')
+    current = str(b.get('current_pin', '')).strip()
+    new_pin = str(b.get('new_pin', '')).strip()
+
+    if not new_pin.isdigit() or not (4 <= len(new_pin) <= 6):
+        return resp(400, {'error': 'Новый PIN должен состоять из 4–6 цифр'})
+
+    cur.execute("SELECT pin_hash FROM student_profiles WHERE id = %s", (me['profile_id'],))
+    row = cur.fetchone()
+    if not row or row['pin_hash'] != hash_value(current):
+        return resp(403, {'error': 'Текущий PIN указан неверно'})
+
+    cur.execute(
+        """
+        SELECT COUNT(*) AS c FROM student_profiles
+        WHERE access_code_id = %s AND pin_hash = %s AND id <> %s
+        """,
+        (me['access_code_id'], hash_value(new_pin), me['profile_id']),
+    )
+    if cur.fetchone()['c'] > 0:
+        return resp(409, {'error': 'Такой PIN в группе уже занят'})
+
+    cur.execute(
+        "UPDATE student_profiles SET pin_hash = %s, pin_hint = %s, updated_at = NOW() WHERE id = %s",
+        (hash_value(new_pin), new_pin[:1] + '•' * (len(new_pin) - 1), me['profile_id']),
     )
     conn.commit()
     return resp(200, {'ok': True})

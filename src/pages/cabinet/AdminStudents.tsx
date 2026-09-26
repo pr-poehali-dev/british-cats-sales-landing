@@ -10,6 +10,8 @@ const AdminStudents = () => {
   const [group, setGroup] = useState('');
   const [onlyAttention, setOnlyAttention] = useState(false);
   const [toDelete, setToDelete] = useState<AdminStudent | null>(null);
+  const [toReset, setToReset] = useState<AdminStudent | null>(null);
+  const [newPin, setNewPin] = useState('');
   const [busy, setBusy] = useState(false);
 
   const load = async () => {
@@ -27,16 +29,32 @@ const AdminStudents = () => {
     load();
   }, []);
 
-  const remove = async (keepCode: boolean) => {
+  const remove = async () => {
     if (!toDelete) return;
     setBusy(true);
     setError('');
     try {
-      await api.deleteStudent(toDelete.id, keepCode);
+      await api.deleteStudent(toDelete.id);
       setToDelete(null);
       await load();
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Не удалось удалить');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const resetPin = async () => {
+    if (!toReset) return;
+    setBusy(true);
+    setError('');
+    try {
+      await api.resetStudentPin(toReset.id, newPin);
+      setToReset(null);
+      setNewPin('');
+      await load();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Не удалось сбросить PIN');
     } finally {
       setBusy(false);
     }
@@ -62,7 +80,7 @@ const AdminStudents = () => {
       <p className="cab-eyebrow">// АДМИНИСТРИРОВАНИЕ</p>
       <h1 className="cab-h1">Ученики</h1>
       <p className="cab-sub">
-        Профили, созданные учениками, их прогресс по анкетам и динамика теста.
+        Профили, созданные учениками внутри потоков, их прогресс по анкетам и динамика теста.
         Подсветка означает низкую удовлетворённость или сомнение в продолжении.
       </p>
 
@@ -71,9 +89,9 @@ const AdminStudents = () => {
       <div className="cab-card">
         <div className="cab-form-grid" style={{ marginBottom: 0 }}>
           <div className="cab-field" style={{ marginBottom: 0 }}>
-            <label>Группа</label>
+            <label>Поток</label>
             <select className="cab-input" value={group} onChange={(e) => setGroup(e.target.value)}>
-              <option value="">Все группы</option>
+              <option value="">Все потоки</option>
               {groups.map((g) => <option key={g} value={g}>{g}</option>)}
             </select>
           </div>
@@ -97,7 +115,8 @@ const AdminStudents = () => {
               <thead>
                 <tr>
                   <th>Ученик</th>
-                  <th>Группа</th>
+                  <th>Поток</th>
+                  <th>PIN</th>
                   <th>Анкет завершено</th>
                   <th>Входной тест</th>
                   <th>Итоговый тест</th>
@@ -115,6 +134,7 @@ const AdminStudents = () => {
                       <span className="cab-muted" style={{ fontSize: 12 }}>{s.email}</span>
                     </td>
                     <td className="cab-muted">{s.group_name || '—'}</td>
+                    <td className="cab-muted" style={{ fontFamily: 'var(--mono)' }}>{s.pin_hint || '—'}</td>
                     <td>{s.completed_count}</td>
                     <td>{s.entrance_score !== null ? `${Number(s.entrance_score)}%` : '—'}</td>
                     <td>{s.final_score !== null ? `${Number(s.final_score)}%` : '—'}</td>
@@ -131,6 +151,9 @@ const AdminStudents = () => {
                         <Link className="cab-btn cab-btn-ghost cab-btn-sm" to={`/cabinet/admin/students/${s.id}`}>
                           Открыть
                         </Link>
+                        <button className="cab-btn cab-btn-ghost cab-btn-sm" onClick={() => { setToReset(s); setNewPin(''); }}>
+                          Сбросить PIN
+                        </button>
                         <button className="cab-btn cab-btn-ghost cab-btn-sm cab-danger" onClick={() => setToDelete(s)}>
                           Удалить
                         </button>
@@ -150,16 +173,44 @@ const AdminStudents = () => {
             <h2>Удалить ученика?</h2>
             <p>
               Профиль <b>{toDelete.first_name} {toDelete.last_name}</b> и все его ответы будут удалены безвозвратно.
-              Выберите, что сделать с кодом доступа.
+              Пароль потока продолжит работать для остальных участников — при желании этот человек сможет
+              завести профиль заново.
             </p>
             <div className="cab-row-actions">
-              <button className="cab-btn cab-btn-sm cab-danger" disabled={busy} onClick={() => remove(true)}>
-                Удалить, код освободить
-              </button>
-              <button className="cab-btn cab-btn-sm cab-danger" disabled={busy} onClick={() => remove(false)}>
-                Удалить и отключить код
+              <button className="cab-btn cab-btn-sm cab-danger" disabled={busy} onClick={remove}>
+                Да, удалить
               </button>
               <button className="cab-btn cab-btn-ghost cab-btn-sm" disabled={busy} onClick={() => setToDelete(null)}>
+                Отмена
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {toReset && (
+        <div className="cab-modal" onClick={() => !busy && setToReset(null)}>
+          <div className="cab-modal-box" onClick={(e) => e.stopPropagation()}>
+            <h2>Сбросить PIN</h2>
+            <p>
+              Задайте новый PIN для <b>{toReset.first_name} {toReset.last_name}</b> и передайте его ученику.
+              Все его активные сессии будут завершены.
+            </p>
+            <div className="cab-field">
+              <label>Новый PIN (4–6 цифр)</label>
+              <input
+                className="cab-input cab-pin-input"
+                inputMode="numeric"
+                value={newPin}
+                placeholder="••••"
+                onChange={(e) => setNewPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
+              />
+            </div>
+            <div className="cab-row-actions">
+              <button className="cab-btn cab-btn-sm" disabled={busy || newPin.length < 4} onClick={resetPin}>
+                Сохранить PIN
+              </button>
+              <button className="cab-btn cab-btn-ghost cab-btn-sm" disabled={busy} onClick={() => setToReset(null)}>
                 Отмена
               </button>
             </div>

@@ -85,6 +85,8 @@ def handler(event: Dict[str, Any], context) -> Dict[str, Any]:
                 return student_report(cur, params)
             if action == 'student-delete' and method == 'POST':
                 return student_delete(conn, cur, event)
+            if action == 'student-pin-reset' and method == 'POST':
+                return student_pin_reset(conn, cur, event)
         return resp(400, {'error': 'Неизвестное действие'})
     finally:
         conn.close()
@@ -135,7 +137,7 @@ def students(cur) -> Dict[str, Any]:
     cur.execute(
         """
         SELECT p.id, p.first_name, p.last_name, p.email, p.phone, p.city,
-               p.industry, p.profession, p.employment_type, p.created_at,
+               p.industry, p.profession, p.employment_type, p.created_at, p.pin_hint,
                ac.group_name, ac.course_name, ac.period,
                (SELECT COUNT(*) FROM questionnaire_assignments a
                  WHERE a.student_profile_id = p.id AND a.status = 'completed') AS completed_count,
@@ -220,7 +222,6 @@ def student_card(cur, params: Dict[str, Any]) -> Dict[str, Any]:
 def student_delete(conn, cur, event: Dict[str, Any]) -> Dict[str, Any]:
     b = json.loads(event.get('body') or '{}')
     pid = int(b.get('id', 0))
-    keep_code = bool(b.get('keep_code'))
     if not pid:
         return resp(400, {'error': 'Не указан ученик'})
 
@@ -228,7 +229,6 @@ def student_delete(conn, cur, event: Dict[str, Any]) -> Dict[str, Any]:
     row = cur.fetchone()
     if not row:
         return resp(404, {'error': 'Ученик не найден'})
-    code_id = row['access_code_id']
 
     cur.execute(
         """
@@ -240,17 +240,41 @@ def student_delete(conn, cur, event: Dict[str, Any]) -> Dict[str, Any]:
         (pid,),
     )
     cur.execute("DELETE FROM questionnaire_assignments WHERE student_profile_id = %s", (pid,))
+    cur.execute("DELETE FROM sessions WHERE student_profile_id = %s", (pid,))
     cur.execute("DELETE FROM student_profiles WHERE id = %s", (pid,))
-    cur.execute("DELETE FROM sessions WHERE access_code_id = %s", (code_id,))
+    conn.commit()
+    return resp(200, {'ok': True})
 
-    if keep_code:
-        cur.execute(
-            "UPDATE access_codes SET status = 'new', activated_at = NULL WHERE id = %s",
-            (code_id,),
-        )
-    else:
-        cur.execute("UPDATE access_codes SET status = 'disabled' WHERE id = %s", (code_id,))
 
+def student_pin_reset(conn, cur, event: Dict[str, Any]) -> Dict[str, Any]:
+    b = json.loads(event.get('body') or '{}')
+    pid = int(b.get('id', 0))
+    pin = str(b.get('pin', '')).strip()
+    if not pid:
+        return resp(400, {'error': 'Не указан ученик'})
+    if not pin.isdigit() or not (4 <= len(pin) <= 6):
+        return resp(400, {'error': 'PIN — от 4 до 6 цифр'})
+
+    cur.execute("SELECT access_code_id FROM student_profiles WHERE id = %s", (pid,))
+    row = cur.fetchone()
+    if not row:
+        return resp(404, {'error': 'Ученик не найден'})
+
+    cur.execute(
+        """
+        SELECT COUNT(*) AS c FROM student_profiles
+        WHERE access_code_id = %s AND pin_hash = %s AND id <> %s
+        """,
+        (row['access_code_id'], hash_value(pin), pid),
+    )
+    if cur.fetchone()['c'] > 0:
+        return resp(409, {'error': 'Такой PIN в группе уже занят'})
+
+    cur.execute(
+        "UPDATE student_profiles SET pin_hash = %s, pin_hint = %s, updated_at = NOW() WHERE id = %s",
+        (hash_value(pin), pin[:1] + '•' * (len(pin) - 1), pid),
+    )
+    cur.execute("DELETE FROM sessions WHERE student_profile_id = %s", (pid,))
     conn.commit()
     return resp(200, {'ok': True})
 

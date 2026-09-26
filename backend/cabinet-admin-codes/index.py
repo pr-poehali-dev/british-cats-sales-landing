@@ -69,6 +69,23 @@ def gen_code() -> str:
     return '-'.join(parts)
 
 
+def slug(text: str) -> str:
+    table = {
+        'а': 'A', 'б': 'B', 'в': 'V', 'г': 'G', 'д': 'D', 'е': 'E', 'ё': 'E', 'ж': 'ZH',
+        'з': 'Z', 'и': 'I', 'й': 'Y', 'к': 'K', 'л': 'L', 'м': 'M', 'н': 'N', 'о': 'O',
+        'п': 'P', 'р': 'R', 'с': 'S', 'т': 'T', 'у': 'U', 'ф': 'F', 'х': 'H', 'ц': 'C',
+        'ч': 'CH', 'ш': 'SH', 'щ': 'SCH', 'ы': 'Y', 'э': 'E', 'ю': 'YU', 'я': 'YA',
+        'ъ': '', 'ь': '',
+    }
+    out = []
+    for ch in text.lower():
+        if ch in table:
+            out.append(table[ch])
+        elif ch.isalnum():
+            out.append(ch.upper())
+    return ''.join(out)[:12]
+
+
 def handler(event: Dict[str, Any], context) -> Dict[str, Any]:
     """Управление кодами доступа учеников: создание, список, отключение, замена"""
     method = event.get('httpMethod', 'GET')
@@ -109,10 +126,10 @@ def list_codes(cur) -> Dict[str, Any]:
         """
         SELECT ac.id, ac.code_hint, ac.group_name, ac.course_name, ac.period,
                ac.role, ac.status, ac.note, ac.activated_at, ac.created_at,
-               p.id AS profile_id, p.first_name, p.last_name, p.email, p.phone
+               ac.is_group, ac.max_students,
+               (SELECT COUNT(*) FROM student_profiles p WHERE p.access_code_id = ac.id) AS students_count
         FROM access_codes ac
-        LEFT JOIN student_profiles p ON p.access_code_id = ac.id
-        WHERE ac.role = 'student'
+        WHERE ac.role = 'student' AND ac.is_group = true
         ORDER BY ac.created_at DESC
         """
     )
@@ -120,7 +137,7 @@ def list_codes(cur) -> Dict[str, Any]:
     stats = {
         'total': len(rows),
         'activated': sum(1 for r in rows if r['status'] == 'activated'),
-        'with_profile': sum(1 for r in rows if r['profile_id']),
+        'students': sum(r['students_count'] for r in rows),
         'disabled': sum(1 for r in rows if r['status'] == 'disabled'),
     }
     return resp(200, {'codes': rows, 'stats': stats})
@@ -128,23 +145,38 @@ def list_codes(cur) -> Dict[str, Any]:
 
 def create_code(conn, cur, event: Dict[str, Any]) -> Dict[str, Any]:
     body = json.loads(event.get('body') or '{}')
-    count = min(int(body.get('count', 1)), 50)
-    group_name = (body.get('group_name') or '').strip() or None
+    group_name = (body.get('group_name') or '').strip()
     course_name = (body.get('course_name') or '').strip() or None
     period = (body.get('period') or '').strip() or None
     note = (body.get('note') or '').strip() or None
+    custom = (body.get('custom_code') or '').strip().upper()
+    max_students = body.get('max_students')
+    max_students = int(max_students) if max_students else None
 
-    created = []
-    for _ in range(count):
-        code = gen_code()
-        cur.execute(
-            """
-            INSERT INTO access_codes (code_hash, code_hint, group_name, course_name, period, note)
-            VALUES (%s, %s, %s, %s, %s, %s) RETURNING id
-            """,
-            (hash_value(code), code[:4] + '…', group_name, course_name, period, note),
-        )
-        created.append({'id': cur.fetchone()['id'], 'code': code})
+    if not group_name:
+        return resp(400, {'error': 'Укажите название группы'})
+
+    if custom:
+        if len(custom) < 6:
+            return resp(400, {'error': 'Пароль должен быть не короче 6 символов'})
+        code = custom
+    else:
+        base = slug(group_name)
+        code = f"{base}-{gen_code().split('-')[0]}" if base else gen_code()
+
+    cur.execute("SELECT id FROM access_codes WHERE code_hash = %s", (hash_value(code),))
+    if cur.fetchone():
+        return resp(409, {'error': 'Такой пароль уже используется. Укажите другой.'})
+
+    cur.execute(
+        """
+        INSERT INTO access_codes
+            (code_hash, code_hint, group_name, course_name, period, note, is_group, max_students)
+        VALUES (%s, %s, %s, %s, %s, %s, true, %s) RETURNING id
+        """,
+        (hash_value(code), code[:6] + '…', group_name, course_name, period, note, max_students),
+    )
+    created = [{'id': cur.fetchone()['id'], 'code': code, 'group_name': group_name}]
     conn.commit()
     return resp(200, {'created': created})
 
@@ -191,7 +223,7 @@ def enable_all(conn, cur) -> Dict[str, Any]:
         """
         UPDATE access_codes
         SET status = CASE WHEN activated_at IS NULL THEN 'new' ELSE 'activated' END
-        WHERE role = 'student' AND status = 'disabled'
+        WHERE role = 'student' AND status = 'disabled' AND is_group = true
         """
     )
     affected = cur.rowcount
@@ -205,10 +237,24 @@ def regenerate(conn, cur, event: Dict[str, Any]) -> Dict[str, Any]:
     if not code_id:
         return resp(400, {'error': 'Не указан код'})
 
-    code = gen_code()
+    custom = (body.get('custom_code') or '').strip().upper()
+    if custom:
+        if len(custom) < 6:
+            return resp(400, {'error': 'Пароль должен быть не короче 6 символов'})
+        code = custom
+    else:
+        cur.execute("SELECT group_name FROM access_codes WHERE id = %s", (code_id,))
+        row = cur.fetchone()
+        base = slug(row['group_name'] or '') if row else ''
+        code = f"{base}-{gen_code().split('-')[0]}" if base else gen_code()
+
+    cur.execute("SELECT id FROM access_codes WHERE code_hash = %s AND id <> %s", (hash_value(code), code_id))
+    if cur.fetchone():
+        return resp(409, {'error': 'Такой пароль уже используется'})
+
     cur.execute(
         "UPDATE access_codes SET code_hash = %s, code_hint = %s WHERE id = %s",
-        (hash_value(code), code[:4] + '…', code_id),
+        (hash_value(code), code[:6] + '…', code_id),
     )
     cur.execute("DELETE FROM sessions WHERE access_code_id = %s", (code_id,))
     conn.commit()

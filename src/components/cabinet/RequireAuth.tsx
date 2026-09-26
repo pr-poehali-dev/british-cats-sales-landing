@@ -16,11 +16,8 @@ const RequireAuth = ({ children, role }: Props) => {
   if (role && me.role !== role) {
     return <Navigate to={me.role === 'admin' ? '/cabinet/admin' : '/cabinet'} replace />;
   }
-  if (me.role === 'student' && !me.has_profile && loc.pathname !== '/cabinet/setup') {
-    return <Navigate to="/cabinet/setup" replace />;
-  }
-  if (me.role === 'student' && me.has_profile && loc.pathname === '/cabinet/setup') {
-    return <Navigate to="/cabinet" replace />;
+  if (me.role === 'student' && !me.has_profile) {
+    return <Navigate to="/cabinet/login" replace />;
   }
   return <>{children}</>;
 };

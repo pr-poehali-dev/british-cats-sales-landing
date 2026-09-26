@@ -1,7 +1,8 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '@/lib/cabinet-api';
 import { useCabinet } from '@/contexts/CabinetAuth';
+import { TICKET_KEY } from './Login';
 
 const INDUSTRIES = [
   'Услуги', 'Торговля и маркетплейсы', 'Производство', 'Строительство и ремонт',
@@ -21,12 +22,26 @@ const EMPTY = {
 };
 
 const ProfileSetup = () => {
-  const { refresh } = useCabinet();
+  const { applyToken } = useCabinet();
   const [form, setForm] = useState(EMPTY);
+  const [pin, setPin] = useState('');
+  const [pin2, setPin2] = useState('');
   const [consent, setConsent] = useState(false);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [ticket, setTicket] = useState('');
+  const [groupName, setGroupName] = useState('');
   const nav = useNavigate();
+
+  useEffect(() => {
+    const t = sessionStorage.getItem(TICKET_KEY) || '';
+    setGroupName(sessionStorage.getItem('cabinet_group') || '');
+    if (!t) {
+      nav('/cabinet/login', { replace: true });
+      return;
+    }
+    setTicket(t);
+  }, [nav]);
 
   const set = (k: keyof typeof EMPTY, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
@@ -41,10 +56,19 @@ const ProfileSetup = () => {
       setError('Проверьте номер телефона');
       return;
     }
+    if (pin.length < 4) {
+      setError('PIN должен быть от 4 до 6 цифр');
+      return;
+    }
+    if (pin !== pin2) {
+      setError('PIN и его повтор не совпадают');
+      return;
+    }
     setBusy(true);
     try {
-      await api.createProfile({ ...form, consent });
-      await refresh();
+      const res = await api.createProfile({ ...form, pin, consent, ticket });
+      sessionStorage.removeItem(TICKET_KEY);
+      await applyToken(res.token);
       nav('/cabinet', { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Не удалось сохранить профиль');
@@ -55,7 +79,8 @@ const ProfileSetup = () => {
 
   const ready =
     form.first_name.trim() && form.last_name.trim() && form.phone.trim() &&
-    form.email.trim() && form.industry && form.employment_type && consent;
+    form.email.trim() && form.industry && form.employment_type && consent &&
+    pin.length >= 4 && pin === pin2;
 
   return (
     <div className="cab cab-login" style={{ alignItems: 'flex-start', paddingTop: 48, paddingBottom: 48 }}>
@@ -64,7 +89,10 @@ const ProfileSetup = () => {
       <form className="cab-login-card" style={{ maxWidth: 560 }} onSubmit={submit}>
         <img className="cab-login-logo" src="/site/logo.jpg" alt="Хакни Нейросети" />
         <h1>Добро пожаловать!</h1>
-        <p>Перед началом заполните короткий профиль — это займёт около двух минут.</p>
+        <p>
+          {groupName ? `Поток: ${groupName}. ` : ''}
+          Заполните короткий профиль — это займёт около двух минут.
+        </p>
 
         {error && <div className="cab-error">{error}</div>}
 
@@ -114,6 +142,41 @@ const ProfileSetup = () => {
           </select>
         </div>
 
+        <div className="cab-pin-block">
+          <h3>Придумайте личный PIN</h3>
+          <p>
+            Это ваш личный ключ внутри потока — по нему система узнаёт именно вас.
+            Запомните его: при каждом входе нужно будет ввести пароль потока и этот PIN.
+          </p>
+          <div className="cab-form-grid" style={{ marginBottom: 0 }}>
+            <div className="cab-field" style={{ marginBottom: 0 }}>
+              <label>PIN (4–6 цифр) *</label>
+              <input
+                className="cab-input cab-pin-input"
+                value={pin}
+                onChange={(e) => setPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                placeholder="••••"
+                inputMode="numeric"
+                autoComplete="off"
+              />
+            </div>
+            <div className="cab-field" style={{ marginBottom: 0 }}>
+              <label>Повторите PIN *</label>
+              <input
+                className="cab-input cab-pin-input"
+                value={pin2}
+                onChange={(e) => setPin2(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                placeholder="••••"
+                inputMode="numeric"
+                autoComplete="off"
+              />
+            </div>
+          </div>
+          {pin2.length >= 4 && pin !== pin2 && (
+            <p className="cab-warn" style={{ color: 'var(--orange)' }}>PIN не совпадает</p>
+          )}
+        </div>
+
         <label className="cab-consent">
           <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
           <span>Согласен на обработку персональных данных школой «Хакни Нейросети»</span>
@@ -122,6 +185,12 @@ const ProfileSetup = () => {
         <button className="cab-btn" type="submit" disabled={busy || !ready} style={{ marginTop: 10 }}>
           {busy ? 'Сохраняем…' : 'Создать профиль'}
         </button>
+
+        <div className="cab-hint">
+          <button type="button" className="cab-link-btn" onClick={() => nav('/cabinet/login')}>
+            ← У меня уже есть профиль
+          </button>
+        </div>
       </form>
     </div>
   );

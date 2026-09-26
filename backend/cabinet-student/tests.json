@@ -9,11 +9,11 @@
       "bodyMatcher": "partial"
     },
     {
-      "name": "Создание профиля без авторизации запрещено",
+      "name": "Создание профиля без билета входа запрещено",
       "method": "POST",
       "path": "/?action=profile-create",
-      "body": {"first_name": "Тест"},
-      "expectedStatus": 403,
+      "body": {"first_name": "Тест", "ticket": "invalid"},
+      "expectedStatus": 401,
       "expectedBody": {"error": "string"},
       "bodyMatcher": "partial"
     }

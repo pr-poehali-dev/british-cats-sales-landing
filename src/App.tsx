@@ -58,7 +58,7 @@ const App = () => (
           <Route path="/zarabotok-na-neyrosetyah" element={<IncomePage />} />
 
           <Route path="/cabinet/login" element={<Login />} />
-          <Route path="/cabinet/setup" element={<RequireAuth role="student"><ProfileSetup /></RequireAuth>} />
+          <Route path="/cabinet/setup" element={<ProfileSetup />} />
           <Route path="/cabinet" element={<RequireAuth role="student"><StudentHome /></RequireAuth>} />
           <Route path="/cabinet/profile" element={<RequireAuth role="student"><StudentProfile /></RequireAuth>} />
           <Route path="/cabinet/survey/:assignmentId" element={<RequireAuth role="student"><Survey /></RequireAuth>} />

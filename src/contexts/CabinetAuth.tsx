@@ -4,7 +4,7 @@ import { api, clearToken, getToken, setToken, type Me } from '@/lib/cabinet-api'
 interface Ctx {
   me: Me | null;
   loading: boolean;
-  login: (code: string) => Promise<Me>;
+  applyToken: (token: string) => Promise<Me>;
   logout: () => Promise<void>;
   refresh: () => Promise<void>;
 }
@@ -35,9 +35,8 @@ export const CabinetAuthProvider = ({ children }: { children: ReactNode }) => {
     refresh();
   }, [refresh]);
 
-  const login = useCallback(async (code: string) => {
-    const res = await api.login(code);
-    setToken(res.token);
+  const applyToken = useCallback(async (token: string) => {
+    setToken(token);
     const fresh = await api.me();
     setMe(fresh);
     return fresh;
@@ -54,7 +53,7 @@ export const CabinetAuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <CabinetCtx.Provider value={{ me, loading, login, logout, refresh }}>
+    <CabinetCtx.Provider value={{ me, loading, applyToken, logout, refresh }}>
       {children}
     </CabinetCtx.Provider>
   );

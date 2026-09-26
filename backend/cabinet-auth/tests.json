@@ -9,19 +9,28 @@
       "bodyMatcher": "partial"
     },
     {
-      "name": "Пустой код не пускает",
+      "name": "Пустой пароль не пускает",
       "method": "POST",
-      "path": "/?action=login",
+      "path": "/?action=check-code",
       "body": {"code": ""},
       "expectedStatus": 400,
       "expectedBody": {"error": "string"},
       "bodyMatcher": "partial"
     },
     {
-      "name": "Неверный код возвращает 401",
+      "name": "Неверный пароль группы отклоняется",
       "method": "POST",
-      "path": "/?action=login",
-      "body": {"code": "zzz-nonexistent-code-999"},
+      "path": "/?action=check-code",
+      "body": {"code": "zzz-nonexistent-group-999"},
+      "expectedStatus": 401,
+      "expectedBody": {"error": "string"},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "PIN без билета входа отклоняется",
+      "method": "POST",
+      "path": "/?action=login-pin",
+      "body": {"ticket": "invalid", "pin": "1234"},
       "expectedStatus": 401,
       "expectedBody": {"error": "string"},
       "bodyMatcher": "partial"

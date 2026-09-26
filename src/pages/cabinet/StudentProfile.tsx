@@ -24,6 +24,9 @@ const StudentProfile = () => {
   const [msg, setMsg] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [pins, setPins] = useState({ current: '', next: '', repeat: '' });
+  const [pinMsg, setPinMsg] = useState('');
+  const [pinError, setPinError] = useState('');
 
   useEffect(() => {
     if (me?.profile) {
@@ -57,6 +60,32 @@ const StudentProfile = () => {
       setBusy(false);
     }
   };
+
+  const changePin = async (e: FormEvent) => {
+    e.preventDefault();
+    setPinError('');
+    setPinMsg('');
+    if (pins.next.length < 4) {
+      setPinError('Новый PIN должен быть от 4 до 6 цифр');
+      return;
+    }
+    if (pins.next !== pins.repeat) {
+      setPinError('Новый PIN и его повтор не совпадают');
+      return;
+    }
+    setBusy(true);
+    try {
+      await api.changePin(pins.current, pins.next);
+      setPins({ current: '', next: '', repeat: '' });
+      setPinMsg('PIN изменён. В следующий раз входите с новым.');
+    } catch (err) {
+      setPinError(err instanceof Error ? err.message : 'Не удалось изменить PIN');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const digits = (v: string) => v.replace(/\D/g, '').slice(0, 6);
 
   return (
     <CabinetShell>
@@ -110,6 +139,39 @@ const StudentProfile = () => {
 
         <button className="cab-btn cab-inline-btn" type="submit" disabled={busy}>
           {busy ? 'Сохраняем…' : 'Сохранить'}
+        </button>
+      </form>
+
+      <form className="cab-card" onSubmit={changePin}>
+        <h2>Личный PIN</h2>
+        <p className="cab-sub" style={{ marginBottom: 20 }}>
+          PIN — ваш личный ключ внутри потока. Пароль потока при этом не меняется.
+        </p>
+
+        {pinError && <div className="cab-error">{pinError}</div>}
+        {pinMsg && <div className="cab-ok">{pinMsg}</div>}
+
+        <div className="cab-form-grid">
+          <div className="cab-field">
+            <label>Текущий PIN</label>
+            <input className="cab-input cab-pin-input" inputMode="numeric" value={pins.current}
+              onChange={(e) => setPins({ ...pins, current: digits(e.target.value) })} placeholder="••••" />
+          </div>
+          <div className="cab-field">
+            <label>Новый PIN</label>
+            <input className="cab-input cab-pin-input" inputMode="numeric" value={pins.next}
+              onChange={(e) => setPins({ ...pins, next: digits(e.target.value) })} placeholder="••••" />
+          </div>
+          <div className="cab-field">
+            <label>Повторите новый</label>
+            <input className="cab-input cab-pin-input" inputMode="numeric" value={pins.repeat}
+              onChange={(e) => setPins({ ...pins, repeat: digits(e.target.value) })} placeholder="••••" />
+          </div>
+        </div>
+
+        <button className="cab-btn cab-btn-ghost cab-inline-btn" type="submit"
+          disabled={busy || pins.current.length < 4 || pins.next.length < 4}>
+          Изменить PIN
         </button>
       </form>
     </CabinetShell>

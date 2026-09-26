@@ -128,6 +128,7 @@ export interface AdminStudent {
   profession: string | null;
   employment_type: string;
   created_at: string;
+  pin_hint: string | null;
   group_name: string | null;
   course_name: string | null;
   completed_count: number;
@@ -160,11 +161,21 @@ export interface AccessCode {
   note: string | null;
   activated_at: string | null;
   created_at: string;
-  profile_id: number | null;
-  first_name: string | null;
-  last_name: string | null;
-  email: string | null;
-  phone: string | null;
+  is_group: boolean;
+  max_students: number | null;
+  students_count: number;
+}
+
+export interface CheckCodeResult {
+  step: 'pin' | 'done';
+  token?: string;
+  role?: 'student' | 'admin';
+  ticket?: string;
+  group_name?: string | null;
+  course_name?: string | null;
+  period?: string | null;
+  students_count?: number;
+  group_full?: boolean;
 }
 
 const call = async <T>(url: string, action: string, init?: RequestInit): Promise<T> => {
@@ -188,18 +199,26 @@ const STUDENT = func2url['cabinet-student'];
 const SURVEYS = func2url['cabinet-admin-surveys'];
 
 export const api = {
-  login: (code: string) =>
-    call<{ token: string; role: 'student' | 'admin'; has_profile: boolean }>(AUTH, 'login', {
+  checkCode: (code: string) =>
+    call<CheckCodeResult>(AUTH, 'check-code', { method: 'POST', body: JSON.stringify({ code }) }),
+  loginPin: (ticket: string, pin: string) =>
+    call<{ token: string; role: 'student'; first_name: string }>(AUTH, 'login-pin', {
       method: 'POST',
-      body: JSON.stringify({ code }),
+      body: JSON.stringify({ ticket, pin }),
     }),
   me: () => call<Me>(AUTH, 'me'),
   logout: () => call<{ ok: boolean }>(AUTH, 'logout', { method: 'POST' }),
 
   listCodes: () =>
     call<{ codes: AccessCode[]; stats: Record<string, number> }>(CODES, 'list'),
-  createCodes: (payload: { count: number; group_name?: string; course_name?: string; period?: string; note?: string }) =>
-    call<{ created: { id: number; code: string }[] }>(CODES, 'create', {
+  createCodes: (payload: {
+    group_name: string;
+    course_name?: string;
+    period?: string;
+    custom_code?: string;
+    max_students?: number | null;
+  }) =>
+    call<{ created: { id: number; code: string; group_name: string }[] }>(CODES, 'create', {
       method: 'POST',
       body: JSON.stringify(payload),
     }),
@@ -207,13 +226,24 @@ export const api = {
     call<{ ok: boolean }>(CODES, 'disable', { method: 'POST', body: JSON.stringify({ id }) }),
   enableCode: (id: number) =>
     call<{ ok: boolean }>(CODES, 'enable', { method: 'POST', body: JSON.stringify({ id }) }),
-  regenerateCode: (id: number) =>
-    call<{ id: number; code: string }>(CODES, 'regenerate', { method: 'POST', body: JSON.stringify({ id }) }),
+  regenerateCode: (id: number, customCode?: string) =>
+    call<{ id: number; code: string }>(CODES, 'regenerate', {
+      method: 'POST',
+      body: JSON.stringify({ id, custom_code: customCode }),
+    }),
   disableAllCodes: () => call<{ affected: number }>(CODES, 'disable-all', { method: 'POST', body: '{}' }),
   enableAllCodes: () => call<{ affected: number }>(CODES, 'enable-all', { method: 'POST', body: '{}' }),
 
   createProfile: (payload: Record<string, unknown>) =>
-    call<{ profile_id: number }>(STUDENT, 'profile-create', { method: 'POST', body: JSON.stringify(payload) }),
+    call<{ profile_id: number; token: string }>(STUDENT, 'profile-create', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
+  changePin: (currentPin: string, newPin: string) =>
+    call<{ ok: boolean }>(STUDENT, 'pin-change', {
+      method: 'POST',
+      body: JSON.stringify({ current_pin: currentPin, new_pin: newPin }),
+    }),
   updateProfile: (payload: Record<string, unknown>) =>
     call<{ ok: boolean }>(STUDENT, 'profile-update', { method: 'POST', body: JSON.stringify(payload) }),
   dashboard: () => call<StudentDashboard>(STUDENT, 'dashboard'),
@@ -237,9 +267,8 @@ export const api = {
       SURVEYS, `student&id=${id}`,
     ),
   adminAnalytics: () => call<Record<string, unknown>>(SURVEYS, 'analytics'),
-  deleteStudent: (id: number, keepCode: boolean) =>
-    call<{ ok: boolean }>(SURVEYS, 'student-delete', {
-      method: 'POST',
-      body: JSON.stringify({ id, keep_code: keepCode }),
-    }),
+  deleteStudent: (id: number) =>
+    call<{ ok: boolean }>(SURVEYS, 'student-delete', { method: 'POST', body: JSON.stringify({ id }) }),
+  resetStudentPin: (id: number, pin: string) =>
+    call<{ ok: boolean }>(SURVEYS, 'student-pin-reset', { method: 'POST', body: JSON.stringify({ id, pin }) }),
 };

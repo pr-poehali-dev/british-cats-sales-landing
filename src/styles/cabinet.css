@@ -978,3 +978,53 @@ select.cab-input option {
     background: #fff;
   }
 }
+
+/* pin */
+.cab-pin-input {
+  font-family: var(--mono);
+  font-size: 22px;
+  letter-spacing: 0.4em;
+  text-align: center;
+}
+.cab-pin-block {
+  background: var(--deep);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 20px;
+}
+.cab-pin-block h3 {
+  font-family: var(--disp);
+  font-size: 16px;
+  color: var(--cyan);
+  margin-bottom: 8px;
+}
+.cab-pin-block p {
+  color: var(--t2);
+  font-size: 13px;
+  line-height: 1.55;
+  margin-bottom: 18px;
+}
+.cab-link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--cyan);
+  font-family: var(--body);
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.cab-link-btn:hover {
+  text-decoration: underline;
+}
+.cab-ok {
+  background: rgba(74, 222, 128, 0.1);
+  border: 1px solid rgba(74, 222, 128, 0.4);
+  color: #86efac;
+  border-radius: 11px;
+  padding: 12px 14px;
+  font-size: 14px;
+  margin-bottom: 18px;
+  line-height: 1.45;
+}
