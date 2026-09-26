@@ -20,6 +20,7 @@ const AdminCodes = () => {
   const [fresh, setFresh] = useState<{ id: number; code: string }[]>([]);
   const [form, setForm] = useState({ count: 1, group_name: '', course_name: '', period: '', note: '' });
   const [busy, setBusy] = useState(false);
+  const [confirmAll, setConfirmAll] = useState(false);
 
   const load = useCallback(async () => {
     try {
@@ -101,6 +102,31 @@ const AdminCodes = () => {
         <div className="cab-stat"><b>{stats.with_profile ?? 0}</b><span>профилей создано</span></div>
         <div className="cab-stat"><b>{stats.disabled ?? 0}</b><span>отключены</span></div>
       </div>
+
+      {codes.length > 0 && (
+        <div className="cab-card cab-cta-card" style={{ borderColor: 'var(--line)' }}>
+          <div>
+            <h2>Массовое управление доступом</h2>
+            <p className="cab-task-meta">
+              Отключение мгновенно завершает все активные сессии. Данные и ответы учеников сохраняются.
+            </p>
+          </div>
+          <div className="cab-row-actions">
+            <button className="cab-btn cab-btn-ghost cab-btn-sm cab-danger" disabled={busy} onClick={() => setConfirmAll(true)}>
+              <Icon name="Lock" size={15} /> Отключить все коды
+            </button>
+            {(stats.disabled ?? 0) > 0 && (
+              <button
+                className="cab-btn cab-btn-ghost cab-btn-sm"
+                disabled={busy}
+                onClick={() => act(() => api.enableAllCodes())}
+              >
+                <Icon name="LockOpen" size={15} /> Включить все
+              </button>
+            )}
+          </div>
+        </div>
+      )}
 
       <div className="cab-card">
         <h2>Создать коды</h2>
@@ -219,6 +245,30 @@ const AdminCodes = () => {
           </div>
         )}
       </div>
+
+      {confirmAll && (
+        <div className="cab-modal" onClick={() => !busy && setConfirmAll(false)}>
+          <div className="cab-modal-box" onClick={(e) => e.stopPropagation()}>
+            <h2>Отключить все коды?</h2>
+            <p>
+              Вход будет закрыт для всех учеников — сейчас активных кодов {(stats.total ?? 0) - (stats.disabled ?? 0)}.
+              Профили и ответы сохранятся, доступ можно вернуть кнопкой «Включить все».
+            </p>
+            <div className="cab-row-actions">
+              <button
+                className="cab-btn cab-btn-sm cab-danger"
+                disabled={busy}
+                onClick={async () => { await act(() => api.disableAllCodes()); setConfirmAll(false); }}
+              >
+                Да, отключить все
+              </button>
+              <button className="cab-btn cab-btn-ghost cab-btn-sm" disabled={busy} onClick={() => setConfirmAll(false)}>
+                Отмена
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </CabinetShell>
   );
 };

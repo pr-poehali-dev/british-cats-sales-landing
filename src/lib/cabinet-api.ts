@@ -209,6 +209,8 @@ export const api = {
     call<{ ok: boolean }>(CODES, 'enable', { method: 'POST', body: JSON.stringify({ id }) }),
   regenerateCode: (id: number) =>
     call<{ id: number; code: string }>(CODES, 'regenerate', { method: 'POST', body: JSON.stringify({ id }) }),
+  disableAllCodes: () => call<{ affected: number }>(CODES, 'disable-all', { method: 'POST', body: '{}' }),
+  enableAllCodes: () => call<{ affected: number }>(CODES, 'enable-all', { method: 'POST', body: '{}' }),
 
   createProfile: (payload: Record<string, unknown>) =>
     call<{ profile_id: number }>(STUDENT, 'profile-create', { method: 'POST', body: JSON.stringify(payload) }),

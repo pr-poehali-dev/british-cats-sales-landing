@@ -95,6 +95,10 @@ def handler(event: Dict[str, Any], context) -> Dict[str, Any]:
                 return set_status(conn, cur, event, None)
             if action == 'regenerate' and method == 'POST':
                 return regenerate(conn, cur, event)
+            if action == 'disable-all' and method == 'POST':
+                return disable_all(conn, cur)
+            if action == 'enable-all' and method == 'POST':
+                return enable_all(conn, cur)
         return resp(400, {'error': 'Неизвестное действие'})
     finally:
         conn.close()
@@ -165,6 +169,34 @@ def set_status(conn, cur, event: Dict[str, Any], status: Optional[str]) -> Dict[
         )
     conn.commit()
     return resp(200, {'ok': True})
+
+
+def disable_all(conn, cur) -> Dict[str, Any]:
+    cur.execute(
+        "UPDATE access_codes SET status = 'disabled' WHERE role = 'student' AND status <> 'disabled'"
+    )
+    affected = cur.rowcount
+    cur.execute(
+        """
+        DELETE FROM sessions
+        WHERE access_code_id IN (SELECT id FROM access_codes WHERE role = 'student')
+        """
+    )
+    conn.commit()
+    return resp(200, {'ok': True, 'affected': affected})
+
+
+def enable_all(conn, cur) -> Dict[str, Any]:
+    cur.execute(
+        """
+        UPDATE access_codes
+        SET status = CASE WHEN activated_at IS NULL THEN 'new' ELSE 'activated' END
+        WHERE role = 'student' AND status = 'disabled'
+        """
+    )
+    affected = cur.rowcount
+    conn.commit()
+    return resp(200, {'ok': True, 'affected': affected})
 
 
 def regenerate(conn, cur, event: Dict[str, Any]) -> Dict[str, Any]:
