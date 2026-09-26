@@ -1,0 +1,436 @@
+.cab {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--t1);
+  font-family: var(--body);
+}
+
+/* login */
+.cab-login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.cab-login-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 40px 34px;
+  position: relative;
+  z-index: 2;
+}
+.cab-login-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  margin-bottom: 24px;
+}
+.cab-login-card h1 {
+  font-family: var(--disp);
+  font-size: 26px;
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+.cab-login-card p {
+  color: var(--t2);
+  font-size: 15px;
+  line-height: 1.55;
+  margin-bottom: 28px;
+}
+.cab-field {
+  margin-bottom: 18px;
+}
+.cab-field label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--t3);
+  margin-bottom: 8px;
+}
+.cab-input {
+  width: 100%;
+  background: var(--deep);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 15px 16px;
+  color: var(--t1);
+  font-family: var(--body);
+  font-size: 16px;
+  transition: border-color 0.3s var(--ease);
+}
+.cab-input::placeholder {
+  color: var(--t3);
+}
+.cab-input:focus {
+  outline: none;
+  border-color: var(--cyan);
+}
+.cab-input:disabled {
+  opacity: 0.6;
+}
+textarea.cab-input {
+  resize: vertical;
+  min-height: 90px;
+}
+.cab-btn {
+  width: 100%;
+  background: var(--cyan);
+  color: #04121c;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-family: var(--body);
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  transition:
+    transform 0.25s var(--ease),
+    box-shadow 0.25s var(--ease),
+    opacity 0.2s;
+}
+.cab-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px var(--cyan-glow);
+}
+.cab-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.cab-btn-ghost {
+  background: transparent;
+  color: var(--t1);
+  border: 1px solid var(--line);
+}
+.cab-btn-ghost:hover:not(:disabled) {
+  border-color: var(--cyan);
+  box-shadow: none;
+}
+.cab-btn-sm {
+  width: auto;
+  padding: 9px 15px;
+  font-size: 13px;
+  border-radius: 9px;
+}
+.cab-error {
+  background: var(--orange-dim);
+  border: 1px solid rgba(255, 92, 57, 0.35);
+  color: #ffb3a1;
+  border-radius: 11px;
+  padding: 12px 14px;
+  font-size: 14px;
+  margin-bottom: 18px;
+  line-height: 1.45;
+}
+.cab-hint {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  color: var(--t3);
+  font-size: 13px;
+  line-height: 1.55;
+}
+.cab-hint a {
+  color: var(--cyan);
+}
+
+/* shell */
+.cab-top {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(5, 13, 26, 0.92);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+.cab-top-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.cab-top-logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-family: var(--disp);
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1.1;
+  color: var(--t1);
+}
+.cab-top-logo img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+}
+.cab-top-nav {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+.cab-top-nav a {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--t2);
+  padding: 8px 12px;
+  border-radius: 9px;
+  transition:
+    color 0.25s,
+    background 0.25s;
+}
+.cab-top-nav a:hover {
+  color: var(--t1);
+  background: var(--cyan-dim);
+}
+.cab-top-nav a.active {
+  color: var(--cyan);
+  background: var(--cyan-dim);
+}
+.cab-logout {
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--t2);
+  border-radius: 9px;
+  padding: 8px 13px;
+  font-family: var(--mono);
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    color 0.25s,
+    border-color 0.25s;
+}
+.cab-logout:hover {
+  color: var(--orange);
+  border-color: var(--orange);
+}
+.cab-main {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 36px 20px 80px;
+}
+.cab-h1 {
+  font-family: var(--disp);
+  font-size: clamp(24px, 3vw, 34px);
+  margin-bottom: 8px;
+}
+.cab-sub {
+  color: var(--t2);
+  font-size: 15px;
+  line-height: 1.6;
+  margin-bottom: 32px;
+  max-width: 720px;
+}
+.cab-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--cyan);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+/* cards & tables */
+.cab-card {
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 26px;
+  margin-bottom: 18px;
+}
+.cab-card h2 {
+  font-family: var(--disp);
+  font-size: 18px;
+  margin-bottom: 14px;
+}
+.cab-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px;
+  margin-bottom: 26px;
+}
+.cab-stat {
+  background: var(--bg2);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+}
+.cab-stat b {
+  display: block;
+  font-family: var(--disp);
+  font-size: 30px;
+  color: var(--cyan);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.cab-stat span {
+  color: var(--t2);
+  font-size: 13px;
+  line-height: 1.4;
+}
+.cab-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+.cab-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+.cab-table th {
+  text-align: left;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--t3);
+  padding: 14px 16px;
+  background: var(--deep);
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.cab-table td {
+  padding: 15px 16px;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+  color: var(--t1);
+  vertical-align: middle;
+}
+.cab-table tr:last-child td {
+  border-bottom: none;
+}
+.cab-table tr:hover td {
+  background: rgba(0, 229, 245, 0.035);
+}
+.cab-muted {
+  color: var(--t3);
+}
+.cab-badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--t2);
+  white-space: nowrap;
+}
+.cab-badge.green {
+  color: #4ade80;
+  border-color: rgba(74, 222, 128, 0.4);
+  background: rgba(74, 222, 128, 0.1);
+}
+.cab-badge.cyan {
+  color: var(--cyan);
+  border-color: rgba(0, 229, 245, 0.4);
+  background: var(--cyan-dim);
+}
+.cab-badge.gray {
+  color: var(--t3);
+}
+.cab-badge.red {
+  color: #ff8b73;
+  border-color: rgba(255, 92, 57, 0.4);
+  background: var(--orange-dim);
+}
+.cab-row-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.cab-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.cab-inline-btn {
+  width: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.cab-empty {
+  text-align: center;
+  padding: 50px 20px;
+  color: var(--t3);
+  font-size: 14px;
+}
+.cab-codes-out {
+  background: var(--deep);
+  border: 1px dashed var(--cyan);
+  border-radius: 14px;
+  padding: 20px;
+  margin-top: 18px;
+}
+.cab-codes-out h3 {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--cyan);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+.cab-code-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 16px;
+  letter-spacing: 0.08em;
+}
+.cab-code-line:last-child {
+  border-bottom: none;
+}
+.cab-warn {
+  color: var(--t3);
+  font-size: 12px;
+  margin-top: 14px;
+  line-height: 1.5;
+}
+.cab-loading {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--t3);
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 640px) {
+  .cab-top-inner {
+    padding: 12px 16px;
+    gap: 10px;
+  }
+  .cab-top-logo span {
+    display: none;
+  }
+  .cab-main {
+    padding: 26px 16px 70px;
+  }
+  .cab-card {
+    padding: 20px;
+  }
+  .cab-login-card {
+    padding: 32px 22px;
+  }
+}

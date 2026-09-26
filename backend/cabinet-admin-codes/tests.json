@@ -1,0 +1,21 @@
+{
+  "tests": [
+    {
+      "name": "Без токена доступ запрещён",
+      "method": "GET",
+      "path": "/?action=list",
+      "expectedStatus": 403,
+      "expectedBody": {"error": "string"},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Создание кода без прав запрещено",
+      "method": "POST",
+      "path": "/?action=create",
+      "body": {"count": 1},
+      "expectedStatus": 403,
+      "expectedBody": {"error": "string"},
+      "bodyMatcher": "partial"
+    }
+  ]
+}

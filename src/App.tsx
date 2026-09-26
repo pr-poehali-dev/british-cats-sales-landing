@@ -13,6 +13,14 @@ import ReviewsPage from "./pages/ReviewsPage";
 import FromZero from "./pages/FromZero";
 import IncomePage from "./pages/Income";
 import NotFound from "./pages/NotFound";
+import { CabinetAuthProvider } from "./contexts/CabinetAuth";
+import RequireAuth from "./components/cabinet/RequireAuth";
+import Login from "./pages/cabinet/Login";
+import StudentHome from "./pages/cabinet/StudentHome";
+import ProfileSetup from "./pages/cabinet/ProfileSetup";
+import AdminHome from "./pages/cabinet/AdminHome";
+import AdminCodes from "./pages/cabinet/AdminCodes";
+import "./styles/cabinet.css";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +39,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
+        <CabinetAuthProvider>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/course" element={<Course />} />
@@ -40,8 +49,16 @@ const App = () => (
           <Route path="/reviews" element={<ReviewsPage />} />
           <Route path="/neyroseti-s-nulya" element={<FromZero />} />
           <Route path="/zarabotok-na-neyrosetyah" element={<IncomePage />} />
+
+          <Route path="/cabinet/login" element={<Login />} />
+          <Route path="/cabinet/setup" element={<RequireAuth role="student"><ProfileSetup /></RequireAuth>} />
+          <Route path="/cabinet" element={<RequireAuth role="student"><StudentHome /></RequireAuth>} />
+          <Route path="/cabinet/admin" element={<RequireAuth role="admin"><AdminHome /></RequireAuth>} />
+          <Route path="/cabinet/admin/codes" element={<RequireAuth role="admin"><AdminCodes /></RequireAuth>} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </CabinetAuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

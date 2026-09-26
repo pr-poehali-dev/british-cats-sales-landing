@@ -1,0 +1,30 @@
+{
+  "tests": [
+    {
+      "name": "Без токена возвращает 401",
+      "method": "GET",
+      "path": "/?action=me",
+      "expectedStatus": 401,
+      "expectedBody": {"error": "string"},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Пустой код не пускает",
+      "method": "POST",
+      "path": "/?action=login",
+      "body": {"code": ""},
+      "expectedStatus": 400,
+      "expectedBody": {"error": "string"},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Неверный код возвращает 401",
+      "method": "POST",
+      "path": "/?action=login",
+      "body": {"code": "zzz-nonexistent-code-999"},
+      "expectedStatus": 401,
+      "expectedBody": {"error": "string"},
+      "bodyMatcher": "partial"
+    }
+  ]
+}

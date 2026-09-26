@@ -49,6 +49,7 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /cabinet
 
 Host: https://chernikovgpt.ru
 Sitemap: https://chernikovgpt.ru/sitemap.xml
