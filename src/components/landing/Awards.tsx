@@ -25,7 +25,7 @@ const Awards = () => {
   return (
     <section className="sec" id="awards">
       <div className="wrap">
-        <Reveal className="eyebrow">// 06 · ПРИЗНАНИЕ</Reveal>
+        <Reveal className="eyebrow">// ПРИЗНАНИЕ</Reveal>
         <Reveal as="h2" className="sec-title grad-text">Официальное признание</Reveal>
         <Reveal as="p" className="sec-sub">Школа отмечена благодарственными письмами от государственных и отраслевых организаций Приморья</Reveal>
         <Reveal className="awd-grid">

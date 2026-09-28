@@ -23,7 +23,7 @@ const Tools = () => {
   return (
     <section className="sec" id="tools" style={{ background: 'var(--deep)' }}>
       <div className="wrap">
-        <Reveal className="eyebrow">// 04 · ИНСТРУМЕНТЫ</Reveal>
+        <Reveal className="eyebrow">// ИНСТРУМЕНТЫ</Reveal>
         <Reveal as="h2" className="sec-title grad-text">Работаем в тех же<br />нейросетях, что и весь мир</Reveal>
         <div className="tools-rows">
           <ToolsMarquee items={ROW_A} dir="left" />

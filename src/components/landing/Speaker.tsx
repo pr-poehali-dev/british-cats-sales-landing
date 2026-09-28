@@ -42,7 +42,7 @@ const Speaker = () => {
   return (
     <section className="sec" id="speaker">
       <div className="wrap">
-        <Reveal className="eyebrow">// 05 · СПИКЕР</Reveal>
+        <Reveal className="eyebrow">// СПИКЕР</Reveal>
         <div className="spk">
           <Reveal className="spk-photo">
             <div

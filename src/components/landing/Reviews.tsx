@@ -109,8 +109,12 @@ const Reviews = () => {
   return (
     <section className="sec" id="reviews">
       <div className="wrap">
-        <Reveal className="eyebrow">// 13 · ОТЗЫВЫ</Reveal>
-        <Reveal as="h2" className="sec-title grad-text">Что говорят студенты</Reveal>
+        <Reveal className="eyebrow">// ОТЗЫВЫ</Reveal>
+        <Reveal as="h2" className="sec-title grad-text">Развёрнутые отзывы<br />выпускников</Reveal>
+        <Reveal as="p" className="sec-sub">
+          Полные тексты отзывов без сокращений — так, как их написали сами выпускники.
+          Каждый можно проверить на независимой площадке.
+        </Reveal>
         <Reveal className="rev-grid">
           {REVIEWS.map((r) => (
             <ReviewCard key={r.name} r={r} />

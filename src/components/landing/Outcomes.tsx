@@ -49,7 +49,7 @@ const Outcomes = () => (
 
       <div className="out-grid">
         {OUTCOMES.map((o, i) => (
-          <Reveal key={o.title} delay={i * 70}>
+          <Reveal key={o.title} delay={i * 0.06}>
             <article className="out-card">
               <div className="out-num">{String(i + 1).padStart(2, '0')}</div>
               <div className="out-icon"><Icon name={o.icon} size={24} /></div>

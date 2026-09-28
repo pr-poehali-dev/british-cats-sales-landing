@@ -16,7 +16,7 @@ const ClassPhotos = () => {
   return (
     <section className="sec" id="class-photos">
       <div className="wrap">
-        <Reveal className="eyebrow">// 10 · КЛАСС</Reveal>
+        <Reveal className="eyebrow">// ЖИВОЙ КЛАСС</Reveal>
         <Reveal as="h2" className="sec-title grad-text">Как проходит занятие</Reveal>
         <Reveal as="p" className="sec-sub">Владивосток, ул. Русская 41а, 3 этаж. Так выглядит наш класс изнутри.</Reveal>
         <Reveal className="class-grid">

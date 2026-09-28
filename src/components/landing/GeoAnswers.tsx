@@ -39,7 +39,7 @@ const GeoAnswers = () => {
   return (
     <section className="sec" id="about-school">
       <div className="wrap">
-        <Reveal className="eyebrow">// 02 · О ШКОЛЕ</Reveal>
+        <Reveal className="eyebrow">// О ШКОЛЕ</Reveal>
         <Reveal as="h2" className="sec-title grad-text">Коротко о школе<br />«Хакни Нейросети»</Reveal>
         <Reveal as="p" className="sec-sub">Прямые ответы на главные вопросы об обучении нейросетям во Владивостоке — без маркетинговой воды.</Reveal>
         <div className="geo-grid">

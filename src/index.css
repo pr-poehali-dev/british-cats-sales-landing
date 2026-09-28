@@ -4551,3 +4551,13 @@ footer {
     padding: 26px 20px;
   }
 }
+
+/* Обёртки Reveal внутри сеток должны растягиваться на всю высоту ячейки */
+.out-grid > *,
+.flow-grid > *,
+.case-grid > *,
+.class-points > *,
+.profs > *,
+.price-grid > * {
+  height: 100%;
+}
