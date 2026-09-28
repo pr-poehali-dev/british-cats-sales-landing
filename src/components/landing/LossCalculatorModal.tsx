@@ -29,7 +29,12 @@ const PRESETS: Record<string, { rate: number; routine: number; count: number; se
 
 const COURSE_FEE = 150000;
 const SUBS_YEAR = 60000;
-const ROUTINE_AI_KEEP = 0.3;
+
+const SCENARIOS = {
+  low: { share: 0.3, name: 'Консервативный', hint: 'ИИ снимает около 30% рутины' },
+  mid: { share: 0.5, name: 'Базовый', hint: 'ИИ снимает около 50% рутины' },
+  high: { share: 0.7, name: 'Оптимистичный', hint: 'ИИ снимает около 70% рутины' },
+} as const;
 
 const fmtMoney = (v: number) => `${Math.round(v).toLocaleString('ru-RU')} ₽`;
 const fmtMoneyShort = (v: number) => {
@@ -72,6 +77,7 @@ const LossCalculatorModal = ({ open, onClose }: LossCalculatorModalProps) => {
   const [routine, setRoutine] = useState(12);
   const [count, setCount] = useState(4);
   const [selected, setSelected] = useState<Record<string, boolean>>({ site: true, video: true, content: true });
+  const [scenario, setScenario] = useState<'low' | 'mid' | 'high'>('mid');
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
@@ -114,24 +120,25 @@ const LossCalculatorModal = ({ open, onClose }: LossCalculatorModalProps) => {
       aiToolCost += p.aiCost * count;
       aiHours += p.aiHours * count;
     });
+    const share = SCENARIOS[scenario].share;
     const aiFull = aiToolCost + COURSE_FEE + SUBS_YEAR;
     const routineManual = routine * 52 * rate;
-    const routineAI = routineManual * ROUTINE_AI_KEEP;
+    const routineAI = routineManual * (1 - share);
     const baseline = picked.length ? Math.min(diyCost, hireCost) : 0;
     const projectLoss = Math.max(baseline - aiFull, 0);
     const routineLoss = Math.max(routineManual - routineAI, 0);
     const totalLoss = Math.max(projectLoss + routineLoss, 0);
     const maxVal = Math.max(diyCost, hireCost, aiFull, 1);
     const monthsEq = rate > 0 ? totalLoss / (rate * 160) : 0;
-    const hoursFreed = Math.max((diyHours - aiHours) + Math.round(routine * 52 * (1 - ROUTINE_AI_KEEP)), 0);
+    const hoursFreed = Math.max((diyHours - aiHours) + Math.round(routine * 52 * share), 0);
     const savingMonthly = totalLoss / 12;
     const payback = savingMonthly > 0 ? (COURSE_FEE + SUBS_YEAR) / savingMonthly : 0;
 
     return {
       picked, diyHours, diyCost, hireCost, aiFull, aiHours, maxVal, totalLoss, monthsEq,
-      baseline, routineManual, hoursFreed, payback,
+      baseline, routineManual, hoursFreed, payback, share,
     };
-  }, [rate, routine, count, selected]);
+  }, [rate, routine, count, selected, scenario]);
 
   const diySumText = useTween(calc.diyCost, fmtMoneyShort);
   const hireSumText = useTween(calc.hireCost, fmtMoneyShort);
@@ -143,8 +150,8 @@ const LossCalculatorModal = ({ open, onClose }: LossCalculatorModalProps) => {
 
   const breakdownRows = [
     { key: 'base', cls: 'lc-plus', label: 'Переплата за проекты (найм/ваше время)', val: calc.baseline, show: calc.picked.length > 0 },
-    { key: 'routine', cls: 'lc-plus', label: 'Рутина, которую ИИ закрыл бы на 70%', val: Math.round(calc.routineManual * (1 - ROUTINE_AI_KEEP)), show: true },
-    { key: 'invest', cls: 'lc-minus', label: 'Инвестиция в ИИ (курс + подписки)', val: -COURSE_FEE - SUBS_YEAR, show: true },
+    { key: 'routine', cls: 'lc-plus', label: `Рутина, которую ИИ может взять на себя (${Math.round(calc.share * 100)}%)`, val: Math.round(calc.routineManual * calc.share), show: true },
+    { key: 'invest', cls: 'lc-minus', label: 'Вложения в ИИ (курс + подписки за год)', val: -COURSE_FEE - SUBS_YEAR, show: true },
   ];
 
   const content = (
@@ -156,13 +163,29 @@ const LossCalculatorModal = ({ open, onClose }: LossCalculatorModalProps) => {
           </button>
 
           <div className="lc-hero">
-            <span className="lc-label">// КАЛЬКУЛЯТОР ПОТЕРЬ</span>
-            <h1>Сколько вы теряете, <em>не внедряя ИИ</em></h1>
-            <p>Сравните стоимость проекта <b>своими силами</b>, <b>на найме специалистов</b> и <b>с помощью нейросетей</b> — и узнайте, сколько денег сгорает каждый год, пока вы откладываете обучение.</p>
+            <span className="lc-label">// КАЛЬКУЛЯТОР ЭКОНОМИИ</span>
+            <h1>Рассчитайте потенциальную <em>экономию времени с ИИ</em></h1>
+            <p>Укажите свои задачи и стоимость часа — калькулятор сравнит, во что обходится работа <b>своими силами</b>, <b>на найме специалистов</b> и <b>с помощью нейросетей</b>. Расчёт ориентировочный и не является гарантией результата.</p>
             <div className="lc-presets">
               <button className="lc-preset" onClick={() => applyPreset('freelance')}>Я фрилансер</button>
               <button className="lc-preset" onClick={() => applyPreset('service')}>Бизнес услуг</button>
               <button className="lc-preset" onClick={() => applyPreset('ecom')}>Онлайн-продажи</button>
+            </div>
+            <div className="lc-scen">
+              <span className="lc-scen-title">Насколько ИИ снимет вашу рутину?</span>
+              <div className="lc-scen-btns">
+                {(Object.keys(SCENARIOS) as (keyof typeof SCENARIOS)[]).map((k) => (
+                  <button
+                    key={k}
+                    type="button"
+                    className={`lc-scen-btn${scenario === k ? ' on' : ''}`}
+                    onClick={() => setScenario(k)}
+                  >
+                    <b>{SCENARIOS[k].name}</b>
+                    <span>{SCENARIOS[k].hint}</span>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -181,7 +204,7 @@ const LossCalculatorModal = ({ open, onClose }: LossCalculatorModalProps) => {
                 <div className="lc-sld-row" style={{ marginBottom: 0 }}>
                   <div className="lc-sld-lbl"><b>Часов рутины в неделю</b><span className="lc-sld-val">{routine} ч/нед</span></div>
                   <input type="range" min={0} max={60} step={1} value={routine} onChange={(e) => setRoutine(+e.target.value)} />
-                  <div className="lc-sld-hint">КОНТЕНТ, ОТВЕТЫ, ВИЗУАЛ, ОТЧЁТЫ, ПОСТЫ, ПРЕЗЕНТАЦИИ — ВСЁ, ЧТО ИИ БЕРЁТ НА СЕБЯ НА 70%</div>
+                  <div className="lc-sld-hint">КОНТЕНТ, ОТВЕТЫ, ВИЗУАЛ, ОТЧЁТЫ, ПОСТЫ, ПРЕЗЕНТАЦИИ — ЗАДАЧИ, ЧАСТЬ КОТОРЫХ МОЖНО ПЕРЕДАТЬ ИИ</div>
                 </div>
               </div>
 
@@ -242,11 +265,11 @@ const LossCalculatorModal = ({ open, onClose }: LossCalculatorModalProps) => {
               </div>
 
               <div className="lc-loss-box">
-                <div className="lc-loss-title"><span className="lc-dot" /> ВАШИ ПОТЕРИ ЗА ГОД БЕЗ ИИ</div>
+                <div className="lc-loss-title"><span className="lc-dot" /> ОРИЕНТИРОВОЧНАЯ ЭКОНОМИЯ ЗА ГОД · {SCENARIOS[scenario].name.toUpperCase()} СЦЕНАРИЙ</div>
                 <div className="lc-loss-num">{lossText}</div>
                 <div className="lc-loss-sub">
                   {calc.picked.length
-                    ? `≈ ${calc.monthsEq.toLocaleString('ru-RU', { maximumFractionDigits: 1 })} МЕСЯЦЕВ ВАШЕЙ РАБОТЫ, СГОРЕВШИХ ВПУСТУЮ`
+                    ? `≈ ${calc.monthsEq.toLocaleString('ru-RU', { maximumFractionDigits: 1 })} МЕСЯЦЕВ ВАШЕЙ РАБОТЫ`
                     : 'ВЫБЕРИТЕ ХОТЯ БЫ ОДИН ПРОЕКТ, ЧТОБЫ УВИДЕТЬ ПОЛНУЮ КАРТИНУ'}
                 </div>
                 <div className="lc-breakdown">
@@ -257,16 +280,16 @@ const LossCalculatorModal = ({ open, onClose }: LossCalculatorModalProps) => {
                     </div>
                   ))}
                   <div className="lc-bd-row lc-bd-total">
-                    <span>ИТОГО ПОТЕРИ</span>
+                    <span>ИТОГО ЭКОНОМИЯ</span>
                     <b>{fmtMoney(calc.totalLoss)}</b>
                   </div>
                 </div>
               </div>
 
               <div className="lc-metric-grid">
-                <div className="lc-metric"><div className="lc-metric-num">{calc.hoursFreed.toLocaleString('ru-RU')} ч</div><div className="lc-metric-lbl">ВРЕМЕНИ ОСВОБОДИТ ИИ ЗА ГОД</div></div>
-                <div className="lc-metric"><div className="lc-metric-num teal">{calc.payback > 0 ? (calc.payback < 0.5 ? '< 0.5 мес' : `${calc.payback.toLocaleString('ru-RU', { maximumFractionDigits: 1 })} мес`) : '—'}</div><div className="lc-metric-lbl">ОКУПАЕМОСТЬ ОБУЧЕНИЯ</div></div>
-                <div className="lc-metric"><div className="lc-metric-num red">{threeYearText}</div><div className="lc-metric-lbl">ПОТЕРИ ЗА 3 ГОДА БЕЗ ИИ</div></div>
+                <div className="lc-metric"><div className="lc-metric-num">{calc.hoursFreed.toLocaleString('ru-RU')} ч</div><div className="lc-metric-lbl">ПОТЕНЦИАЛЬНО ВЫСВОБОЖДАЕМОЕ ВРЕМЯ ЗА ГОД</div></div>
+                <div className="lc-metric"><div className="lc-metric-num teal">{calc.payback > 0 ? (calc.payback < 0.5 ? '< 0.5 мес' : `${calc.payback.toLocaleString('ru-RU', { maximumFractionDigits: 1 })} мес`) : '—'}</div><div className="lc-metric-lbl">РАСЧЁТНЫЙ СРОК ОКУПАЕМОСТИ</div></div>
+                <div className="lc-metric"><div className="lc-metric-num teal">{threeYearText}</div><div className="lc-metric-lbl">ОРИЕНТИРОВОЧНАЯ ЭКОНОМИЯ ЗА 3 ГОДА</div></div>
               </div>
 
               <a
@@ -278,10 +301,16 @@ const LossCalculatorModal = ({ open, onClose }: LossCalculatorModalProps) => {
                   setTimeout(() => scrollToSection('#pricing'), 250);
                 }}
               >
-                Хватит терять — занять место →
+                Посмотреть программу и форматы →
               </a>
 
-              <div className="lc-res-note"><b>* РАСЧЁТ:</b> ЦЕНЫ ПО РЫНКУ ВЛАДИВОСТОКА/ФРИЛАНСА НА ОСНОВЕ КЕЙСОВ ВЫПУСКНИКОВ ШКОЛЫ. ИНВЕСТИЦИЯ В ИИ: КУРС «БАЗА» 150 000 ₽ + ПОДПИСКИ НА НЕЙРОСЕТИ ~5 000 ₽/МЕС. ИИ СНИМАЕТ ~70% РУТИННЫХ ЗАДАЧ.</div>
+              <div className="lc-res-note">
+                <b>* ОТКУДА ЦИФРЫ.</b> СТОИМОСТЬ ПРОЕКТОВ — ОРИЕНТИРОВОЧНЫЕ ЦЕНЫ РЫНКА ВЛАДИВОСТОКА И ФРИЛАНСА.
+                ВЛОЖЕНИЯ В ИИ: КУРС «БАЗА» 150 000 ₽ + ПОДПИСКИ НА СЕРВИСЫ ОКОЛО 5 000 ₽ В МЕСЯЦ.
+                ДОЛЮ СНИМАЕМОЙ РУТИНЫ ВЫ ВЫБИРАЕТЕ САМИ ВВЕРХУ — ЭТО ДОПУЩЕНИЕ, А НЕ УСТАНОВЛЕННЫЙ ФАКТ.
+                РЕАЛЬНЫЙ ЭФФЕКТ ЗАВИСИТ ОТ ВАШИХ ЗАДАЧ, КАЧЕСТВА ПРОЦЕССОВ И ПРАКТИКИ. РАСЧЁТ ОРИЕНТИРОВОЧНЫЙ
+                И НЕ ЯВЛЯЕТСЯ ГАРАНТИЕЙ РЕЗУЛЬТАТА.
+              </div>
             </div>
           </div>
         </div>

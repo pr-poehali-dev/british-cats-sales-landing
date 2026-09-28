@@ -22,7 +22,7 @@ const Pill = () => {
     <div id="pill" className={show ? 'show' : ''}>
       <span>До старта потока:</span>
       <b>{days} дней</b>
-      <span className="pill-seats">Продажи закрыты</span>
+      <span className="pill-seats">Набор открыт</span>
       <a
         className="btn btn-sm"
         href="#pricing"
@@ -31,7 +31,7 @@ const Pill = () => {
           scrollToSection('#pricing');
         }}
       >
-        Заявка на декабрь
+        Подобрать поток
       </a>
     </div>
   );

@@ -3,9 +3,11 @@ import { scrollToSection } from '@/lib/scroll';
 import LossCalculatorModal from './LossCalculatorModal';
 
 const LINKS = [
+  { href: '#outcomes', label: 'Результат' },
   { href: '#program', label: 'Программа' },
+  { href: '#class', label: 'Формат' },
   { href: '#speaker', label: 'Спикер' },
-  { href: '#cases', label: 'Результаты' },
+  { href: '#cases', label: 'Отзывы' },
   { href: '#pricing', label: 'Тарифы' },
   { href: '#faq', label: 'FAQ' },
 ];
@@ -51,9 +53,9 @@ const Navbar = () => {
         ))}
       </div>
       <div className="nav-right">
-        <button type="button" className="btn btn-ghost btn-sm" onClick={() => setCalcOpen(true)}>Сколько ты теряешь без ИИ?</button>
-        <span className="chip-seats">ПРОДАЖИ ЗАКРЫТЫ</span>
-        <a className="btn btn-sm" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Заявка на декабрь</a>
+        <button type="button" className="btn btn-ghost btn-sm" onClick={() => setCalcOpen(true)}>Калькулятор экономии</button>
+        <span className="chip-seats">СТАРТ · 7 ДЕКАБРЯ</span>
+        <a className="btn btn-sm" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Подобрать поток</a>
       </div>
       <button
         className={`nav-burger${open ? ' open' : ''}`}
@@ -67,9 +69,9 @@ const Navbar = () => {
         {LINKS.map((l) => (
           <a key={l.href} href={l.href} onClick={(e) => scrollTo(e, l.href)}>{l.label}</a>
         ))}
-        <button type="button" className="btn btn-ghost" onClick={() => { setOpen(false); setCalcOpen(true); }}>Сколько ты теряешь без ИИ?</button>
-        <span className="chip-seats mob">ПРОДАЖИ ЗАКРЫТЫ</span>
-        <a className="btn" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Заявка на декабрь →</a>
+        <button type="button" className="btn btn-ghost" onClick={() => { setOpen(false); setCalcOpen(true); }}>Калькулятор экономии</button>
+        <span className="chip-seats mob">СТАРТ · 7 ДЕКАБРЯ</span>
+        <a className="btn" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Подобрать поток →</a>
       </div>
       <LossCalculatorModal open={calcOpen} onClose={() => setCalcOpen(false)} />
     </nav>

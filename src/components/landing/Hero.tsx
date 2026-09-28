@@ -83,22 +83,23 @@ const Hero = () => {
       <div className="spot l" /><div className="spot r" />
       <div className="grid-bg" />
       <div className="wrap hero-inner">
-        <div className="hero-tag"><i />ВЛАДИВОСТОК · ЖИВОЕ ОБУЧЕНИЕ · 43.11°N 131.88°E</div>
+        <div className="hero-tag"><i />ВЛАДИВОСТОК · ОЧНО · 3 МЕСЯЦА · С НУЛЯ</div>
         <h1>
-          <span className="row"><span className="grad-text">НАУЧИСЬ</span></span>
-          <span className="row"><span className="grad-text">ЗАРАБАТЫВАТЬ</span></span>
-          <span className="row"><span className="cyan">С НЕЙРОСЕТЯМИ</span></span>
+          <span className="row"><span className="grad-text">ОСВОЙТЕ ИИ</span></span>
+          <span className="row"><span className="grad-text">НА ПРАКТИКЕ</span></span>
+          <span className="row"><span className="cyan">ДЛЯ СВОЕГО ДЕЛА</span></span>
           <span className="h1-seo">Курсы нейросетей во Владивостоке — живая школа «Хакни Нейросети»</span>
         </h1>
         <div className="hero-grid">
           <div>
-            <p className="hero-sub">Практический трёхмесячный курс по нейросетям и искусственному интеллекту для предпринимателей, специалистов и фрилансеров — даже если начинаешь с нуля. ChatGPT, Gemini, Perplexity, ИИ-агенты, сайты, дизайн, видео, контент и автоматизация бизнеса — с практикой в живом классе с кураторами.</p>
+            <p className="hero-sub">За 72 часа живого обучения вы научитесь работать с современными нейросетями и создадите на своём проекте ИИ-ассистента, контент-систему, визуал, видео, сайт и сценарий автоматизации. Сергей Черников и два куратора помогают на каждом занятии.</p>
+            <div className="hero-trust">24 практических занятия · группа до 30 человек · записи на 6 месяцев · без программирования</div>
             <div className="hero-cta">
-              <a className="btn magnetic" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Оставить заявку на декабрь →</a>
-              <a className="btn btn-ghost magnetic" href="#program" onClick={(e) => scrollTo(e, '#program')}>Программа курса</a>
+              <a className="btn magnetic" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Получить программу и подобрать поток →</a>
+              <a className="btn btn-ghost magnetic" href="#class" onClick={(e) => scrollTo(e, '#class')}>Прийти на бесплатное пробное занятие</a>
             </div>
             <div className="hero-note-row">
-              <div className="hero-cta-note glow">Рассрочка от 12 500 ₽/мес · Курс окупается 1–2 заказами (один ИИ-проект стоит от 30 000 ₽)</div>
+              <div className="hero-cta-note glow">150 000 ₽ · рассрочка от 12 500 ₽ в месяц · вернём всю сумму после первых двух занятий, если формат не подойдёт</div>
               <a
                 className="btn btn-ghost btn-sm hero-download"
                 href="https://cdn.poehali.dev/projects/d3e635a0-73f6-4725-9cb9-7faeace376fe/bucket/59140a36-aa2c-45a5-8af4-734797273ad3.pdf"
@@ -107,7 +108,7 @@ const Hero = () => {
                 rel="noopener noreferrer"
               >
                 <Icon name="Download" size={14} />
-                Скачать программу
+                Скачать программу PDF
               </a>
             </div>
             <div className="timer-wrap">
@@ -117,9 +118,9 @@ const Hero = () => {
               </div>
             </div>
             <div className="hero-meta">
-              <div><b>72 часа</b>практики</div>
-              <div><b>2 раза</b>в неделю по 3 часа</div>
-              <div><b>30 мест</b>в группе</div>
+              <div><b>72 часа</b>живой практики</div>
+              <div><b>1 спикер</b>и два куратора</div>
+              <div><b>6 работ</b>на вашем проекте</div>
               <div><b>6 месяцев</b>доступ к записям</div>
             </div>
           </div>
@@ -130,7 +131,7 @@ const Hero = () => {
             </div>
             <div className="brackets"><i /><i /><i /><i /></div>
             <div className="float-tag t1">СЕРГЕЙ ЧЕРНИКОВ · СПИКЕР</div>
-            <div className="float-tag t2">10 000+ УЧЕНИКОВ НА ПРОГРАММАХ С 2018 ГОДА</div>
+            <div className="float-tag t2">ВЕДЁТ ЗАНЯТИЯ ЛИЧНО · РАЗРАБОТЧИК ИИ-ПРОДУКТОВ</div>
           </div>
         </div>
       </div>

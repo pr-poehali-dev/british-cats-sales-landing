@@ -5,6 +5,7 @@ import Navbar from '@/components/landing/Navbar';
 import Hero from '@/components/landing/Hero';
 import Ticker from '@/components/landing/Ticker';
 import Stats from '@/components/landing/Stats';
+import Outcomes from '@/components/landing/Outcomes';
 import GeoAnswers from '@/components/landing/GeoAnswers';
 import Professions from '@/components/landing/Professions';
 import Program from '@/components/landing/Program';
@@ -27,8 +28,8 @@ import { GEO_ANSWERS } from '@/components/landing/GeoAnswers';
 import { QA } from '@/components/landing/Faq';
 import { useSeo } from '@/lib/seo';
 
-const TICK1 = ['НЕ ЗНАТЬ AI — ДОРОГО!', 'ПРОДАЖИ ЗАКРЫТЫ', 'СЛЕДУЮЩИЙ ПОТОК · ДЕКАБРЬ 2026', 'ЖИВОЙ КЛАСС', 'ВЛАДИВОСТОК'];
-const TICK2 = ['САЙТ ЗА 30 МИНУТ', 'РЕКЛАМНЫЙ РОЛИК', 'ИИ-АГЕНТ В TELEGRAM', 'КОНТЕНТ-ПЛАН', 'НЕЙРО-АВАТАР', 'ВОРОНКА ПРОДАЖ'];
+const TICK1 = ['ОЧНО ВО ВЛАДИВОСТОКЕ', '72 ЧАСА ЖИВОЙ ПРАКТИКИ', 'СПИКЕР И ДВА КУРАТОРА', 'СТАРТ ПОТОКА · ДЕКАБРЬ 2026', 'БЕЗ ПРОГРАММИРОВАНИЯ'];
+const TICK2 = ['ИИ-АССИСТЕНТ', 'КОНТЕНТ-СИСТЕМА', 'ВИЗУАЛ И ВИДЕО', 'РАБОЧИЙ САЙТ', 'ВОРОНКА ИЛИ БОТ', 'ПЛАН АВТОМАТИЗАЦИИ'];
 
 const FAQ_LD = {
   '@context': 'https://schema.org',
@@ -58,21 +59,22 @@ const Index = () => {
       <Navbar />
       <Hero />
       <Ticker items={TICK1} />
-      <Stats />
-      <GeoAnswers />
+      <Outcomes />
       <Professions />
-      <Program />
-      <Tools />
-      <Speaker />
-      <Awards />
-      <Ticker items={TICK2} reverse />
-      <Cases />
-      <Income />
       <Versus />
       <ClassPhotos />
+      <Ticker items={TICK2} reverse />
+      <Program />
+      <Tools />
+      <Cases />
+      <Reviews />
+      <Speaker />
+      <Awards />
+      <Stats />
+      <Income />
       <Streams />
       <Pricing />
-      <Reviews />
+      <GeoAnswers />
       <Faq />
       <FinalCta />
       <Footer />
