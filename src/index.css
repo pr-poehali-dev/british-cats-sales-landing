@@ -2204,9 +2204,36 @@ h3 {
   border-radius: 50%;
   transform: translateY(-50%);
 }
+.ticket .t-seats {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 30px 24px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--t3);
+  text-transform: uppercase;
+}
+.ticket .t-seats-bar {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+.ticket .t-seats-bar i {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--cyan), var(--orange));
+}
 @media (max-width: 800px) {
   .streams {
     grid-template-columns: 1fr;
+  }
+  .ticket .t-seats {
+    padding: 0 20px 20px;
   }
 }
 

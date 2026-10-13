@@ -1,9 +1,11 @@
 import Reveal from './Reveal';
 import { scrollToSection } from '@/lib/scroll';
 
+const TOTAL_SEATS = 30;
+
 const TICKETS = [
-  { date: '07.12', sub: 'ПОНЕДЕЛЬНИК + ЧЕТВЕРГ · 17:00–20:00', flow: 'ПОТОК 1', left: 'ИДЁТ НАБОР' },
-  { date: '09.12', sub: 'ЧТ 17:00–20:00 · СБ 09:00–12:00', flow: 'ПОТОК 2', left: 'ИДЁТ НАБОР' },
+  { date: '07.12', sub: 'ПОНЕДЕЛЬНИК + ЧЕТВЕРГ · 17:00–20:00', flow: 'ПОТОК 1', free: 14 },
+  { date: '09.12', sub: 'ЧТ 17:00–20:00 · СБ 09:00–12:00', flow: 'ПОТОК 2', free: 18 },
 ];
 
 const goToFinal = () => scrollToSection('#pricing');
@@ -26,8 +28,18 @@ const Streams = () => {
                 onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goToFinal(); } }}
               >
                 <div className="t-date"><b>{t.date}</b><span>{t.sub}</span></div>
-                <div className="t-info">{t.flow}<br /><span className="left">{t.left}</span></div>
+                <div className="t-info">
+                  {t.flow}
+                  <br />
+                  <span className="left">Осталось {t.free} из {TOTAL_SEATS} мест</span>
+                </div>
                 <div className="t-stub" />
+              </div>
+              <div className="t-seats" aria-hidden>
+                <div className="t-seats-bar">
+                  <i style={{ width: `${((TOTAL_SEATS - t.free) / TOTAL_SEATS) * 100}%` }} />
+                </div>
+                <span>Занято {TOTAL_SEATS - t.free} из {TOTAL_SEATS}</span>
               </div>
             </Reveal>
           ))}
