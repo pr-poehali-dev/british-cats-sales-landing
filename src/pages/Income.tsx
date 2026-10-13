@@ -111,7 +111,7 @@ const IncomePage = () => {
         </p>
 
         <div className="seo-cta">
-          <Link className="btn" to="/#pricing">Оставить заявку на декабрь →</Link>
+          <Link className="btn" to="/#pricing">Подобрать поток →</Link>
           <Link className="btn btn-ghost" to="/course">Программа курса</Link>
         </div>
         <SeoLinks exclude="/zarabotok-na-neyrosetyah" />

@@ -120,7 +120,7 @@ const SergeyChernikov = () => {
         </p>
 
         <div className="seo-cta">
-          <Link className="btn" to="/#pricing">Оставить заявку на декабрь →</Link>
+          <Link className="btn" to="/#pricing">Подобрать поток →</Link>
           <a className="btn btn-ghost" href="https://t.me/ChernikovGPT_Bot" target="_blank" rel="noopener">Бесплатная консультация</a>
         </div>
         <SeoLinks exclude="/sergey-chernikov" />

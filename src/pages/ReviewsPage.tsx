@@ -73,7 +73,7 @@ const ReviewsPage = () => {
         </p>
 
         <div className="seo-cta">
-          <Link className="btn" to="/#pricing">Оставить заявку на декабрь →</Link>
+          <Link className="btn" to="/#pricing">Подобрать поток →</Link>
           <Link className="btn btn-ghost" to="/about">О школе</Link>
         </div>
         <SeoLinks exclude="/reviews" />

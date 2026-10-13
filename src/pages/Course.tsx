@@ -17,7 +17,7 @@ const JSON_LD = {
     price: '150000',
     priceCurrency: 'RUB',
     category: 'Paid',
-    availability: 'https://schema.org/PreOrder',
+    availability: 'https://schema.org/InStock',
   },
   hasCourseInstance: [
     {
@@ -134,7 +134,7 @@ const Course = () => {
         </p>
 
         <div className="seo-cta">
-          <Link className="btn" to="/#pricing">Оставить заявку на декабрь →</Link>
+          <Link className="btn" to="/#pricing">Подобрать поток →</Link>
           <a className="btn btn-ghost" href="https://t.me/ChernikovGPT_Bot" target="_blank" rel="noopener">Бесплатная консультация</a>
         </div>
         <SeoLinks exclude="/course" />

@@ -2,8 +2,8 @@ import Reveal from './Reveal';
 import { scrollToSection } from '@/lib/scroll';
 
 const TICKETS = [
-  { date: '07.12', sub: 'ПОНЕДЕЛЬНИК + ЧЕТВЕРГ · 17:00–20:00', flow: 'ПОТОК 1', left: 'СКОРО ОТКРОЕТСЯ' },
-  { date: '09.12', sub: 'ЧТ 17:00–20:00 · СБ 09:00–12:00', flow: 'ПОТОК 2', left: 'СКОРО ОТКРОЕТСЯ' },
+  { date: '07.12', sub: 'ПОНЕДЕЛЬНИК + ЧЕТВЕРГ · 17:00–20:00', flow: 'ПОТОК 1', left: 'ИДЁТ НАБОР' },
+  { date: '09.12', sub: 'ЧТ 17:00–20:00 · СБ 09:00–12:00', flow: 'ПОТОК 2', left: 'ИДЁТ НАБОР' },
 ];
 
 const goToFinal = () => scrollToSection('#pricing');
@@ -14,7 +14,7 @@ const Streams = () => {
       <div className="wrap">
         <Reveal className="eyebrow">// РАСПИСАНИЕ</Reveal>
         <Reveal as="h2" className="sec-title grad-text">Два потока.<br />Декабрь 2026</Reveal>
-        <Reveal as="p" className="sec-sub">Владивосток, ул. Русская 41а, 3 этаж. Продажи текущего потока закрыты — оставь заявку на один из декабрьских потоков, сообщим первыми об открытии записи.</Reveal>
+        <Reveal as="p" className="sec-sub">Владивосток, ул. Русская 41а, 3 этаж. Набор открыт. Выберите удобное расписание — менеджер свяжется, ответит на вопросы и пригласит на бесплатное пробное занятие.</Reveal>
         <div className="streams">
           {TICKETS.map((t, i) => (
             <Reveal key={t.flow} className="ticket" delay={i * 0.1}>

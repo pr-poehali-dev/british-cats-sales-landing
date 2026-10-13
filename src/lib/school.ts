@@ -90,7 +90,7 @@ export const STREAMS: Stream[] = [
   },
 ];
 
-export const SALES_OPEN = false;
+export const SALES_OPEN = true;
 
 export const getNextStream = (): Stream | null => {
   const now = Date.now();
@@ -104,6 +104,6 @@ export const getStreamEndIso = (stream: Stream): string => {
   return d.toISOString().slice(0, 10);
 };
 
-export const CTA_LABEL = SALES_OPEN ? 'Записаться на курс' : 'Оставить заявку на декабрь';
-export const CTA_SHORT = SALES_OPEN ? 'Записаться' : 'Заявка на декабрь';
+export const CTA_LABEL = SALES_OPEN ? 'Записаться на курс' : 'Подобрать поток';
+export const CTA_SHORT = SALES_OPEN ? 'Записаться' : 'Подобрать поток';
 export const SEATS_LABEL = SALES_OPEN ? 'ИДЁТ НАБОР' : 'ПРОДАЖИ ЗАКРЫТЫ';
