@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import Countdown from './Countdown';
+import HeroVideo from './HeroVideo';
 import Icon from '@/components/ui/icon';
 import { scrollToSection } from '@/lib/scroll';
 
@@ -88,51 +89,47 @@ const Hero = () => {
           <span className="row"><span className="grad-text">ОСВОЙТЕ ИИ</span></span>
           <span className="row"><span className="grad-text">НА ПРАКТИКЕ</span></span>
           <span className="row"><span className="cyan">ДЛЯ СВОЕГО ДЕЛА</span></span>
-          <span className="h1-seo">Курсы нейросетей во Владивостоке — живая школа «Хакни Нейросети»</span>
+          <span className="h1-seo sr-only">Курсы нейросетей во Владивостоке — живая школа «Хакни Нейросети»</span>
         </h1>
-        <div className="hero-grid">
+        <div className="hero-grid hero-grid-v">
           <div>
-            <p className="hero-sub">За 72 часа живого обучения вы научитесь работать с современными нейросетями и создадите на своём проекте ИИ-ассистента, контент-систему, визуал, видео, сайт и сценарий автоматизации. Сергей Черников и два куратора помогают на каждом занятии.</p>
-            <div className="hero-trust">24 практических занятия · группа до 30 человек · записи на 6 месяцев · без программирования</div>
+            <p className="hero-sub">
+              Три месяца в живом классе — и у вас <b>6 готовых ИИ-инструментов</b> для своей работы или бизнеса:
+              ассистент, контент, визуал, видео, сайт и автоматизация. Без программирования.
+            </p>
             <div className="hero-cta">
-              <a className="btn magnetic" href="#pricing" onClick={(e) => scrollTo(e, '#pricing')}>Получить программу и подобрать поток →</a>
-              <a className="btn btn-ghost magnetic" href="#class" onClick={(e) => scrollTo(e, '#class')}>Прийти на бесплатное пробное занятие</a>
+              <a className="btn magnetic" href="#streams" onClick={(e) => scrollTo(e, '#streams')}>Подобрать поток →</a>
+              <a className="btn btn-ghost magnetic" href="#final" onClick={(e) => scrollTo(e, '#final')}>Пробное занятие бесплатно</a>
             </div>
-            <div className="hero-note-row">
-              <div className="hero-cta-note glow">150 000 ₽ · рассрочка от 12 500 ₽ в месяц · вернём всю сумму после первых двух занятий, если формат не подойдёт</div>
-              <a
-                className="btn btn-ghost btn-sm hero-download"
-                href="https://cdn.poehali.dev/projects/d3e635a0-73f6-4725-9cb9-7faeace376fe/bucket/59140a36-aa2c-45a5-8af4-734797273ad3.pdf"
-                download
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Icon name="Download" size={14} />
-                Скачать программу PDF
-              </a>
-            </div>
-            <div className="timer-wrap">
-              <div>
-                <div className="timer-label">ДО СТАРТА ПОТОКА · 07.12.2026</div>
-                <Countdown />
-              </div>
-            </div>
-            <div className="hero-meta">
-              <div><b>72 часа</b>живой практики</div>
-              <div><b>1 спикер</b>и два куратора</div>
-              <div><b>6 работ</b>на вашем проекте</div>
-              <div><b>6 месяцев</b>доступ к записям</div>
+            <ul className="hero-points">
+              <li><Icon name="ShieldCheck" size={16} />Вернём деньги, если после двух занятий формат не подойдёт</li>
+              <li><Icon name="Wallet" size={16} />150 000 ₽ или от 12 500 ₽ в месяц</li>
+              <li>
+                <Icon name="Download" size={16} />
+                <a
+                  href="https://cdn.poehali.dev/projects/d3e635a0-73f6-4725-9cb9-7faeace376fe/bucket/59140a36-aa2c-45a5-8af4-734797273ad3.pdf"
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Скачать программу PDF
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div className="hero-side">
+            <HeroVideo />
+            <div className="hero-start">
+              <div className="timer-label">СТАРТ ПОТОКА 07.12 · ОСТАЛОСЬ 14 МЕСТ</div>
+              <Countdown />
             </div>
           </div>
-          <div className="portrait" role="button" tabIndex={0} onClick={(e) => scrollTo(e, '#speaker')} style={{ cursor: 'pointer' }}>
-            <div className="frame hero-glitch">
-              <img className="hg-robot" src="https://cdn.poehali.dev/projects/d3e635a0-73f6-4725-9cb9-7faeace376fe/bucket/2a99f48e-b96a-4740-b7b5-20e600a11814.png" alt="" aria-hidden />
-              <img className="hg-human" src="/site/speaker.jpg" alt="Сергей Черников" />
-            </div>
-            <div className="brackets"><i /><i /><i /><i /></div>
-            <div className="float-tag t1">СЕРГЕЙ ЧЕРНИКОВ · СПИКЕР</div>
-            <div className="float-tag t2">ВЕДЁТ ЗАНЯТИЯ ЛИЧНО · РАЗРАБОТЧИК ИИ-ПРОДУКТОВ</div>
-          </div>
+        </div>
+        <div className="hero-meta">
+          <div><b>72 часа</b>живой практики</div>
+          <div><b>Спикер + 2 куратора</b>на каждом занятии</div>
+          <div><b>До 30 человек</b>в группе</div>
+          <div><b>6 месяцев</b>доступ к записям</div>
         </div>
       </div>
     </header>
