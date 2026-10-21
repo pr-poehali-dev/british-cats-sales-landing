@@ -84,15 +84,24 @@ const Hero = () => {
       <div className="spot l" /><div className="spot r" />
       <div className="grid-bg" />
       <div className="wrap hero-inner">
-        <div className="hero-tag"><i />ВЛАДИВОСТОК · ОЧНО · 3 МЕСЯЦА · С НУЛЯ</div>
-        <h1>
-          <span className="row"><span className="grad-text">ОСВОЙТЕ ИИ</span></span>
-          <span className="row"><span className="grad-text">НА ПРАКТИКЕ</span></span>
-          <span className="row"><span className="cyan">ДЛЯ СВОЕГО ДЕЛА</span></span>
-          <span className="h1-seo sr-only">Курсы нейросетей во Владивостоке — живая школа «Хакни Нейросети»</span>
-        </h1>
-        <div className="hero-grid hero-grid-v">
-          <div>
+        <div className="hero-v2">
+          <div className="hv2-head">
+            <div className="hero-tag"><i />ВЛАДИВОСТОК · ОЧНО · 3 МЕСЯЦА · С НУЛЯ</div>
+            <h1>
+              <span className="row"><span className="grad-text">ОСВОЙТЕ ИИ</span></span>
+              <span className="row"><span className="grad-text">НА ПРАКТИКЕ</span></span>
+              <span className="row"><span className="cyan">ДЛЯ СВОЕГО ДЕЛА</span></span>
+              <span className="h1-seo sr-only">Курсы нейросетей во Владивостоке — живая школа «Хакни Нейросети»</span>
+            </h1>
+          </div>
+          <div className="hv2-media">
+            <HeroVideo />
+            <div className="hero-start">
+              <div className="timer-label">СТАРТ ПОТОКА 07.12 · ОСТАЛОСЬ 14 МЕСТ</div>
+              <Countdown />
+            </div>
+          </div>
+          <div className="hv2-body">
             <p className="hero-sub">
               Три месяца в живом классе — и у вас <b>6 готовых ИИ-инструментов</b> для своей работы или бизнеса:
               ассистент, контент, визуал, видео, сайт и автоматизация. Без программирования.
@@ -116,13 +125,6 @@ const Hero = () => {
                 </a>
               </li>
             </ul>
-          </div>
-          <div className="hero-side">
-            <HeroVideo />
-            <div className="hero-start">
-              <div className="timer-label">СТАРТ ПОТОКА 07.12 · ОСТАЛОСЬ 14 МЕСТ</div>
-              <Countdown />
-            </div>
           </div>
         </div>
         <div className="hero-meta">
