@@ -4,6 +4,8 @@ import Icon from '@/components/ui/icon';
 
 const VIDEO = 'https://cdn.poehali.dev/projects/d3e635a0-73f6-4725-9cb9-7faeace376fe/bucket/71336070-1976-43db-9329-fb01a0a6b9a6.MP4';
 
+const ROUTE_URL = 'https://2gis.ru/vladivostok/firm/70000001105602364';
+
 const ITEMS = [
   {
     icon: 'MapPin',
@@ -116,6 +118,16 @@ const Contacts = () => {
                 );
               })}
             </div>
+            <Reveal className="ct-route">
+              <a className="btn magnetic" href={ROUTE_URL} target="_blank" rel="noopener noreferrer">
+                <Icon name="Navigation" size={16} />
+                Построить маршрут в 2ГИС
+              </a>
+              <a className="btn btn-ghost" href="tel:+79941074310">
+                <Icon name="Phone" size={16} />
+                Позвонить менеджеру
+              </a>
+            </Reveal>
           </div>
         </div>
       </div>

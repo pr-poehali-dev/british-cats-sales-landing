@@ -5255,3 +5255,21 @@ a.ct-card:hover {
     max-width: 260px;
   }
 }
+
+.ct-route {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 28px;
+}
+.ct-route .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+@media (max-width: 560px) {
+  .ct-route .btn {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+}
