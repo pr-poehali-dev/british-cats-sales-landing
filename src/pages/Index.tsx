@@ -21,6 +21,7 @@ import Pricing from '@/components/landing/Pricing';
 import Reviews from '@/components/landing/Reviews';
 import Faq from '@/components/landing/Faq';
 import FinalCta from '@/components/landing/FinalCta';
+import Contacts from '@/components/landing/Contacts';
 import Footer from '@/components/landing/Footer';
 import Pill from '@/components/landing/Pill';
 import GiftPopup from '@/components/landing/GiftPopup';
@@ -77,6 +78,7 @@ const Index = () => {
       <GeoAnswers />
       <Faq />
       <FinalCta />
+      <Contacts />
       <Footer />
       <Pill />
       <GiftPopup />

@@ -10,6 +10,7 @@ const LINKS = [
   { href: '#cases', label: 'Отзывы' },
   { href: '#pricing', label: 'Тарифы' },
   { href: '#faq', label: 'FAQ' },
+  { href: '#contacts', label: 'Контакты' },
 ];
 
 const Navbar = () => {

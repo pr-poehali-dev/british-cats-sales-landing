@@ -14,6 +14,7 @@ const NAV = [
   { href: '#cases', label: 'Результаты' },
   { href: '#pricing', label: 'Тарифы' },
   { href: '#faq', label: 'Вопросы' },
+  { href: '#contacts', label: 'Контакты' },
 ];
 
 const FootWord = () => {
