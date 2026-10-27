@@ -1,5 +1,8 @@
+import { useRef, useState } from 'react';
 import Reveal from './Reveal';
 import Icon from '@/components/ui/icon';
+
+const VIDEO = 'https://cdn.poehali.dev/projects/d3e635a0-73f6-4725-9cb9-7faeace376fe/bucket/71336070-1976-43db-9329-fb01a0a6b9a6.MP4';
 
 const ITEMS = [
   {
@@ -13,7 +16,7 @@ const ITEMS = [
     icon: 'Phone',
     label: 'Телефон менеджера',
     value: '+7 994 107 43 10',
-    note: 'Позвоните или напишите — подберём поток',
+    note: 'Позвоните — подберём поток',
     href: 'tel:+79941074310',
   },
   {
@@ -32,41 +35,88 @@ const ITEMS = [
   },
 ];
 
+const RouteVideo = () => {
+  const ref = useRef<HTMLVideoElement>(null);
+  const [started, setStarted] = useState(false);
+
+  const start = () => {
+    setStarted(true);
+    const v = ref.current;
+    if (v) {
+      v.muted = false;
+      v.play().catch(() => undefined);
+    }
+  };
+
+  return (
+    <div className="ct-phone">
+      <div className="ct-phone-frame">
+        <video
+          ref={ref}
+          src={VIDEO}
+          poster="/contacts-video-poster.jpg"
+          preload="none"
+          playsInline
+          controls={started}
+          onEnded={() => setStarted(false)}
+        />
+        {!started && (
+          <button type="button" className="ct-play" onClick={start} aria-label="Смотреть, как нас найти">
+            <span className="ct-play-btn"><Icon name="Play" size={26} /></span>
+            <span className="ct-play-text">
+              <b>Как нас найти</b>
+              <i>Видеомаршрут · 0:27</i>
+            </span>
+          </button>
+        )}
+      </div>
+      <div className="brackets"><i /><i /><i /><i /></div>
+    </div>
+  );
+};
+
 const Contacts = () => {
   return (
     <section className="sec" id="contacts">
       <div className="wrap">
-        <Reveal className="eyebrow">// КОНТАКТЫ</Reveal>
-        <Reveal as="h2" className="sec-title grad-text">Приходите в гости</Reveal>
-        <Reveal as="p" className="sec-sub">
-          Школа находится в центре Владивостока. Ищите офис «Хакни Нейросети» на третьем этаже.
-        </Reveal>
-        <div className="ct-grid">
-          {ITEMS.map((it, i) => {
-            const body = (
-              <>
-                <span className="ct-ico"><Icon name={it.icon} size={22} fallback="CircleAlert" /></span>
-                <span className="ct-label">{it.label}</span>
-                <b className="ct-value">{it.value}</b>
-                <span className="ct-note">{it.note}</span>
-              </>
-            );
-            return (
-              <Reveal key={it.label} delay={i * 0.08}>
-                {it.href ? (
-                  <a
-                    className="ct-card"
-                    href={it.href}
-                    {...(it.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                  >
-                    {body}
-                  </a>
-                ) : (
-                  <div className="ct-card">{body}</div>
-                )}
-              </Reveal>
-            );
-          })}
+        <div className="ct-layout">
+          <Reveal className="ct-video">
+            <RouteVideo />
+          </Reveal>
+          <div className="ct-info">
+            <Reveal className="eyebrow">// КОНТАКТЫ</Reveal>
+            <Reveal as="h2" className="sec-title grad-text">Приходите в гости</Reveal>
+            <Reveal as="p" className="sec-sub">
+              Школа в центре Владивостока. Посмотрите видеомаршрут и ищите офис «Хакни Нейросети» на третьем этаже.
+            </Reveal>
+            <div className="ct-grid">
+              {ITEMS.map((it, i) => {
+                const body = (
+                  <>
+                    <span className="ct-ico"><Icon name={it.icon} size={20} fallback="CircleAlert" /></span>
+                    <span className="ct-label">{it.label}</span>
+                    <b className="ct-value">{it.value}</b>
+                    <span className="ct-note">{it.note}</span>
+                  </>
+                );
+                return (
+                  <Reveal key={it.label} delay={i * 0.08}>
+                    {it.href ? (
+                      <a
+                        className="ct-card"
+                        href={it.href}
+                        {...(it.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                      >
+                        {body}
+                      </a>
+                    ) : (
+                      <div className="ct-card">{body}</div>
+                    )}
+                  </Reveal>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </section>
