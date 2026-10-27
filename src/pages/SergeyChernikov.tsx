@@ -114,6 +114,7 @@ const SergeyChernikov = () => {
 
         <h2>Контакты</h2>
         <p>
+          Телефон менеджера: <a href="tel:+79941074310">+7 994 107 43 10</a>.<br />
           Telegram: <a href="https://t.me/chernikovpsiholog" target="_blank" rel="noopener">@chernikovpsiholog</a>.
           Школа «Хакни Нейросети»: Владивосток, ул. Русская, 41а, 3 этаж. Подробнее —{' '}
           <Link to="/about">о школе</Link>.

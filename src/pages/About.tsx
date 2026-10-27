@@ -99,6 +99,7 @@ const About = () => {
         <p>
           <strong>Адрес:</strong> Владивосток, ул. Русская, 41а, 3 этаж.<br />
           <strong>Время работы:</strong> пн–сб, 10:00–20:00.<br />
+          <strong>Телефон менеджера:</strong> <a href="tel:+79941074310">+7 994 107 43 10</a><br />
           <strong>Telegram:</strong>{' '}
           <a href="https://t.me/chernikovpsiholog" target="_blank" rel="noopener">@chernikovpsiholog</a><br />
           <strong>Реквизиты:</strong> ИП Черников С. Н., ОГРН 321253600091137, ИНН 783801003680.

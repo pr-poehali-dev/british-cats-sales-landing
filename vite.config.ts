@@ -17,6 +17,16 @@ import {componentTagger} from "pp-tagger";
 //   с трёх попыток — отдаёт обрыв vite, дальше как раньше (ждёт сервер и
 //   перезагружает).
 // Клиентский ping понижен до 7 с через server.hmr.timeout ниже.
+//
+// Самовосстановление. В dev страница — это ~100 отдельных модулей, и один
+// сорванный запрос (502 ingress на reload, обрыв HTTP/2 на плохой сети) роняет
+// весь граф src/main.tsx: React не монтируется, экран пустой до F5. Скрипт сам
+// перезагружает превью, если не загрузился модуль или стиль своего сайта либо
+// не прошёл динамический import. Перед перезагрузкой ждёт, пока страница снова
+// отвечает 200 (сервер лежит — ждём, а не крутим reload), и растит паузу
+// 1 → 2 → 4 … 60 с (счётчик в sessionStorage, сбрасывается через 10 с после
+// load) — битый код не уводит превью в цикл. Тот же блок — в шаблоне TanStack
+// (src/platform/dev-hmr.ts).
 const hmrClient = `(() => {
     const NativeWebSocket = WebSocket;
     class HmrSocket extends EventTarget {
@@ -71,6 +81,50 @@ const hmrClient = `(() => {
     window.WebSocket = new Proxy(NativeWebSocket, {
         construct: (target, args) => args[1] === "vite-hmr" ? new HmrSocket(...args) : new target(...args),
     });
+
+    const KEY = "ezst:recover";
+    const attempts = () => {
+        try {
+            return Number(sessionStorage.getItem(KEY)) || 0;
+        } catch {
+            return 3;
+        }
+    };
+    const setAttempts = (n) => {
+        try {
+            sessionStorage.setItem(KEY, String(n));
+        } catch {}
+    };
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    const pause = (n) => Math.min(60000, 1000 * 2 ** n);
+    const answers = () => fetch(location.href, {cache: "no-store"}).then((r) => r.ok, () => false);
+    let recovering = false;
+    const recover = async (reason) => {
+        if (recovering) return;
+        recovering = true;
+        const n = attempts();
+        console.warn("[ezst] превью не загрузилось (" + reason + "), перезагрузка через " + pause(n) / 1000 + " с");
+        await sleep(pause(n));
+        for (let i = 0; !(await answers()); i++) await sleep(pause(i));
+        setAttempts(n + 1);
+        location.reload();
+    };
+    const failedImport = (message) => /dynamically imported module|Importing a module script failed/.test(message || "");
+    const own = (url) => !!url && new URL(url, location.href).origin === location.origin;
+    window.addEventListener("pagehide", () => recovering = true);
+    window.addEventListener("error", (event) => {
+        const el = event.target;
+        const module = el instanceof HTMLScriptElement && el.type === "module" && own(el.src);
+        const link = el instanceof HTMLLinkElement && ["modulepreload", "stylesheet"].includes(el.rel) && own(el.href);
+        if (module || link) return recover("не загрузился " + (el.src || el.href));
+        if (failedImport(event.message)) recover(event.message);
+    }, true);
+    window.addEventListener("unhandledrejection", (event) => {
+        const message = String(event.reason?.message || event.reason);
+        if (failedImport(message)) recover(message);
+    });
+    window.addEventListener("vite:preloadError", () => recover("vite:preloadError"));
+    window.addEventListener("load", () => setTimeout(() => recovering || setAttempts(0), 10000));
 })();`;
 
 const hmrKeepalive = {

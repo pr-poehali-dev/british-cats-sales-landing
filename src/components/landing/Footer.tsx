@@ -41,6 +41,7 @@ const Footer = () => {
           </div>
           <div>
             <h5>Контакты</h5>
+            <a href="tel:+79941074310">Менеджер — +7 994 107 43 10</a>
             <a href="https://t.me/chernikovgpt" target="_blank" rel="noopener">Telegram-канал — @chernikovgpt</a>
             <a href="https://t.me/ChernikovGPT_Bot" target="_blank" rel="noopener">Бот консультаций — @ChernikovGPT_Bot</a>
             <a href="https://2gis.ru/vladivostok/firm/70000001105602364" target="_blank" rel="noopener">Владивосток, ул. Русская, 41а, 3 этаж</a>
